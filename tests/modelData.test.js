@@ -50,8 +50,29 @@ test("Gemini tier models are tracked as separate model lines", () => {
   assert.ok(!geminiModels.has("Gemini 3.5 Pro"));
 });
 
+test("xAI Grok releases cover base generations and the distinct coding line", () => {
+  const grokModels = new Set(RELEASES.filter((release) => release.provider === "xAI").map((release) => release.model));
+
+  assert.deepEqual([...grokModels].sort(), [
+    "Grok 1",
+    "Grok 1.5",
+    "Grok 2",
+    "Grok 3",
+    "Grok 4",
+    "Grok 4 Fast",
+    "Grok 4.1",
+    "Grok 4.1 Fast",
+    "Grok 4.20",
+    "Grok 4.3",
+    "Grok Code Fast 1",
+  ]);
+  assert.equal(RELEASES.find((release) => release.model === "Grok 4")?.codingIndex, 40.5);
+  assert.equal(RELEASES.find((release) => release.model === "Grok 4.20")?.codingIndex, 42.2);
+});
+
 test("dataset does not include preview, mini, nano, spark, air, plus, lite, or speciale config rows as standalone releases", () => {
   for (const release of RELEASES) {
+    if (release.model === "Grok Code Fast 1") continue;
     assert.doesNotMatch(release.model, /\b(Preview|mini|nano|Spark|Air|Plus|Lite|Speciale)\b/i, release.model);
   }
 });

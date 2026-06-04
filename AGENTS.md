@@ -1,0 +1,1 @@
+- Do not use worktrees for this project. Make changes directly in the main working tree unless Jeroen explicitly asks otherwise.

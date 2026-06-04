@@ -48,6 +48,7 @@ jobs:
           mkdir site
           cp index.html styles.css site/
           cp -R src site/src
+          cp -R assets site/assets
 
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3

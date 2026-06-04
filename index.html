@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agentic Model Release Tracker</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Agentic work + programming</p>
+        <h1>AI model releases versnellen</h1>
+        <p class="subtitle">Volg releases van frontier labs, Chinese labs en andere impactvolle spelers. De Opus 4.5 Coding Index-score is de “goed genoeg”-drempel.</p>
+      </div>
+      <div class="hero-actions">
+        <button id="downloadChart" type="button">Download plaatje</button>
+        <button id="resetFilters" type="button" class="secondary">Reset filters</button>
+      </div>
+    </section>
+
+    <section class="filters-panel">
+      <label>
+        Groep
+        <select id="groupFilter">
+          <option value="all">Alle groepen</option>
+          <option value="Frontier labs">Frontier labs</option>
+          <option value="Chinese+Other">Chinese+Other</option>
+        </select>
+      </label>
+      <label>
+        Minimum Coding Index
+        <span class="range-value" id="scoreValue">0.0</span>
+        <input id="scoreFilter" type="range" min="0" max="60" step="0.1" value="0" />
+      </label>
+      <label>
+        Vanaf
+        <input id="dateAfter" type="date" />
+      </label>
+      <label>
+        Tot
+        <input id="dateBefore" type="date" />
+      </label>
+      <label class="checkbox-label">
+        <input id="scoredOnly" type="checkbox" />
+        Alleen met AA-score
+      </label>
+    </section>
+
+    <section class="provider-filter" id="providerFilters" aria-label="Provider filters"></section>
+
+    <section class="kpis">
+      <article>
+        <span>Totaal</span>
+        <strong id="kpiTotal">0</strong>
+      </article>
+      <article>
+        <span>2026 YTD</span>
+        <strong id="kpiYtd">0</strong>
+      </article>
+      <article>
+        <span>2026 projected</span>
+        <strong id="kpiProjected">0</strong>
+      </article>
+      <article>
+        <span>Boven drempel</span>
+        <strong id="kpiQualified">0</strong>
+      </article>
+      <article class="wide-kpi">
+        <span>Beste score</span>
+        <strong id="kpiBest">Geen score</strong>
+      </article>
+    </section>
+
+    <section class="visual-grid">
+      <article class="chart-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Combined model releases</h2>
+            <p id="thresholdText">Opus 4.5 drempel: 47.8</p>
+          </div>
+          <span>Projectie t/m 31 december 2026</span>
+        </div>
+        <canvas id="releaseCanvas"></canvas>
+      </article>
+
+      <article class="breakdown-panel">
+        <div class="panel-heading compact">
+          <div>
+          <h2>Provider breakdown</h2>
+            <p>Releases en hoogste AA-score</p>
+          </div>
+        </div>
+        <div id="providerBreakdown" class="provider-breakdown"></div>
+      </article>
+    </section>
+
+    <section class="data-section">
+      <div class="panel-heading">
+        <div>
+          <h2>Release dataset</h2>
+          <p>Seed-data met datum, provider, score en notitie.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table id="releaseTable">
+          <thead>
+            <tr>
+              <th>Datum</th>
+              <th>Provider</th>
+              <th>Model</th>
+              <th>Groep</th>
+              <th>AA Coding Index</th>
+              <th>Notitie</th>
+              <th>Bron</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="notes-section">
+      <article>
+        <h2>Misschien nog toevoegen</h2>
+        <p id="missingLabs"></p>
+      </article>
+      <article>
+        <h2>Bronnen</h2>
+        <div id="sourceList" class="source-list"></div>
+      </article>
+    </section>
+  </main>
+  <script type="module" src="./src/app.js?v=20220604c"></script>
+</body>
+</html>

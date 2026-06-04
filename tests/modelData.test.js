@@ -77,6 +77,15 @@ test("dataset does not include preview, mini, nano, spark, air, plus, lite, or s
   }
 });
 
+test("MiniMax M3 is tracked as the latest MiniMax base release", () => {
+  const m3 = RELEASES.find((release) => release.model === "MiniMax M3");
+
+  assert.equal(m3?.provider, "MiniMax");
+  assert.equal(m3?.releaseDate, "2026-06-01");
+  assert.equal(m3?.codingIndex, null);
+  assert.match(m3?.sourceUrl, /minimax-m3/);
+});
+
 test("known February 5 2026 coding frontier releases are correct", () => {
   assert.equal(RELEASES.find((release) => release.model === "Claude Opus 4.6")?.releaseDate, "2026-02-05");
   assert.equal(RELEASES.find((release) => release.model === "GPT-5.3-Codex")?.releaseDate, "2026-02-05");

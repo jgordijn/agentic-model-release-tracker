@@ -870,6 +870,16 @@ export const RELEASES = [
     scoreSourceUrl: aaCodingSource,
     notes: "Latest Opus release in the verified dataset.",
   }),
+  release({
+    model: "MiniMax M3",
+    provider: "MiniMax",
+    group: "Chinese+Other",
+    releaseDate: "2026-06-01",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://www.minimax.io/blog/minimax-m3",
+    notes: "Official MiniMax M3 release for frontier coding, agentic work, 1M context, and native multimodality; AA score not available in the consulted snapshot.",
+  }),
 ];
 
 export const DATA_SOURCES = [

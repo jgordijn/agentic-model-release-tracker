@@ -34,9 +34,25 @@ test("Qwen rows are family-level and do not include size or distilled variants",
   }
 });
 
-test("dataset does not include preview, mini, nano, spark, or flash config rows as standalone releases", () => {
+test("Gemini tier models are tracked as separate model lines", () => {
+  const geminiModels = new Set(RELEASES.filter((release) => release.provider === "Google").map((release) => release.model));
+
+  assert.ok(geminiModels.has("Gemini 1.5 Pro"));
+  assert.ok(geminiModels.has("Gemini 1.5 Flash"));
+  assert.ok(geminiModels.has("Gemini 2.0 Flash"));
+  assert.ok(geminiModels.has("Gemini 2.5 Pro"));
+  assert.ok(geminiModels.has("Gemini 2.5 Flash"));
+  assert.ok(geminiModels.has("Gemini 3 Pro"));
+  assert.ok(geminiModels.has("Gemini 3 Flash"));
+  assert.ok(geminiModels.has("Gemini 3.5 Flash"));
+  assert.ok(!geminiModels.has("Gemini 3"));
+  assert.ok(!geminiModels.has("Gemini 3.5"));
+  assert.ok(!geminiModels.has("Gemini 3.5 Pro"));
+});
+
+test("dataset does not include preview, mini, nano, spark, air, plus, lite, or speciale config rows as standalone releases", () => {
   for (const release of RELEASES) {
-    assert.doesNotMatch(release.model, /\b(Preview|mini|nano|Spark|Flash|Air|Plus|Speciale)\b/i, release.model);
+    assert.doesNotMatch(release.model, /\b(Preview|mini|nano|Spark|Air|Plus|Lite|Speciale)\b/i, release.model);
   }
 });
 

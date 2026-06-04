@@ -100,22 +100,53 @@ export function getProjectedChartPoints(series, padding, width, height) {
 export function groupByProvider(models) {
   const providers = [...new Set(models.map((model) => model.provider))].sort();
 
-  return providers.map((provider) => {
-    const releases = models.filter((model) => model.provider === provider);
-    const scored = releases.filter((model) => model.codingIndex !== null);
-    const latestMaxScore = scored.reduce(
-      (maxScore, model) => (maxScore === null || model.codingIndex > maxScore ? model.codingIndex : maxScore),
-      null,
-    );
+  return providers
+    .map((provider) => {
+      const releases = models.filter((model) => model.provider === provider);
+      const scored = releases.filter((model) => model.codingIndex !== null);
+      const latestMaxScore = scored.reduce(
+        (maxScore, model) => (maxScore === null || model.codingIndex > maxScore ? model.codingIndex : maxScore),
+        null,
+      );
 
-    return {
-      provider,
-      releases: releases.length,
-      scored: scored.length,
-      qualified: scored.filter((model) => model.codingIndex >= OPUS_45_CODING_THRESHOLD).length,
-      latestMaxScore,
-    };
+      return {
+        provider,
+        releases: releases.length,
+        scored: scored.length,
+        qualified: scored.filter((model) => model.codingIndex >= OPUS_45_CODING_THRESHOLD).length,
+        latestMaxScore,
+      };
+    })
+    .sort((a, b) => compareNullableNumbers(b.latestMaxScore, a.latestMaxScore) || a.provider.localeCompare(b.provider));
+}
+
+export function sortReleases(models, sort = {}) {
+  const { key = "releaseDate", direction = "desc" } = sort;
+  const multiplier = direction === "asc" ? 1 : -1;
+
+  return [...models].sort((a, b) => {
+    const result = compareValues(a[key], b[key]);
+    if (result !== 0) return result * multiplier;
+    return b.releaseDate.localeCompare(a.releaseDate) || a.model.localeCompare(b.model);
   });
+}
+
+export function paginateRows(rows, pagination = {}) {
+  const pageSize = Math.max(1, Number(pagination.pageSize) || 25);
+  const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
+  const page = Math.min(Math.max(1, Number(pagination.page) || 1), totalPages);
+  const startIndex = (page - 1) * pageSize;
+  const pageRows = rows.slice(startIndex, startIndex + pageSize);
+
+  return {
+    rows: pageRows,
+    page,
+    pageSize,
+    totalRows: rows.length,
+    totalPages,
+    startRow: rows.length === 0 ? 0 : startIndex + 1,
+    endRow: startIndex + pageRows.length,
+  };
 }
 
 function getYear(date) {
@@ -128,4 +159,18 @@ function isLeapYear(year) {
 
 function scaleValue(value, maxValue, padding, plotHeight) {
   return padding.top + plotHeight - (value / maxValue) * plotHeight;
+}
+
+function compareValues(a, b) {
+  if (typeof a === "number" || typeof b === "number" || a === null || b === null) {
+    return compareNullableNumbers(a, b);
+  }
+  return String(a).localeCompare(String(b));
+}
+
+function compareNullableNumbers(a, b) {
+  if (a === null && b === null) return 0;
+  if (a === null) return -1;
+  if (b === null) return 1;
+  return a - b;
 }

@@ -294,6 +294,49 @@ input[type="range"] {
   overflow-x: auto;
 }
 
+.table-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  flex-wrap: wrap;
+}
+
+.table-controls label,
+.page-buttons {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.table-controls select {
+  height: 32px;
+  min-width: 72px;
+  background: rgba(5, 18, 34, 0.88);
+  border: 1px solid rgba(109, 178, 255, 0.35);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 0 8px;
+}
+
+.page-buttons button {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid rgba(109, 178, 255, 0.35);
+  background: rgba(9, 30, 55, 0.9);
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.page-buttons button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -313,6 +356,35 @@ th {
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0;
+}
+
+th button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  min-height: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-transform: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+}
+
+th button.active {
+  color: #eaf4ff;
+}
+
+.sort-arrow {
+  display: inline-flex;
+  justify-content: center;
+  width: 12px;
+  color: #42e4c5;
+  font-size: 0.72rem;
 }
 
 .good-score {

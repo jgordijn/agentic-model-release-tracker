@@ -6,8 +6,10 @@ import {
   calculateProjection,
   getProjectedChartPoints,
   groupByProvider,
+  paginateRows,
+  sortReleases,
   summarizeReleases,
-} from "./dashboardLogic.js?v=20220604e";
+} from "./dashboardLogic.js?v=20220604f";
 
 const TODAY = "2026-06-04";
 const state = {
@@ -17,6 +19,12 @@ const state = {
   scoredOnly: false,
   after: "",
   before: "",
+  tableSort: {
+    key: "releaseDate",
+    direction: "desc",
+  },
+  tablePage: 1,
+  tablePageSize: 25,
 };
 
 const providerColors = {
@@ -78,27 +86,57 @@ function populateSources() {
 function bindControls() {
   document.querySelector("#groupFilter").addEventListener("change", (event) => {
     state.group = event.target.value;
+    state.tablePage = 1;
     render();
   });
   document.querySelector("#scoreFilter").addEventListener("input", (event) => {
     state.minScore = Number(event.target.value);
     document.querySelector("#scoreValue").textContent = state.minScore.toFixed(1);
+    state.tablePage = 1;
     render();
   });
   document.querySelector("#scoredOnly").addEventListener("change", (event) => {
     state.scoredOnly = event.target.checked;
+    state.tablePage = 1;
     render();
   });
   document.querySelector("#dateAfter").addEventListener("change", (event) => {
     state.after = event.target.value;
+    state.tablePage = 1;
     render();
   });
   document.querySelector("#dateBefore").addEventListener("change", (event) => {
     state.before = event.target.value;
+    state.tablePage = 1;
     render();
   });
   document.querySelector("#providerFilters").addEventListener("change", () => {
     state.providers = [...document.querySelectorAll("#providerFilters input:checked")].map((item) => item.value);
+    state.tablePage = 1;
+    render();
+  });
+  document.querySelector("#releaseTable thead").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-sort-key]");
+    if (!button) return;
+    const key = button.dataset.sortKey;
+    state.tableSort =
+      state.tableSort.key === key
+        ? { key, direction: state.tableSort.direction === "asc" ? "desc" : "asc" }
+        : { key, direction: key === "releaseDate" || key === "codingIndex" ? "desc" : "asc" };
+    state.tablePage = 1;
+    render();
+  });
+  document.querySelector("#rowsPerPage").addEventListener("change", (event) => {
+    state.tablePageSize = Number(event.target.value);
+    state.tablePage = 1;
+    render();
+  });
+  document.querySelector("#prevPage").addEventListener("click", () => {
+    state.tablePage -= 1;
+    render();
+  });
+  document.querySelector("#nextPage").addEventListener("click", () => {
+    state.tablePage += 1;
     render();
   });
   document.querySelector("#resetFilters").addEventListener("click", resetFilters);
@@ -112,12 +150,16 @@ function resetFilters() {
   state.scoredOnly = false;
   state.after = [...RELEASES.map((release) => release.releaseDate)].sort()[0];
   state.before = TODAY;
+  state.tableSort = { key: "releaseDate", direction: "desc" };
+  state.tablePage = 1;
+  state.tablePageSize = 25;
   document.querySelector("#groupFilter").value = "all";
   document.querySelector("#scoreFilter").value = "0";
   document.querySelector("#scoreValue").textContent = "0.0";
   document.querySelector("#scoredOnly").checked = false;
   document.querySelector("#dateAfter").value = state.after;
   document.querySelector("#dateBefore").value = state.before;
+  document.querySelector("#rowsPerPage").value = String(state.tablePageSize);
   document.querySelectorAll("#providerFilters input").forEach((item) => {
     item.checked = false;
   });
@@ -282,8 +324,12 @@ function renderProviderBreakdown(models) {
 }
 
 function renderTable(models) {
-  const rows = [...models].sort((a, b) => b.releaseDate.localeCompare(a.releaseDate));
-  document.querySelector("#releaseTable tbody").innerHTML = rows
+  const sortedRows = sortReleases(models, state.tableSort);
+  const paginated = paginateRows(sortedRows, { page: state.tablePage, pageSize: state.tablePageSize });
+  state.tablePage = paginated.page;
+  updateSortButtons();
+  updatePagination(paginated);
+  document.querySelector("#releaseTable tbody").innerHTML = paginated.rows
     .map(
       (item) => `
         <tr>
@@ -298,6 +344,25 @@ function renderTable(models) {
       `,
     )
     .join("");
+}
+
+function updateSortButtons() {
+  document.querySelectorAll("[data-sort-key]").forEach((button) => {
+    const isActive = button.dataset.sortKey === state.tableSort.key;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-sort", isActive ? (state.tableSort.direction === "asc" ? "ascending" : "descending") : "none");
+    button.querySelector(".sort-arrow").textContent = isActive ? (state.tableSort.direction === "asc" ? "▲" : "▼") : "↕";
+  });
+}
+
+function updatePagination(paginated) {
+  document.querySelector("#pageRange").textContent =
+    paginated.totalRows === 0
+      ? "Geen rijen"
+      : `${paginated.startRow}-${paginated.endRow} van ${paginated.totalRows}`;
+  document.querySelector("#pageCount").textContent = `Pagina ${paginated.page} / ${paginated.totalPages}`;
+  document.querySelector("#prevPage").disabled = paginated.page <= 1;
+  document.querySelector("#nextPage").disabled = paginated.page >= paginated.totalPages;
 }
 
 function downloadCanvas() {

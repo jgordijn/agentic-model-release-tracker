@@ -8,6 +8,8 @@ import {
   calculateProjection,
   getProjectedChartPoints,
   groupByProvider,
+  paginateRows,
+  sortReleases,
   summarizeReleases,
 } from "../src/dashboardLogic.js";
 
@@ -253,10 +255,74 @@ test("groupByProvider creates stable provider totals and handles missing scores"
     },
   ]);
 
-  assert.equal(grouped[0].provider, "Alibaba");
-  assert.equal(grouped[0].releases, 1);
-  assert.equal(grouped[0].qualified, 1);
-  assert.equal(grouped[3].provider, "OpenAI");
+  const alibaba = grouped.find((row) => row.provider === "Alibaba");
+  assert.equal(alibaba.releases, 1);
+  assert.equal(alibaba.qualified, 1);
   assert.equal(grouped.find((row) => row.provider === "OpenAI").latestMaxScore, 59.1);
   assert.equal(grouped.find((row) => row.provider === "Mistral").latestMaxScore, null);
+});
+
+test("groupByProvider sorts by highest score first with unscored providers last", () => {
+  const grouped = groupByProvider([
+    ...sampleModels,
+    {
+      model: "Unscored Cohere",
+      provider: "Cohere",
+      group: "Chinese+Other",
+      releaseDate: "2026-01-01",
+      codingIndex: null,
+      focus: ["programming"],
+    },
+  ]);
+
+  assert.deepEqual(
+    grouped.map((row) => row.provider),
+    ["OpenAI", "Alibaba", "Anthropic", "Cohere", "Mistral"],
+  );
+});
+
+test("sortReleases sorts by table columns with stable null handling", () => {
+  assert.deepEqual(
+    sortReleases(sampleModels, { key: "provider", direction: "asc" }).map((item) => item.provider),
+    ["Alibaba", "Anthropic", "Mistral", "OpenAI"],
+  );
+  assert.deepEqual(
+    sortReleases(sampleModels, { key: "codingIndex", direction: "desc" }).map((item) => item.model),
+    ["GPT-5.5", "Qwen3.7 Max", "Claude Opus 4.5", "Mistral Medium 3"],
+  );
+  assert.deepEqual(
+    sortReleases(sampleModels, { key: "codingIndex", direction: "asc" }).map((item) => item.model),
+    ["Mistral Medium 3", "Claude Opus 4.5", "Qwen3.7 Max", "GPT-5.5"],
+  );
+  assert.deepEqual(
+    sortReleases(sampleModels).map((item) => item.model),
+    ["Qwen3.7 Max", "GPT-5.5", "Claude Opus 4.5", "Mistral Medium 3"],
+  );
+  assert.deepEqual(
+    sortReleases(
+      [
+        { ...sampleModels[0], model: "B Model", releaseDate: "2026-01-01" },
+        { ...sampleModels[0], model: "A Model", releaseDate: "2026-01-01" },
+      ],
+      { key: "releaseDate", direction: "desc" },
+    ).map((item) => item.model),
+    ["A Model", "B Model"],
+  );
+});
+
+test("paginateRows returns the requested page and clamps out-of-range pages", () => {
+  const paginated = paginateRows(sampleModels, { page: 2, pageSize: 2 });
+  assert.deepEqual(
+    paginated.rows.map((item) => item.model),
+    ["Qwen3.7 Max", "Mistral Medium 3"],
+  );
+  assert.equal(paginated.totalPages, 2);
+  assert.equal(paginated.startRow, 3);
+  assert.equal(paginated.endRow, 4);
+
+  assert.equal(paginateRows(sampleModels, { page: 99, pageSize: 2 }).page, 2);
+  assert.equal(paginateRows(sampleModels, { page: 0, pageSize: 2 }).page, 1);
+  assert.equal(paginateRows([], { page: 3, pageSize: 2 }).startRow, 0);
+  assert.equal(paginateRows([], { page: 3, pageSize: 2 }).endRow, 0);
+  assert.equal(paginateRows(sampleModels, { pageSize: 0 }).pageSize, 25);
 });

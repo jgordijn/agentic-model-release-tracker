@@ -102,18 +102,35 @@
           <h2>Release dataset</h2>
           <p>Seed-data met datum, provider, score en notitie.</p>
         </div>
+        <div class="table-controls" aria-label="Tabel paginering">
+          <label>
+            Rijen
+            <select id="rowsPerPage">
+              <option value="10">10</option>
+              <option value="25" selected>25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </label>
+          <span id="pageRange">-</span>
+          <div class="page-buttons">
+            <button id="prevPage" type="button" aria-label="Vorige pagina">‹</button>
+            <span id="pageCount">Pagina 1 / 1</span>
+            <button id="nextPage" type="button" aria-label="Volgende pagina">›</button>
+          </div>
+        </div>
       </div>
       <div class="table-wrap">
         <table id="releaseTable">
           <thead>
             <tr>
-              <th>Datum</th>
-              <th>Provider</th>
-              <th>Model</th>
-              <th>Groep</th>
-              <th>AA Coding Index</th>
-              <th>Notitie</th>
-              <th>Bron</th>
+              <th><button type="button" data-sort-key="releaseDate">Datum <span class="sort-arrow">↕</span></button></th>
+              <th><button type="button" data-sort-key="provider">Provider <span class="sort-arrow">↕</span></button></th>
+              <th><button type="button" data-sort-key="model">Model <span class="sort-arrow">↕</span></button></th>
+              <th><button type="button" data-sort-key="group">Groep <span class="sort-arrow">↕</span></button></th>
+              <th><button type="button" data-sort-key="codingIndex">AA Coding Index <span class="sort-arrow">↕</span></button></th>
+              <th><button type="button" data-sort-key="notes">Notitie <span class="sort-arrow">↕</span></button></th>
+              <th><button type="button" data-sort-key="sourceUrl">Bron <span class="sort-arrow">↕</span></button></th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -132,6 +149,6 @@
       </article>
     </section>
   </main>
-  <script type="module" src="./src/app.js?v=20220604e"></script>
+  <script type="module" src="./src/app.js?v=20220604f"></script>
 </body>
 </html>

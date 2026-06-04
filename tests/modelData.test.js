@@ -14,6 +14,37 @@ test("every release stores a maker or benchmark source URL", () => {
   }
 });
 
+test("source URLs do not contain accidental whitespace", () => {
+  for (const release of RELEASES) {
+    assert.equal(decodeURIComponent(release.sourceUrl), decodeURIComponent(release.sourceUrl).trim(), release.model);
+  }
+});
+
+test("every release is classified as a base model or distinct specialized base line", () => {
+  for (const release of RELEASES) {
+    assert.ok(["base", "specialized-base"].includes(release.releaseCategory), release.model);
+  }
+});
+
+test("Qwen rows are family-level and do not include size or distilled variants", () => {
+  const qwenRows = RELEASES.filter((release) => release.provider === "Alibaba");
+
+  for (const release of qwenRows) {
+    assert.doesNotMatch(release.model, /\b\d+(?:\.\d+)?B\b|A\d+B|Distill/i, release.model);
+  }
+});
+
+test("dataset does not include preview, mini, nano, spark, or flash config rows as standalone releases", () => {
+  for (const release of RELEASES) {
+    assert.doesNotMatch(release.model, /\b(Preview|mini|nano|Spark|Flash|Air|Plus|Speciale)\b/i, release.model);
+  }
+});
+
+test("known February 5 2026 coding frontier releases are correct", () => {
+  assert.equal(RELEASES.find((release) => release.model === "Claude Opus 4.6")?.releaseDate, "2026-02-05");
+  assert.equal(RELEASES.find((release) => release.model === "GPT-5.3-Codex")?.releaseDate, "2026-02-05");
+});
+
 test("frontier labs include pre-2025 releases for the requested chart range", () => {
   const frontierBefore2025 = RELEASES.filter(
     (release) => release.group === "Frontier labs" && release.releaseDate < "2025-01-01",

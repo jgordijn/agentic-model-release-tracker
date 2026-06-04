@@ -4,12 +4,13 @@ import {
   applyFilters,
   buildChartSeries,
   calculateProjection,
+  getProvidersForGroup,
   getProjectedChartPoints,
   groupByProvider,
   paginateRows,
   sortReleases,
   summarizeReleases,
-} from "./dashboardLogic.js?v=20220604f";
+} from "./dashboardLogic.js?v=20220604h";
 
 const TODAY = "2026-06-04";
 const state = {
@@ -45,6 +46,8 @@ function init() {
   populateProviderFilters();
   populateSources();
   setDateDefaults();
+  state.providers = getProvidersForGroup(RELEASES, state.group);
+  syncProviderControls();
   bindControls();
   render();
 }
@@ -86,6 +89,8 @@ function populateSources() {
 function bindControls() {
   document.querySelector("#groupFilter").addEventListener("change", (event) => {
     state.group = event.target.value;
+    state.providers = getProvidersForGroup(RELEASES, state.group);
+    syncProviderControls();
     state.tablePage = 1;
     render();
   });
@@ -112,6 +117,8 @@ function bindControls() {
   });
   document.querySelector("#providerFilters").addEventListener("change", () => {
     state.providers = [...document.querySelectorAll("#providerFilters input:checked")].map((item) => item.value);
+    state.group = "custom";
+    document.querySelector("#groupFilter").value = state.group;
     state.tablePage = 1;
     render();
   });
@@ -145,7 +152,7 @@ function bindControls() {
 
 function resetFilters() {
   state.group = "all";
-  state.providers = [];
+  state.providers = getProvidersForGroup(RELEASES, state.group);
   state.minScore = 0;
   state.scoredOnly = false;
   state.after = [...RELEASES.map((release) => release.releaseDate)].sort()[0];
@@ -160,18 +167,24 @@ function resetFilters() {
   document.querySelector("#dateAfter").value = state.after;
   document.querySelector("#dateBefore").value = state.before;
   document.querySelector("#rowsPerPage").value = String(state.tablePageSize);
-  document.querySelectorAll("#providerFilters input").forEach((item) => {
-    item.checked = false;
-  });
+  syncProviderControls();
   render();
 }
 
 function render() {
+  syncProviderControls();
   const filtered = applyFilters(RELEASES, state);
   renderKpis(filtered);
   renderChart(filtered);
   renderProviderBreakdown(filtered);
   renderTable(filtered);
+}
+
+function syncProviderControls() {
+  const selectedProviders = new Set(state.providers);
+  document.querySelectorAll("#providerFilters input").forEach((item) => {
+    item.checked = selectedProviders.has(item.value);
+  });
 }
 
 function renderKpis(models) {

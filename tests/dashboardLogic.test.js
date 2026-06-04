@@ -6,6 +6,7 @@ import {
   applyFilters,
   buildChartSeries,
   calculateProjection,
+  getProvidersForGroup,
   getProjectedChartPoints,
   groupByProvider,
   paginateRows,
@@ -94,6 +95,14 @@ test("applyFilters excludes non-selected providers", () => {
   );
 });
 
+test("applyFilters treats custom groups as provider-only selections", () => {
+  assert.deepEqual(
+    applyFilters(sampleModels, { group: "custom", providers: ["OpenAI", "Mistral"] }).map((item) => item.model),
+    ["GPT-5.5", "Mistral Medium 3"],
+  );
+  assert.deepEqual(applyFilters(sampleModels, { group: "custom", providers: [] }), []);
+});
+
 test("applyFilters excludes rows outside date bounds", () => {
   assert.deepEqual(
     applyFilters(sampleModels, { after: "2026-06-01" }).map((item) => item.model),
@@ -103,6 +112,17 @@ test("applyFilters excludes rows outside date bounds", () => {
     applyFilters(sampleModels, { before: "2025-01-01" }).map((item) => item.model),
     [],
   );
+});
+
+test("getProvidersForGroup returns all providers or providers belonging to a selected group", () => {
+  assert.deepEqual(getProvidersForGroup(sampleModels, "all"), ["Alibaba", "Anthropic", "Mistral", "OpenAI"]);
+  assert.deepEqual(getProvidersForGroup(sampleModels, "Frontier labs"), ["Anthropic", "OpenAI"]);
+  assert.deepEqual(getProvidersForGroup(sampleModels, "Chinese+Other"), ["Alibaba", "Mistral"]);
+  assert.deepEqual(getProvidersForGroup(sampleModels, "custom"), ["Alibaba", "Anthropic", "Mistral", "OpenAI"]);
+});
+
+test("getProvidersForGroup returns an empty list for unknown groups", () => {
+  assert.deepEqual(getProvidersForGroup(sampleModels, "Unknown"), []);
 });
 
 test("applyFilters excludes unscored rows when scoredOnly is active", () => {

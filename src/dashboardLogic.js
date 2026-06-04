@@ -11,7 +11,8 @@ export function applyFilters(models, filters = {}) {
   } = filters;
 
   return models.filter((model) => {
-    if (group !== "all" && model.group !== group) return false;
+    if (group === "custom" && providers.length === 0) return false;
+    if (group !== "all" && group !== "custom" && model.group !== group) return false;
     if (providers.length > 0 && !providers.includes(model.provider)) return false;
     if (after && model.releaseDate < after) return false;
     if (before && model.releaseDate > before) return false;
@@ -19,6 +20,12 @@ export function applyFilters(models, filters = {}) {
     if (minScore > 0 && (model.codingIndex === null || model.codingIndex < minScore)) return false;
     return true;
   });
+}
+
+export function getProvidersForGroup(models, group) {
+  const providers = [...new Set(models.map((model) => model.provider))].sort();
+  if (group === "all" || group === "custom") return providers;
+  return providers.filter((provider) => models.some((model) => model.provider === provider && model.group === group));
 }
 
 export function summarizeReleases(models, today) {

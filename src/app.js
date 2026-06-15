@@ -16,7 +16,104 @@ const TODAY = RELEASES.reduce(
   (latest, release) => (release.releaseDate > latest ? release.releaseDate : latest),
   RELEASES[0]?.releaseDate ?? new Date().toISOString().slice(0, 10),
 );
+const DEFAULT_LANGUAGE = "nl";
+const translations = {
+  nl: {
+    documentTitle: "Agentic Model Release Tracker",
+    eyebrow: "Agentic werk + programmeren",
+    title: "AI-modelreleases versnellen",
+    subtitle:
+      "Volg releases van frontier labs, Chinese labs en andere impactvolle spelers. De Opus 4.5 Coding Index-score is de ‘goed genoeg’-drempel.",
+    downloadChart: "Download plaatje",
+    resetFilters: "Reset filters",
+    groupLabel: "Groep",
+    groupAll: "Alle groepen",
+    groupCustom: "Aangepaste groep",
+    minCodingIndex: "Minimum Coding Index",
+    fromDate: "Vanaf",
+    toDate: "Tot",
+    scoredOnly: "Alleen met AA-score",
+    kpiTotal: "Totaal",
+    kpiYtd: "2026 tot nu toe",
+    kpiProjected: "2026 projectie",
+    kpiQualified: "Boven drempel",
+    kpiBest: "Beste score",
+    noScore: "Geen score",
+    thresholdText: "Opus 4.5 drempel: {threshold}",
+    chartTitle: "Gecombineerde modelreleases",
+    projectionNote: "Projectie t/m 31 december 2026",
+    providerBreakdownTitle: "Provideroverzicht",
+    providerBreakdownSubtitle: "Releases en hoogste AA-score",
+    datasetTitle: "Release-dataset",
+    datasetSubtitle: "Seed-data met datum, provider, score en notitie.",
+    rowsLabel: "Rijen",
+    tablePaginationLabel: "Tabelpaginering",
+    previousPage: "Vorige pagina",
+    nextPage: "Volgende pagina",
+    dateColumn: "Datum",
+    providerColumn: "Provider",
+    modelColumn: "Model",
+    groupColumn: "Groep",
+    codingIndexColumn: "AA Coding Index",
+    notesColumn: "Notitie",
+    sourceColumn: "Bron",
+    makerLink: "maker",
+    noRows: "Geen rijen",
+    pageCount: "Pagina {page} / {totalPages}",
+    pageRange: "{startRow}-{endRow} van {totalRows}",
+    maybeAddTitle: "Misschien nog toevoegen",
+    sourcesTitle: "Bronnen",
+  },
+  en: {
+    documentTitle: "Agentic Model Release Tracker",
+    eyebrow: "Agentic work + programming",
+    title: "AI model releases are accelerating",
+    subtitle:
+      "Track releases from frontier labs, Chinese labs, and other high-impact players. The Opus 4.5 Coding Index score is the “good enough” threshold.",
+    downloadChart: "Download image",
+    resetFilters: "Reset filters",
+    groupLabel: "Group",
+    groupAll: "All groups",
+    groupCustom: "Custom group",
+    minCodingIndex: "Minimum Coding Index",
+    fromDate: "From",
+    toDate: "To",
+    scoredOnly: "Only with AA score",
+    kpiTotal: "Total",
+    kpiYtd: "2026 YTD",
+    kpiProjected: "2026 projected",
+    kpiQualified: "Above threshold",
+    kpiBest: "Best score",
+    noScore: "No score",
+    thresholdText: "Opus 4.5 threshold: {threshold}",
+    chartTitle: "Combined model releases",
+    projectionNote: "Projection through December 31, 2026",
+    providerBreakdownTitle: "Provider breakdown",
+    providerBreakdownSubtitle: "Releases and highest AA score",
+    datasetTitle: "Release dataset",
+    datasetSubtitle: "Seed data with date, provider, score, and note.",
+    rowsLabel: "Rows",
+    tablePaginationLabel: "Table pagination",
+    previousPage: "Previous page",
+    nextPage: "Next page",
+    dateColumn: "Date",
+    providerColumn: "Provider",
+    modelColumn: "Model",
+    groupColumn: "Group",
+    codingIndexColumn: "AA Coding Index",
+    notesColumn: "Note",
+    sourceColumn: "Source",
+    makerLink: "maker",
+    noRows: "No rows",
+    pageCount: "Page {page} / {totalPages}",
+    pageRange: "{startRow}-{endRow} of {totalRows}",
+    maybeAddTitle: "Maybe add next",
+    sourcesTitle: "Sources",
+  },
+};
+
 const state = {
+  language: getInitialLanguage(),
   group: "all",
   providers: [],
   minScore: 0,
@@ -52,7 +149,38 @@ function init() {
   state.providers = getProvidersForGroup(RELEASES, state.group);
   syncProviderControls();
   bindControls();
+  applyLanguage();
   render();
+}
+
+function getInitialLanguage() {
+  const params = new URLSearchParams(window.location.search);
+  const requestedLanguage = params.get("lang") || localStorage.getItem("dashboardLanguage");
+  return translations[requestedLanguage] ? requestedLanguage : DEFAULT_LANGUAGE;
+}
+
+function t(key, replacements = {}) {
+  const template = translations[state.language][key] ?? translations[DEFAULT_LANGUAGE][key] ?? key;
+  return Object.entries(replacements).reduce((value, [name, replacement]) => value.replace(`{${name}}`, replacement), template);
+}
+
+function applyLanguage() {
+  document.documentElement.lang = state.language;
+  document.title = t("documentTitle");
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    element.textContent = t(element.dataset.i18n);
+  });
+  document.querySelectorAll("[data-i18n-attr]").forEach((element) => {
+    element.dataset.i18nAttr.split(",").forEach((mapping) => {
+      const [attribute, key] = mapping.split(":");
+      element.setAttribute(attribute, t(key));
+    });
+  });
+  document.querySelectorAll(".language-button").forEach((button) => {
+    const active = button.dataset.language === state.language;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
 }
 
 function setDateDefaults() {
@@ -151,6 +279,14 @@ function bindControls() {
   });
   document.querySelector("#resetFilters").addEventListener("click", resetFilters);
   document.querySelector("#downloadChart").addEventListener("click", downloadCanvas);
+  document.querySelectorAll(".language-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.language = button.dataset.language;
+      localStorage.setItem("dashboardLanguage", state.language);
+      applyLanguage();
+      render();
+    });
+  });
 }
 
 function resetFilters() {
@@ -198,8 +334,8 @@ function renderKpis(models) {
   document.querySelector("#kpiYtd").textContent = summary.ytd;
   document.querySelector("#kpiProjected").textContent = projection.projected;
   document.querySelector("#kpiQualified").textContent = summary.qualified;
-  document.querySelector("#kpiBest").textContent = best ? `${best.model} (${best.codingIndex})` : "Geen score";
-  document.querySelector("#thresholdText").textContent = `Opus 4.5 drempel: ${OPUS_45_CODING_THRESHOLD}`;
+  document.querySelector("#kpiBest").textContent = best ? `${best.model} (${best.codingIndex})` : t("noScore");
+  document.querySelector("#thresholdText").textContent = t("thresholdText", { threshold: OPUS_45_CODING_THRESHOLD });
 }
 
 function renderChart(models) {
@@ -358,7 +494,7 @@ function renderTable(models) {
           <td>${item.group}</td>
           <td class="${item.codingIndex >= OPUS_45_CODING_THRESHOLD ? "good-score" : ""}">${item.codingIndex ?? "n/a"}</td>
           <td>${item.notes}</td>
-          <td><a href="${item.sourceUrl}" target="_blank" rel="noreferrer">maker</a></td>
+          <td><a href="${item.sourceUrl}" target="_blank" rel="noreferrer">${t("makerLink")}</a></td>
         </tr>
       `,
     )
@@ -377,9 +513,9 @@ function updateSortButtons() {
 function updatePagination(paginated) {
   document.querySelector("#pageRange").textContent =
     paginated.totalRows === 0
-      ? "Geen rijen"
-      : `${paginated.startRow}-${paginated.endRow} van ${paginated.totalRows}`;
-  document.querySelector("#pageCount").textContent = `Pagina ${paginated.page} / ${paginated.totalPages}`;
+      ? t("noRows")
+      : t("pageRange", { startRow: paginated.startRow, endRow: paginated.endRow, totalRows: paginated.totalRows });
+  document.querySelector("#pageCount").textContent = t("pageCount", { page: paginated.page, totalPages: paginated.totalPages });
   document.querySelector("#prevPage").disabled = paginated.page <= 1;
   document.querySelector("#nextPage").disabled = paginated.page >= paginated.totalPages;
 }

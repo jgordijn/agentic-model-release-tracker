@@ -72,6 +72,33 @@ h1 {
   gap: 10px;
   flex-wrap: wrap;
   justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.language-toggle {
+  display: inline-flex;
+  gap: 6px;
+  padding: 4px;
+  border: 1px solid #28517f;
+  border-radius: 999px;
+  background: rgba(6, 20, 38, 0.84);
+}
+
+.language-button {
+  min-width: 42px;
+  min-height: 34px;
+  padding: 0 10px;
+  border-color: transparent;
+  border-radius: 999px;
+  background: transparent;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.language-button.active,
+.language-button:hover {
+  border-color: var(--cyan);
+  background: rgba(65, 226, 192, 0.14);
 }
 
 button {

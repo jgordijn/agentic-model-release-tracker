@@ -12,42 +12,46 @@
   <main class="app-shell">
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">Agentic work + programming</p>
-        <h1>AI model releases versnellen</h1>
-        <p class="subtitle">Volg releases van frontier labs, Chinese labs en andere impactvolle spelers, inclusief de AA Coding Index-notities in de release dataset.</p>
+        <p class="eyebrow" data-i18n="eyebrow">Agentic work + programming</p>
+        <h1 data-i18n="title">AI model releases versnellen</h1>
+        <p class="subtitle" data-i18n="subtitle">Volg releases van frontier labs, Chinese labs en andere impactvolle spelers, inclusief de AA Coding Index-notities in de release dataset.</p>
       </div>
       <div class="hero-actions">
-        <button id="downloadChart" type="button">Download plaatje</button>
-        <button id="resetFilters" type="button" class="secondary">Reset filters</button>
+        <div class="language-toggle" role="group" aria-label="Language">
+          <button id="langEn" type="button" class="language-button" data-language="en" aria-label="English">🇬🇧</button>
+          <button id="langNl" type="button" class="language-button" data-language="nl" aria-label="Nederlands">🇳🇱</button>
+        </div>
+        <button id="downloadChart" type="button" data-i18n="downloadChart">Download plaatje</button>
+        <button id="resetFilters" type="button" class="secondary" data-i18n="resetFilters">Reset filters</button>
       </div>
     </section>
 
     <section class="filters-panel">
       <label>
-        Groep
+        <span data-i18n="groupLabel">Groep</span>
         <select id="groupFilter">
-          <option value="all">Alle groepen</option>
+          <option value="all" data-i18n="groupAll">Alle groepen</option>
           <option value="Frontier labs">Frontier labs</option>
           <option value="Chinese+Other">Chinese+Other</option>
-          <option value="custom" hidden>Custom group</option>
+          <option value="custom" hidden data-i18n="groupCustom">Aangepaste groep</option>
         </select>
       </label>
       <label>
-        Minimum Coding Index
+        <span data-i18n="minCodingIndex">Minimum Coding Index</span>
         <span class="range-value" id="scoreValue">0.0</span>
         <input id="scoreFilter" type="range" min="0" max="60" step="0.1" value="0" />
       </label>
       <label>
-        Vanaf
+        <span data-i18n="fromDate">Vanaf</span>
         <input id="dateAfter" type="date" />
       </label>
       <label>
-        Tot
+        <span data-i18n="toDate">Tot</span>
         <input id="dateBefore" type="date" />
       </label>
       <label class="checkbox-label">
         <input id="scoredOnly" type="checkbox" />
-        Alleen met AA-score
+        <span data-i18n="scoredOnly">Alleen met AA-score</span>
       </label>
     </section>
 
@@ -55,23 +59,23 @@
 
     <section class="kpis">
       <article>
-        <span>Totaal</span>
+        <span data-i18n="kpiTotal">Totaal</span>
         <strong id="kpiTotal">0</strong>
       </article>
       <article>
-        <span>2026 YTD</span>
+        <span data-i18n="kpiYtd">2026 YTD</span>
         <strong id="kpiYtd">0</strong>
       </article>
       <article>
-        <span>2026 projected</span>
+        <span data-i18n="kpiProjected">2026 projectie</span>
         <strong id="kpiProjected">0</strong>
       </article>
       <article>
-        <span>Groene AA-score</span>
+        <span data-i18n="kpiQualified">Groene AA-score</span>
         <strong id="kpiQualified">0</strong>
       </article>
       <article class="wide-kpi">
-        <span>Beste score</span>
+        <span data-i18n="kpiBest">Beste score</span>
         <strong id="kpiBest">Geen score</strong>
       </article>
     </section>
@@ -80,23 +84,23 @@
       <article class="chart-panel">
         <div class="panel-heading">
           <div>
-            <h2>Combined model releases</h2>
-            <p id="thresholdText">Observed releases with 2026 YTD and projection</p>
+            <h2 data-i18n="chartTitle">Gecombineerde modelreleases</h2>
+            <p id="thresholdText" data-i18n="chartSubtitle">Observed releases with 2026 YTD and projection</p>
           </div>
-          <span>Projectie t/m 31 december 2026</span>
+          <span data-i18n="projectionNote">Projectie t/m 31 december 2026</span>
         </div>
         <div class="chart-stage">
           <canvas id="releaseCanvas"></canvas>
-          <aside class="chart-callouts" aria-label="Chart summary">
+          <aside class="chart-callouts" aria-label="Chart summary" data-i18n-attr="aria-label:chartSummaryLabel">
             <div class="callout projected">
-              <span>2026 projected</span>
+              <span data-i18n="chartProjectedLabel">2026 projected</span>
               <strong id="chartProjected">0</strong>
-              <small>combined releases</small>
+              <small data-i18n="chartProjectedSmall">combined releases</small>
             </div>
             <div class="callout ytd">
-              <span>2026 YTD</span>
+              <span data-i18n="chartYtdLabel">2026 YTD</span>
               <strong id="chartYtd">0</strong>
-              <small>already released</small>
+              <small data-i18n="chartYtdSmall">already released</small>
             </div>
           </aside>
         </div>
@@ -105,8 +109,8 @@
       <article class="breakdown-panel">
         <div class="panel-heading compact">
           <div>
-          <h2>Provider breakdown</h2>
-            <p>Releases en hoogste AA-score</p>
+          <h2 data-i18n="providerBreakdownTitle">Provideroverzicht</h2>
+            <p data-i18n="providerBreakdownSubtitle">Releases en hoogste AA-score</p>
           </div>
         </div>
         <div id="providerBreakdown" class="provider-breakdown"></div>
@@ -116,12 +120,12 @@
     <section class="data-section">
       <div class="panel-heading">
         <div>
-          <h2>Release dataset</h2>
-          <p>Seed-data met datum, provider, score en notitie.</p>
+          <h2 data-i18n="datasetTitle">Release-dataset</h2>
+          <p data-i18n="datasetSubtitle">Seed-data met datum, provider, score en notitie.</p>
         </div>
-        <div class="table-controls" aria-label="Tabel paginering">
+        <div class="table-controls" aria-label="Tabel paginering" data-i18n-attr="aria-label:tablePaginationLabel">
           <label>
-            Rijen
+            <span data-i18n="rowsLabel">Rijen</span>
             <select id="rowsPerPage">
               <option value="10">10</option>
               <option value="25" selected>25</option>
@@ -131,9 +135,9 @@
           </label>
           <span id="pageRange">-</span>
           <div class="page-buttons">
-            <button id="prevPage" type="button" aria-label="Vorige pagina">‹</button>
+            <button id="prevPage" type="button" aria-label="Vorige pagina" data-i18n-attr="aria-label:previousPage">‹</button>
             <span id="pageCount">Pagina 1 / 1</span>
-            <button id="nextPage" type="button" aria-label="Volgende pagina">›</button>
+            <button id="nextPage" type="button" aria-label="Volgende pagina" data-i18n-attr="aria-label:nextPage">›</button>
           </div>
         </div>
       </div>
@@ -141,13 +145,13 @@
         <table id="releaseTable">
           <thead>
             <tr>
-              <th><button type="button" data-sort-key="releaseDate">Datum <span class="sort-arrow">↕</span></button></th>
-              <th><button type="button" data-sort-key="provider">Provider <span class="sort-arrow">↕</span></button></th>
-              <th><button type="button" data-sort-key="model">Model <span class="sort-arrow">↕</span></button></th>
-              <th><button type="button" data-sort-key="group">Groep <span class="sort-arrow">↕</span></button></th>
-              <th><button type="button" data-sort-key="codingIndex">AA Coding Index <span class="sort-arrow">↕</span></button></th>
-              <th><button type="button" data-sort-key="notes">Notitie <span class="sort-arrow">↕</span></button></th>
-              <th><button type="button" data-sort-key="sourceUrl">Bron <span class="sort-arrow">↕</span></button></th>
+              <th><button type="button" data-sort-key="releaseDate"><span data-i18n="dateColumn">Datum</span> <span class="sort-arrow">↕</span></button></th>
+              <th><button type="button" data-sort-key="provider"><span data-i18n="providerColumn">Provider</span> <span class="sort-arrow">↕</span></button></th>
+              <th><button type="button" data-sort-key="model"><span data-i18n="modelColumn">Model</span> <span class="sort-arrow">↕</span></button></th>
+              <th><button type="button" data-sort-key="group"><span data-i18n="groupColumn">Groep</span> <span class="sort-arrow">↕</span></button></th>
+              <th><button type="button" data-sort-key="codingIndex"><span data-i18n="codingIndexColumn">AA Coding Index</span> <span class="sort-arrow">↕</span></button></th>
+              <th><button type="button" data-sort-key="notes"><span data-i18n="notesColumn">Notitie</span> <span class="sort-arrow">↕</span></button></th>
+              <th><button type="button" data-sort-key="sourceUrl"><span data-i18n="sourceColumn">Bron</span> <span class="sort-arrow">↕</span></button></th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -157,15 +161,15 @@
 
     <section class="notes-section">
       <article>
-        <h2>Misschien nog toevoegen</h2>
+        <h2 data-i18n="maybeAddTitle">Misschien nog toevoegen</h2>
         <p id="missingLabs"></p>
       </article>
       <article>
-        <h2>Bronnen</h2>
+        <h2 data-i18n="sourcesTitle">Bronnen</h2>
         <div id="sourceList" class="source-list"></div>
       </article>
     </section>
   </main>
-  <script type="module" src="./src/app.js?v=20220604i"></script>
+  <script type="module" src="./src/app.js?v=20220615a"></script>
 </body>
 </html>

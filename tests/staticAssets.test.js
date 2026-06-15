@@ -25,6 +25,18 @@ test("chart projection is drawn as a green dashed trend from the previous year",
   assert.doesNotMatch(app, /projectedPoint\.x \+ 54/);
 });
 
+test("language toggle exposes Dutch and English flag buttons", async () => {
+  const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
+
+  assert.match(html, /data-language="en"[^>]*aria-label="English"/);
+  assert.match(html, /data-language="nl"[^>]*aria-label="Nederlands"/);
+  assert.match(html, /🇬🇧/);
+  assert.match(html, /🇳🇱/);
+  assert.match(app, /const translations = \{/);
+  assert.match(app, /localStorage\.setItem\("dashboardLanguage", state\.language\)/);
+});
+
 test("Pages workflow includes project assets in the deployed site", async () => {
   const workflow = await readFile(new URL("../.github/workflows/pages.yml", import.meta.url), "utf8");
 

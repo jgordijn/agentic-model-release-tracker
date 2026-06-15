@@ -919,9 +919,8 @@ export const RELEASES = [
     codingIndex: null,
     focus: ["agentic", "programming"],
     releaseCategory: "specialized-base",
-    sourceType: "secondary",
-    sourceUrl: "https://developers.cloudflare.com/changelog/post/2026-06-12-kimi-k2-7-code-workers-ai/",
-    notes: "Code-optimized Kimi K2 variant with improved coding and agentic benchmark performance over K2.6; official Moonshot social release corroborates availability.",
+    sourceUrl: "https://x.com/Kimi_Moonshot/status/2065377579130142937",
+    notes: "Official Kimi/Moonshot announcement says Kimi-K2.7-Code was released and available via Kimi API and Kimi Code on Jun 12; code-optimized K2 variant with improved coding and agentic benchmark performance over K2.6.",
   }),
   release({
     model: "GLM-5.2",

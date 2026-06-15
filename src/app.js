@@ -12,7 +12,10 @@ import {
   summarizeReleases,
 } from "./dashboardLogic.js?v=20220604h";
 
-const TODAY = "2026-06-04";
+const TODAY = RELEASES.reduce(
+  (latest, release) => (release.releaseDate > latest ? release.releaseDate : latest),
+  RELEASES[0]?.releaseDate ?? new Date().toISOString().slice(0, 10),
+);
 const state = {
   group: "all",
   providers: [],

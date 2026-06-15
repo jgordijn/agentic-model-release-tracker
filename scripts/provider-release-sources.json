@@ -56,8 +56,21 @@
         "site:x.ai/news xAI Grok model coding agentic after:{since}",
         "site:docs.x.ai/developers/models Grok model after:{since}"
       ],
-      "includeSignals": ["Grok", "Composer", "Build", "model", "coding", "long-running tasks"],
-      "excludeSignals": ["voice", "image", "video", "partnership"]
+      "includeSignals": ["Grok", "Build", "model", "coding", "long-running tasks"],
+      "excludeSignals": ["voice", "image", "video", "partnership", "Cursor Composer"]
+    },
+    {
+      "name": "Cursor",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://cursor.com/blog"
+      ],
+      "searchQueries": [
+        "site:cursor.com/blog Cursor Composer model release coding agentic after:{since}",
+        "site:cursor.com/blog Composer model long-running tasks after:{since}"
+      ],
+      "includeSignals": ["Composer", "Cursor", "model", "coding", "long-running tasks", "instruction following"],
+      "excludeSignals": ["editor feature", "integration only"]
     },
     {
       "name": "Mistral",

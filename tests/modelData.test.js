@@ -54,7 +54,6 @@ test("xAI releases cover base Grok generations and distinct coding lines", () =>
   const grokModels = new Set(RELEASES.filter((release) => release.provider === "xAI").map((release) => release.model));
 
   assert.deepEqual([...grokModels].sort(), [
-    "Composer 2.5",
     "Grok 1",
     "Grok 1.5",
     "Grok 2",

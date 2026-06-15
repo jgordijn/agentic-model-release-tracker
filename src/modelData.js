@@ -882,14 +882,14 @@ export const RELEASES = [
   }),
   release({
     model: "Composer 2.5",
-    provider: "xAI",
+    provider: "Cursor",
     group: "Chinese+Other",
-    releaseDate: "2026-06-01",
+    releaseDate: "2026-06-11",
     codingIndex: null,
     focus: ["agentic", "programming"],
     releaseCategory: "specialized-base",
-    sourceUrl: "https://x.ai/news/composer-2-5",
-    notes: "xAI model available in Grok Build for long-running coding tasks and complex instruction following.",
+    sourceUrl: "https://cursor.com/blog/composer-2-5",
+    notes: "Cursor's Composer 2.5 coding model, built on Moonshot's Kimi K2.5 checkpoint, improves long-running tasks and complex instruction following.",
   }),
   release({
     model: "Claude Fable 5",
@@ -922,6 +922,16 @@ export const RELEASES = [
     sourceType: "secondary",
     sourceUrl: "https://developers.cloudflare.com/changelog/post/2026-06-12-kimi-k2-7-code-workers-ai/",
     notes: "Code-optimized Kimi K2 variant with improved coding and agentic benchmark performance over K2.6; official Moonshot social release corroborates availability.",
+  }),
+  release({
+    model: "GLM-5.2",
+    provider: "Z.ai",
+    group: "Chinese+Other",
+    releaseDate: "2026-06-13",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://docs.z.ai/devpack/latest-model",
+    notes: "Flagship Z.ai coding model available to GLM Coding Plan users with 1M-context support; API, chatbot, and MIT open weights were announced as following the initial coding-plan rollout.",
   }),
 ];
 

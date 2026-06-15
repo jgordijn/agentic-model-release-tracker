@@ -16,6 +16,15 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
+test("chart projection is drawn as a red dashed trend from the previous year", async () => {
+  const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
+
+  assert.match(app, /const previousPoint = points\[projectedIndex - 1\]/);
+  assert.match(app, /\{ x: previousPoint\.x, y: previousPoint\.y \}/);
+  assert.match(app, /"#ff3b4f"/);
+  assert.doesNotMatch(app, /projectedPoint\.x \+ 54/);
+});
+
 test("Pages workflow includes project assets in the deployed site", async () => {
   const workflow = await readFile(new URL("../.github/workflows/pages.yml", import.meta.url), "utf8");
 

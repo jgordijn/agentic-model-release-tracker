@@ -272,15 +272,18 @@ function drawLine(ctx, points, color, dashed) {
 }
 
 function drawProjectedLine(ctx, points) {
-  const projectedPoint = points.find((point) => point.projected !== null);
-  if (!projectedPoint?.projectedPoint) return;
+  const projectedIndex = points.findIndex((point) => point.projected !== null);
+  const projectedPoint = points[projectedIndex];
+  const previousPoint = points[projectedIndex - 1];
+  if (!previousPoint || !projectedPoint?.projectedPoint) return;
+
   drawLine(
     ctx,
     [
-      { x: projectedPoint.x, y: projectedPoint.y },
-      { x: projectedPoint.x + 54, y: projectedPoint.projectedPoint.y },
+      { x: previousPoint.x, y: previousPoint.y },
+      { x: projectedPoint.projectedPoint.x, y: projectedPoint.projectedPoint.y },
     ],
-    "#41e2c0",
+    "#ff3b4f",
     true,
   );
 }
@@ -312,8 +315,8 @@ function drawLabels(ctx, points, projection) {
   });
   const current = points.find((point) => point.year === projection.currentYear);
   if (current?.projectedPoint) {
-    ctx.fillStyle = "#41e2c0";
-    ctx.fillText(`${projection.projected} projected`, current.x + 78, Math.max(34, current.projectedPoint.y - 8));
+    ctx.fillStyle = "#ff3b4f";
+    ctx.fillText(String(projection.projected), current.projectedPoint.x, Math.max(34, current.projectedPoint.y - 8));
   }
 }
 

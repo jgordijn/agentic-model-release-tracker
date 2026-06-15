@@ -50,10 +50,11 @@ test("Gemini tier models are tracked as separate model lines", () => {
   assert.ok(!geminiModels.has("Gemini 3.5 Pro"));
 });
 
-test("xAI Grok releases cover base generations and the distinct coding line", () => {
+test("xAI releases cover base Grok generations and distinct coding lines", () => {
   const grokModels = new Set(RELEASES.filter((release) => release.provider === "xAI").map((release) => release.model));
 
   assert.deepEqual([...grokModels].sort(), [
+    "Composer 2.5",
     "Grok 1",
     "Grok 1.5",
     "Grok 2",

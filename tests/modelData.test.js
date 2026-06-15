@@ -91,6 +91,13 @@ test("known February 5 2026 coding frontier releases are correct", () => {
   assert.equal(RELEASES.find((release) => release.model === "GPT-5.3-Codex")?.releaseDate, "2026-02-05");
 });
 
+test("Claude Fable 5 carries the available Artificial Analysis coding score", () => {
+  const fable = RELEASES.find((release) => release.model === "Claude Fable 5");
+
+  assert.equal(fable?.codingIndex, 62);
+  assert.match(fable?.scoreSourceUrl, /artificial_analysis_coding_index/);
+});
+
 test("frontier labs include pre-2025 releases for the requested chart range", () => {
   const frontierBefore2025 = RELEASES.filter(
     (release) => release.group === "Frontier labs" && release.releaseDate < "2025-01-01",

@@ -602,7 +602,7 @@ export const RELEASES = [
     focus: ["agentic", "programming"],
     sourceUrl: "https://www.anthropic.com/news/claude-opus-4-5",
     scoreSourceUrl: aaCodingSource,
-    notes: "Opus 4.5 is the coding-solved threshold row.",
+    notes: "AA Coding Index reference score for Claude Opus 4.5; kept in the release dataset rather than as a chart annotation.",
   }),
   release({
     model: "Grok 4.1 Fast",
@@ -896,10 +896,11 @@ export const RELEASES = [
     provider: "Anthropic",
     group: "Frontier labs",
     releaseDate: "2026-06-09",
-    codingIndex: null,
+    codingIndex: 62,
     focus: ["agentic", "programming"],
     sourceUrl: "https://www.anthropic.com/news/claude-fable-5-mythos-5",
-    notes: "Mythos-class generally available Claude release for long-horizon software engineering; Mythos 5 is treated as a restricted-access variant of the same underlying model.",
+    scoreSourceUrl: aaCodingSource,
+    notes: "Mythos-class generally available Claude release for long-horizon software engineering; AA score uses the Adaptive Reasoning, Max Effort, Opus 4.8 Fallback row. Mythos 5 is treated as a restricted-access variant of the same underlying model.",
   }),
   release({
     model: "DiffusionGemma",

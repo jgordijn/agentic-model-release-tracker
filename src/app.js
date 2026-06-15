@@ -1,6 +1,5 @@
 import { DATA_SOURCES, IMPORTANT_MISSING_LABS, RELEASES } from "./modelData.js?v=20220604i";
 import {
-  OPUS_45_CODING_THRESHOLD,
   applyFilters,
   buildChartSeries,
   calculateProjection,
@@ -199,7 +198,9 @@ function renderKpis(models) {
   document.querySelector("#kpiProjected").textContent = projection.projected;
   document.querySelector("#kpiQualified").textContent = summary.qualified;
   document.querySelector("#kpiBest").textContent = best ? `${best.model} (${best.codingIndex})` : "Geen score";
-  document.querySelector("#thresholdText").textContent = `Opus 4.5 drempel: ${OPUS_45_CODING_THRESHOLD}`;
+  document.querySelector("#thresholdText").textContent = "Observed releases with 2026 YTD and projection";
+  document.querySelector("#chartYtd").textContent = projection.ytd;
+  document.querySelector("#chartProjected").textContent = projection.projected;
 }
 
 function renderChart(models) {
@@ -215,16 +216,30 @@ function renderChart(models) {
   const series = buildChartSeries(models, TODAY);
   const projection = calculateProjection(models, TODAY);
   const maxValue = Math.max(1, ...series.observed, projection.projected);
-  const padding = { left: 58, right: 48, top: 46, bottom: 58 };
+  const padding = { left: 58, right: 88, top: 42, bottom: 58 };
   const points = getProjectedChartPoints(series, padding, width, height);
 
   ctx.clearRect(0, 0, width, height);
+  drawChartBackground(ctx, width, height, padding);
   drawGrid(ctx, width, height, padding, maxValue);
   drawArea(ctx, points, height, padding);
   drawLine(ctx, points, "#4f95ff", false);
   drawProjectedLine(ctx, points);
   drawPoints(ctx, points);
   drawLabels(ctx, points, projection);
+}
+
+function drawChartBackground(ctx, width, height, padding) {
+  const glow = ctx.createRadialGradient(width * 0.52, padding.top, 10, width * 0.52, padding.top, width * 0.72);
+  glow.addColorStop(0, "rgba(53, 130, 255, 0.28)");
+  glow.addColorStop(0.45, "rgba(18, 58, 110, 0.18)");
+  glow.addColorStop(1, "rgba(2, 8, 20, 0)");
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, width, height);
+
+  ctx.strokeStyle = "rgba(68, 139, 255, 0.18)";
+  ctx.lineWidth = 1;
+  ctx.strokeRect(padding.left, padding.top, width - padding.left - padding.right, height - padding.top - padding.bottom);
 }
 
 function drawGrid(ctx, width, height, padding, maxValue) {
@@ -239,7 +254,15 @@ function drawGrid(ctx, width, height, padding, maxValue) {
     ctx.moveTo(padding.left, y);
     ctx.lineTo(width - padding.right, y);
     ctx.stroke();
-    ctx.fillText(String(value), 16, y + 4);
+  }
+
+  ctx.strokeStyle = "rgba(160, 190, 230, 0.12)";
+  for (let i = 0; i <= 4; i += 1) {
+    const x = padding.left + ((width - padding.left - padding.right) * i) / 4;
+    ctx.beginPath();
+    ctx.moveTo(x, padding.top);
+    ctx.lineTo(x, height - padding.bottom);
+    ctx.stroke();
   }
 }
 
@@ -251,7 +274,8 @@ function drawArea(ctx, points, height, padding) {
   ctx.fillStyle = gradient;
   ctx.beginPath();
   ctx.moveTo(points[0].x, height - padding.bottom);
-  points.forEach((point) => ctx.lineTo(point.x, point.y));
+  ctx.lineTo(points[0].x, points[0].y);
+  drawSmoothPath(ctx, points, { continueFromCurrentPoint: true });
   ctx.lineTo(points[points.length - 1].x, height - padding.bottom);
   ctx.closePath();
   ctx.fill();
@@ -259,16 +283,44 @@ function drawArea(ctx, points, height, padding) {
 
 function drawLine(ctx, points, color, dashed) {
   if (points.length === 0) return;
+  ctx.save();
+  ctx.shadowColor = color;
+  ctx.shadowBlur = dashed ? 0 : 18;
   ctx.strokeStyle = color;
   ctx.lineWidth = 3;
   ctx.setLineDash(dashed ? [7, 7] : []);
   ctx.beginPath();
-  points.forEach((point, index) => {
-    if (index === 0) ctx.moveTo(point.x, point.y);
-    else ctx.lineTo(point.x, point.y);
-  });
+  drawSmoothPath(ctx, points);
   ctx.stroke();
   ctx.setLineDash([]);
+  ctx.restore();
+}
+
+function drawSmoothPath(ctx, points, options = {}) {
+  if (points.length === 0) return;
+  if (!options.continueFromCurrentPoint) {
+    ctx.moveTo(points[0].x, points[0].y);
+  }
+  if (points.length === 1) return;
+
+  // Catmull-Rom to cubic Bézier: keeps the line fluent while passing through
+  // every actual release-count point instead of cutting across/around them.
+  for (let index = 0; index < points.length - 1; index += 1) {
+    const previous = points[Math.max(0, index - 1)];
+    const current = points[index];
+    const next = points[index + 1];
+    const following = points[Math.min(points.length - 1, index + 2)];
+    const controlScale = 1 / 6;
+
+    ctx.bezierCurveTo(
+      current.x + (next.x - previous.x) * controlScale,
+      current.y + (next.y - previous.y) * controlScale,
+      next.x - (following.x - current.x) * controlScale,
+      next.y - (following.y - current.y) * controlScale,
+      next.x,
+      next.y,
+    );
+  }
 }
 
 function drawProjectedLine(ctx, points) {
@@ -290,6 +342,11 @@ function drawProjectedLine(ctx, points) {
 
 function drawPoints(ctx, points) {
   points.forEach((point) => {
+    ctx.beginPath();
+    ctx.strokeStyle = "rgba(79, 149, 255, 0.34)";
+    ctx.lineWidth = 2;
+    ctx.arc(point.x, point.y, 10, 0, Math.PI * 2);
+    ctx.stroke();
     ctx.beginPath();
     ctx.fillStyle = "#ffffff";
     ctx.arc(point.x, point.y, 6, 0, Math.PI * 2);
@@ -316,7 +373,10 @@ function drawLabels(ctx, points, projection) {
   const current = points.find((point) => point.year === projection.currentYear);
   if (current?.projectedPoint) {
     ctx.fillStyle = "#41e2c0";
+    ctx.font = "700 16px Inter, system-ui, sans-serif";
     ctx.fillText(String(projection.projected), current.projectedPoint.x, Math.max(34, current.projectedPoint.y - 8));
+    ctx.font = "12px Inter, system-ui, sans-serif";
+    ctx.fillText("projected", current.projectedPoint.x, Math.max(50, current.projectedPoint.y + 10));
   }
 }
 
@@ -356,7 +416,7 @@ function renderTable(models) {
           <td>${item.provider}</td>
           <td>${item.model}</td>
           <td>${item.group}</td>
-          <td class="${item.codingIndex >= OPUS_45_CODING_THRESHOLD ? "good-score" : ""}">${item.codingIndex ?? "n/a"}</td>
+          <td class="${item.codingIndex !== null ? "good-score" : ""}">${item.codingIndex ?? "n/a"}</td>
           <td>${item.notes}</td>
           <td><a href="${item.sourceUrl}" target="_blank" rel="noreferrer">maker</a></td>
         </tr>

@@ -1,0 +1,163 @@
+{
+  "since": "2026-06-01",
+  "providers": [
+    {
+      "name": "OpenAI",
+      "group": "Frontier labs",
+      "primarySources": [
+        "https://openai.com/news/",
+        "https://openai.com/index/",
+        "https://platform.openai.com/docs/models"
+      ],
+      "searchQueries": [
+        "site:openai.com/index OpenAI model release coding agentic after:{since}",
+        "site:platform.openai.com/docs/models OpenAI GPT Codex model after:{since}"
+      ],
+      "includeSignals": ["GPT", "Codex", "model", "coding", "agentic", "tool use"],
+      "excludeSignals": ["partnership", "customer story", "report"]
+    },
+    {
+      "name": "Anthropic",
+      "group": "Frontier labs",
+      "primarySources": [
+        "https://www.anthropic.com/news",
+        "https://docs.anthropic.com/en/docs/about-claude/models"
+      ],
+      "searchQueries": [
+        "site:anthropic.com/news Anthropic Claude model release coding agentic after:{since}",
+        "site:docs.anthropic.com Claude models release after:{since}"
+      ],
+      "includeSignals": ["Claude", "model", "coding", "agentic", "computer use", "software engineering"],
+      "excludeSignals": ["partnership", "customer", "policy"]
+    },
+    {
+      "name": "Google",
+      "group": "Frontier labs",
+      "primarySources": [
+        "https://blog.google/innovation-and-ai/models-and-research/gemini-models/",
+        "https://blog.google/innovation-and-ai/technology/developers-tools/",
+        "https://ai.google.dev/gemini-api/docs/models"
+      ],
+      "searchQueries": [
+        "site:blog.google Google Gemini Gemma model release coding agentic after:{since}",
+        "site:ai.google.dev/gemini-api/docs/models Gemini model after:{since}"
+      ],
+      "includeSignals": ["Gemini", "Gemma", "model", "coding", "agentic", "developer"],
+      "excludeSignals": ["app feature", "Workspace", "subscription"]
+    },
+    {
+      "name": "xAI",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://x.ai/news",
+        "https://docs.x.ai/developers/models"
+      ],
+      "searchQueries": [
+        "site:x.ai/news xAI Grok model coding agentic after:{since}",
+        "site:docs.x.ai/developers/models Grok model after:{since}"
+      ],
+      "includeSignals": ["Grok", "Composer", "Build", "model", "coding", "long-running tasks"],
+      "excludeSignals": ["voice", "image", "video", "partnership"]
+    },
+    {
+      "name": "Mistral",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://mistral.ai/news",
+        "https://docs.mistral.ai/getting-started/models/models_overview/"
+      ],
+      "searchQueries": [
+        "site:mistral.ai/news Mistral model release coding agentic after:{since}",
+        "site:docs.mistral.ai models Mistral Large Devstral Codestral after:{since}"
+      ],
+      "includeSignals": ["Mistral", "Devstral", "Codestral", "Magistral", "model", "coding", "agentic"],
+      "excludeSignals": ["platform", "partnership", "customer"]
+    },
+    {
+      "name": "Alibaba",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://qwenlm.github.io/blog",
+        "https://qwen.ai/blog"
+      ],
+      "searchQueries": [
+        "site:qwenlm.github.io/blog Qwen model release coding agentic after:{since}",
+        "site:qwen.ai/blog Qwen model release coding agentic after:{since}"
+      ],
+      "includeSignals": ["Qwen", "Coder", "model", "agentic", "tool use", "coding"],
+      "excludeSignals": ["embedding", "reranker", "image edit"]
+    },
+    {
+      "name": "DeepSeek",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://api-docs.deepseek.com/news/",
+        "https://www.deepseek.com/en/transparency/"
+      ],
+      "searchQueries": [
+        "site:api-docs.deepseek.com/news DeepSeek model release after:{since}",
+        "site:deepseek.com DeepSeek V model release coding agentic after:{since}"
+      ],
+      "includeSignals": ["DeepSeek", "V", "R", "model", "tool", "agent", "coding"],
+      "excludeSignals": ["pricing only", "cache only"]
+    },
+    {
+      "name": "Moonshot.ai",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://platform.moonshot.ai/blog/posts/changelog",
+        "https://www.moonshot.ai/",
+        "https://x.com/Kimi_Moonshot"
+      ],
+      "searchQueries": [
+        "Moonshot AI Kimi model release coding agentic after:{since}",
+        "site:platform.moonshot.ai Kimi model release after:{since}",
+        "site:x.com/Kimi_Moonshot Kimi latest coding model released after:{since}"
+      ],
+      "includeSignals": ["Kimi", "K2", "Code", "model", "agentic", "coding"],
+      "excludeSignals": ["app-only", "doodle"]
+    },
+    {
+      "name": "MiniMax",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://www.minimax.io/news",
+        "https://www.minimax.io/blog"
+      ],
+      "searchQueries": [
+        "site:minimax.io MiniMax M model release coding agentic after:{since}",
+        "site:minimax.io/blog MiniMax model coding agent after:{since}"
+      ],
+      "includeSignals": ["MiniMax", "M", "model", "agent", "coding"],
+      "excludeSignals": ["audio", "video", "image"]
+    },
+    {
+      "name": "Z.ai",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://z.ai/blog",
+        "https://docs.z.ai/release-notes/new-released"
+      ],
+      "searchQueries": [
+        "site:z.ai/blog GLM model release coding agentic after:{since}",
+        "site:docs.z.ai/release-notes GLM model release after:{since}"
+      ],
+      "includeSignals": ["GLM", "model", "agentic", "coding", "tool"],
+      "excludeSignals": ["docs-only"]
+    },
+    {
+      "name": "Xiaomi",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://github.com/XiaomiMiMo",
+        "https://huggingface.co/XiaomiMiMo"
+      ],
+      "searchQueries": [
+        "Xiaomi MiMo model release coding agentic after:{since}",
+        "site:huggingface.co/XiaomiMiMo MiMo model after:{since}"
+      ],
+      "includeSignals": ["MiMo", "model", "coding", "agentic"],
+      "excludeSignals": ["demo-only"]
+    }
+  ]
+}

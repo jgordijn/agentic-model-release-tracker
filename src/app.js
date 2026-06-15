@@ -283,7 +283,7 @@ function drawProjectedLine(ctx, points) {
       { x: previousPoint.x, y: previousPoint.y },
       { x: projectedPoint.projectedPoint.x, y: projectedPoint.projectedPoint.y },
     ],
-    "#ff3b4f",
+    "#41e2c0",
     true,
   );
 }
@@ -315,7 +315,7 @@ function drawLabels(ctx, points, projection) {
   });
   const current = points.find((point) => point.year === projection.currentYear);
   if (current?.projectedPoint) {
-    ctx.fillStyle = "#ff3b4f";
+    ctx.fillStyle = "#41e2c0";
     ctx.fillText(String(projection.projected), current.projectedPoint.x, Math.max(34, current.projectedPoint.y - 8));
   }
 }

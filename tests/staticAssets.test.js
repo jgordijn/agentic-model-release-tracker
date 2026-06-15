@@ -16,12 +16,12 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("chart projection is drawn as a red dashed trend from the previous year", async () => {
+test("chart projection is drawn as a green dashed trend from the previous year", async () => {
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
   assert.match(app, /const previousPoint = points\[projectedIndex - 1\]/);
   assert.match(app, /\{ x: previousPoint\.x, y: previousPoint\.y \}/);
-  assert.match(app, /"#ff3b4f"/);
+  assert.match(app, /"#41e2c0"/);
   assert.doesNotMatch(app, /projectedPoint\.x \+ 54/);
 });
 

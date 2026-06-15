@@ -98,6 +98,29 @@ test("Claude Fable 5 carries the available Artificial Analysis coding score", ()
   assert.match(fable?.scoreSourceUrl, /artificial_analysis_coding_index/);
 });
 
+test("Mistral Medium 3.5 carries the Artificial Analysis coding score", () => {
+  const medium = RELEASES.find((release) => release.model === "Mistral Medium 3.5");
+
+  assert.equal(medium?.provider, "Mistral");
+  assert.equal(medium?.codingIndex, 35.4);
+  assert.match(medium?.scoreSourceUrl, /artificialanalysis\.ai\/models\/mistral-medium-3-5/);
+});
+
+test("Cursor Composer model history is represented without AA scores", () => {
+  const composerRows = RELEASES.filter((release) => release.provider === "Cursor");
+
+  assert.deepEqual(
+    composerRows.map((release) => [release.model, release.releaseDate, release.codingIndex]),
+    [
+      ["Composer 1", "2025-10-29", null],
+      ["Composer 1.5", "2026-02-09", null],
+      ["Composer 2", "2026-03-19", null],
+      ["Composer 2.5", "2026-05-18", null],
+    ],
+  );
+  assert.ok(composerRows.every((release) => release.releaseCategory === "specialized-base"));
+});
+
 test("frontier labs include pre-2025 releases for the requested chart range", () => {
   const frontierBefore2025 = RELEASES.filter(
     (release) => release.group === "Frontier labs" && release.releaseDate < "2025-01-01",

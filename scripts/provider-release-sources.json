@@ -97,7 +97,7 @@
         "site:qwenlm.github.io/blog Qwen model release coding agentic after:{since}",
         "site:qwen.ai/blog Qwen model release coding agentic after:{since}"
       ],
-      "includeSignals": ["Qwen", "Coder", "model", "agentic", "tool use", "coding"],
+      "includeSignals": ["Qwen", "Coder", "model", "agentic", "tool use", "coding", "SWE", "Terminal", "MCP", "language world model"],
       "excludeSignals": ["embedding", "reranker", "image edit"]
     },
     {
@@ -171,6 +171,20 @@
       ],
       "includeSignals": ["MiMo", "model", "coding", "agentic"],
       "excludeSignals": ["demo-only"]
+    },
+    {
+      "name": "NVIDIA",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://build.nvidia.com/nvidia",
+        "https://huggingface.co/nvidia"
+      ],
+      "searchQueries": [
+        "site:build.nvidia.com/nvidia NVIDIA Nemotron model agentic coding after:{since}",
+        "site:huggingface.co/nvidia Nemotron model agentic coding after:{since}"
+      ],
+      "includeSignals": ["NVIDIA", "Nemotron", "model", "agentic", "tool use", "coding", "SWE-Bench"],
+      "excludeSignals": ["GPU", "platform only", "customer story"]
     }
   ]
 }

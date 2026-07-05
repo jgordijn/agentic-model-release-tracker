@@ -64,6 +64,7 @@ test("xAI releases cover base Grok generations and distinct coding lines", () =>
     "Grok 4.1 Fast",
     "Grok 4.20",
     "Grok 4.3",
+    "Grok Build 0.1",
     "Grok Code Fast 1",
   ]);
   assert.equal(RELEASES.find((release) => release.model === "Grok 4")?.codingIndex, 40.5);

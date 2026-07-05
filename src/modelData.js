@@ -1014,10 +1014,11 @@ export const RELEASES = [
     provider: "Anthropic",
     group: "Frontier labs",
     releaseDate: "2026-06-30",
-    codingIndex: null,
+    codingIndex: 71.5,
     focus: ["agentic", "programming"],
     sourceUrl: "https://www.anthropic.com/news/claude-sonnet-5",
-    notes: "Anthropic's most agentic Sonnet model yet, generally available in Claude Code and the Claude Platform with improvements in planning, tool use, coding, and autonomous workflows; AA Coding Index score not available in the consulted snapshot.",
+    scoreSourceUrl: aaCodingSource,
+    notes: "Anthropic's most agentic Sonnet model yet, generally available in Claude Code and the Claude Platform with improvements in planning, tool use, coding, and autonomous workflows; AA score uses the Adaptive Reasoning, Max Effort row.",
   }),
 ];
 

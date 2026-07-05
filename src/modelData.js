@@ -974,10 +974,11 @@ export const RELEASES = [
     provider: "Z.ai",
     group: "Chinese+Other",
     releaseDate: "2026-06-13",
-    codingIndex: null,
+    codingIndex: 68.8,
     focus: ["agentic", "programming"],
     sourceUrl: "https://docs.z.ai/devpack/latest-model",
-    notes: "Flagship Z.ai coding model available to GLM Coding Plan users with 1M-context support; API, chatbot, and MIT open weights were announced as following the initial coding-plan rollout.",
+    scoreSourceUrl: aaCodingSource,
+    notes: "Flagship Z.ai coding model available to GLM Coding Plan users with 1M-context support; API, chatbot, and MIT open weights were announced as following the initial coding-plan rollout; AA score uses the GLM-5.2 (max) row.",
   }),
   release({
     model: "Grok Build 0.1",

@@ -83,7 +83,8 @@ test("MiniMax M3 is tracked as the latest MiniMax base release", () => {
 
   assert.equal(m3?.provider, "MiniMax");
   assert.equal(m3?.releaseDate, "2026-06-01");
-  assert.equal(m3?.codingIndex, null);
+  assert.equal(m3?.codingIndex, 43.4);
+  assert.match(m3?.scoreSourceUrl, /artificial_analysis_coding_index/);
   assert.match(m3?.sourceUrl, /minimax-m3/);
 });
 
@@ -95,7 +96,7 @@ test("known February 5 2026 coding frontier releases are correct", () => {
 test("Claude Fable 5 carries the available Artificial Analysis coding score", () => {
   const fable = RELEASES.find((release) => release.model === "Claude Fable 5");
 
-  assert.equal(fable?.codingIndex, 62);
+  assert.equal(fable?.codingIndex, 76.5);
   assert.match(fable?.scoreSourceUrl, /artificial_analysis_coding_index/);
 });
 
@@ -103,8 +104,8 @@ test("Mistral Medium 3.5 carries the Artificial Analysis coding score", () => {
   const medium = RELEASES.find((release) => release.model === "Mistral Medium 3.5");
 
   assert.equal(medium?.provider, "Mistral");
-  assert.equal(medium?.codingIndex, 35.4);
-  assert.match(medium?.scoreSourceUrl, /artificialanalysis\.ai\/models\/mistral-medium-3-5/);
+  assert.equal(medium?.codingIndex, 46.9);
+  assert.match(medium?.scoreSourceUrl, /artificial_analysis_coding_index/);
 });
 
 test("Cursor Composer model history is represented without AA scores", () => {

@@ -194,6 +194,14 @@ input[type="range"] {
   color: var(--cyan);
 }
 
+button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+.check-pill input:focus-visible + span {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
 .kpis {
   display: grid;
   grid-template-columns: repeat(5, minmax(130px, 1fr));

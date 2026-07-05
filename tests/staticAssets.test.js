@@ -16,13 +16,70 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("chart projection is drawn as a green dashed trend from the previous year", async () => {
+test("chart projection is drawn as a green dashed trend with a same-year fallback start", async () => {
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(app, /const previousPoint = points\[projectedIndex - 1\]/);
-  assert.match(app, /\{ x: previousPoint\.x, y: previousPoint\.y \}/);
+  assert.match(app, /const startPoint = points\[projectedIndex - 1\] \?\? projectedPoint/);
+  assert.match(app, /\{ x: startPoint\.x, y: startPoint\.y \}/);
   assert.match(app, /"#41e2c0"/);
   assert.doesNotMatch(app, /projectedPoint\.x \+ 54/);
+});
+
+test("chart draws y-axis tick labels from the shared chart ceiling", async () => {
+  const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
+
+  assert.match(app, /getChartMaxValue/);
+  assert.match(app, /ctx\.fillText\(String\(value\)/);
+});
+
+test("chart year labels anchor to the plot bottom instead of a fixed pixel", async () => {
+  const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
+
+  assert.match(app, /height - padding\.bottom \+ 20/);
+  assert.doesNotMatch(app, /, 394\)/);
+});
+
+test("vertical gridlines align with the plotted year points", async () => {
+  const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
+
+  assert.match(app, /ctx\.moveTo\(point\.x, padding\.top\)/);
+});
+
+test("canvas labels and translations localize the projected word and year", async () => {
+  const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
+
+  assert.match(app, /t\("chartProjectedWord"\)/);
+  assert.doesNotMatch(app, /fillText\("projected"/);
+  assert.match(app, /\{year\}/);
+  assert.doesNotMatch(app, /2026 (YTD|projectie|projected|tot nu toe)/);
+  assert.doesNotMatch(app, /december 2026/i);
+});
+
+test("chart redraws when the window resizes", async () => {
+  const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
+
+  assert.match(app, /addEventListener\("resize"/);
+});
+
+test("dynamic HTML rendering escapes interpolated data", async () => {
+  const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
+
+  assert.match(app, /function escapeHtml/);
+  assert.match(app, /escapeHtml\(item\.notes\)/);
+  assert.match(app, /escapeHtml\(item\.sourceUrl\)/);
+  assert.match(app, /escapeHtml\(provider\)/);
+});
+
+test("table sort state is exposed via aria-sort on the header cell", async () => {
+  const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
+
+  assert.match(app, /closest\("th"\)\.setAttribute\("aria-sort"/);
+});
+
+test("keyboard focus is visible on provider pills and controls", async () => {
+  const css = await readFile(new URL("../styles.css", import.meta.url), "utf8");
+
+  assert.match(css, /\.check-pill input:focus-visible \+ span/);
 });
 
 test("language toggle exposes Dutch and English flag buttons", async () => {

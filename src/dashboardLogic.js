@@ -75,8 +75,14 @@ export function buildChartSeries(models, today) {
   return { years, observed, projected };
 }
 
+export function getChartMaxValue(series) {
+  const rawMax = Math.max(1, ...series.observed, ...series.projected.filter((value) => value !== null));
+  // Round up to a multiple of four so five gridlines always land on integers.
+  return Math.ceil(rawMax / 4) * 4;
+}
+
 export function getProjectedChartPoints(series, padding, width, height) {
-  const maxValue = Math.max(1, ...series.observed, ...series.projected.filter((value) => value !== null));
+  const maxValue = getChartMaxValue(series);
   const plotWidth = width - padding.left - padding.right;
   const plotHeight = height - padding.top - padding.bottom;
   const xStep = series.years.length > 1 ? plotWidth / (series.years.length - 1) : 0;

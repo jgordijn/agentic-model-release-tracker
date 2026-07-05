@@ -6,6 +6,7 @@ import {
   applyFilters,
   buildChartSeries,
   calculateProjection,
+  getChartMaxValue,
   getProvidersForGroup,
   getProjectedChartPoints,
   groupByProvider,
@@ -235,6 +236,20 @@ test("buildChartSeries counts observed and projected releases per year", () => {
   assert.deepEqual(series.years, [2025, 2026]);
   assert.deepEqual(series.observed, [2, 2]);
   assert.deepEqual(series.projected, [null, 5]);
+});
+
+test("getChartMaxValue rounds the chart ceiling up to integer gridline steps", () => {
+  assert.equal(getChartMaxValue({ observed: [1, 9, 14, 17, 12], projected: [null, null, null, null, 29] }), 32);
+  assert.equal(getChartMaxValue({ observed: [2], projected: [null] }), 4);
+  assert.equal(getChartMaxValue({ observed: [], projected: [] }), 4);
+});
+
+test("getProjectedChartPoints scales values against the shared chart ceiling", () => {
+  const padding = { left: 58, right: 48, top: 46, bottom: 58 };
+  const points = getProjectedChartPoints({ years: [2026], observed: [1], projected: [null] }, padding, 900, 420);
+  const plotHeight = 420 - padding.top - padding.bottom;
+
+  assert.equal(points[0].y, padding.top + plotHeight - (1 / 4) * plotHeight);
 });
 
 test("getProjectedChartPoints places projected value above the previous year when it is higher", () => {

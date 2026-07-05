@@ -1,20 +1,22 @@
-import { DATA_SOURCES, IMPORTANT_MISSING_LABS, RELEASES } from "./modelData.js?v=20220604i";
+import { DATA_SOURCES, IMPORTANT_MISSING_LABS, RELEASES } from "./modelData.js?v=20260705a";
 import {
   applyFilters,
   buildChartSeries,
   calculateProjection,
+  getChartMaxValue,
   getProvidersForGroup,
   getProjectedChartPoints,
   groupByProvider,
   paginateRows,
   sortReleases,
   summarizeReleases,
-} from "./dashboardLogic.js?v=20220604h";
+} from "./dashboardLogic.js?v=20260705a";
 
 const TODAY = RELEASES.reduce(
   (latest, release) => (release.releaseDate > latest ? release.releaseDate : latest),
   RELEASES[0]?.releaseDate ?? new Date().toISOString().slice(0, 10),
 );
+const CURRENT_YEAR = Number(TODAY.slice(0, 4));
 const DEFAULT_LANGUAGE = "nl";
 const translations = {
   nl: {
@@ -33,19 +35,20 @@ const translations = {
     toDate: "Tot",
     scoredOnly: "Alleen met AA-score",
     kpiTotal: "Totaal",
-    kpiYtd: "2026 tot nu toe",
-    kpiProjected: "2026 projectie",
+    kpiYtd: "{year} tot nu toe",
+    kpiProjected: "{year} projectie",
     kpiQualified: "Groene AA-score",
     kpiBest: "Beste score",
     noScore: "Geen score",
-    chartSubtitle: "Geobserveerde releases met 2026 tot nu toe en projectie",
+    chartSubtitle: "Geobserveerde releases met {year} tot nu toe en projectie",
     chartTitle: "Gecombineerde modelreleases",
     chartSummaryLabel: "Grafieksamenvatting",
-    chartProjectedLabel: "2026 projectie",
+    chartProjectedLabel: "{year} projectie",
     chartProjectedSmall: "gecombineerde releases",
-    chartYtdLabel: "2026 tot nu toe",
+    chartProjectedWord: "projectie",
+    chartYtdLabel: "{year} tot nu toe",
     chartYtdSmall: "al uitgebracht",
-    projectionNote: "Projectie t/m 31 december 2026",
+    projectionNote: "Projectie t/m 31 december {year}",
     providerBreakdownTitle: "Provideroverzicht",
     providerBreakdownSubtitle: "Releases en hoogste AA-score",
     datasetTitle: "Release-dataset",
@@ -84,19 +87,20 @@ const translations = {
     toDate: "To",
     scoredOnly: "Only with AA score",
     kpiTotal: "Total",
-    kpiYtd: "2026 YTD",
-    kpiProjected: "2026 projected",
+    kpiYtd: "{year} YTD",
+    kpiProjected: "{year} projected",
     kpiQualified: "Green AA score",
     kpiBest: "Best score",
     noScore: "No score",
-    chartSubtitle: "Observed releases with 2026 YTD and projection",
+    chartSubtitle: "Observed releases with {year} YTD and projection",
     chartTitle: "Combined model releases",
     chartSummaryLabel: "Chart summary",
-    chartProjectedLabel: "2026 projected",
+    chartProjectedLabel: "{year} projected",
     chartProjectedSmall: "combined releases",
-    chartYtdLabel: "2026 YTD",
+    chartProjectedWord: "projected",
+    chartYtdLabel: "{year} YTD",
     chartYtdSmall: "already released",
-    projectionNote: "Projection through December 31, 2026",
+    projectionNote: "Projection through December 31, {year}",
     providerBreakdownTitle: "Provider breakdown",
     providerBreakdownSubtitle: "Releases and highest AA score",
     datasetTitle: "Release dataset",
@@ -170,7 +174,17 @@ function getInitialLanguage() {
 
 function t(key, replacements = {}) {
   const template = translations[state.language][key] ?? translations[DEFAULT_LANGUAGE][key] ?? key;
-  return Object.entries(replacements).reduce((value, [name, replacement]) => value.replace(`{${name}}`, replacement), template);
+  return Object.entries({ year: CURRENT_YEAR, ...replacements }).reduce(
+    (value, [name, replacement]) => value.replaceAll(`{${name}}`, replacement),
+    template,
+  );
+}
+
+function escapeHtml(value) {
+  return String(value).replace(
+    /[&<>"']/g,
+    (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character],
+  );
 }
 
 function applyLanguage() {
@@ -211,8 +225,8 @@ function populateProviderFilters() {
     .map(
       (provider) => `
         <label class="check-pill">
-          <input type="checkbox" value="${provider}" />
-          <span>${provider}</span>
+          <input type="checkbox" value="${escapeHtml(provider)}" />
+          <span>${escapeHtml(provider)}</span>
         </label>
       `,
     )
@@ -221,7 +235,7 @@ function populateProviderFilters() {
 
 function populateSources() {
   document.querySelector("#sourceList").innerHTML = DATA_SOURCES.map(
-    (source) => `<a href="${source.url}" target="_blank" rel="noreferrer">${source.label}</a>`,
+    (source) => `<a href="${escapeHtml(source.url)}" target="_blank" rel="noreferrer">${escapeHtml(source.label)}</a>`,
   ).join("");
   document.querySelector("#missingLabs").textContent = IMPORTANT_MISSING_LABS.join(", ");
 }
@@ -288,6 +302,11 @@ function bindControls() {
   });
   document.querySelector("#resetFilters").addEventListener("click", resetFilters);
   document.querySelector("#downloadChart").addEventListener("click", downloadCanvas);
+  let chartResizeFrame = 0;
+  window.addEventListener("resize", () => {
+    cancelAnimationFrame(chartResizeFrame);
+    chartResizeFrame = requestAnimationFrame(() => renderChart(applyFilters(RELEASES, state)));
+  });
   document.querySelectorAll(".language-button").forEach((button) => {
     button.addEventListener("click", () => {
       state.language = button.dataset.language;
@@ -361,18 +380,18 @@ function renderChart(models) {
 
   const series = buildChartSeries(models, TODAY);
   const projection = calculateProjection(models, TODAY);
-  const maxValue = Math.max(1, ...series.observed, projection.projected);
+  const maxValue = getChartMaxValue(series);
   const padding = { left: 58, right: 88, top: 42, bottom: 58 };
   const points = getProjectedChartPoints(series, padding, width, height);
 
   ctx.clearRect(0, 0, width, height);
   drawChartBackground(ctx, width, height, padding);
-  drawGrid(ctx, width, height, padding, maxValue);
+  drawGrid(ctx, width, height, padding, maxValue, points);
   drawArea(ctx, points, height, padding);
   drawLine(ctx, points, "#4f95ff", false);
   drawProjectedLine(ctx, points);
   drawPoints(ctx, points);
-  drawLabels(ctx, points, projection);
+  drawLabels(ctx, points, projection, height, padding);
 }
 
 function drawChartBackground(ctx, width, height, padding) {
@@ -388,11 +407,12 @@ function drawChartBackground(ctx, width, height, padding) {
   ctx.strokeRect(padding.left, padding.top, width - padding.left - padding.right, height - padding.top - padding.bottom);
 }
 
-function drawGrid(ctx, width, height, padding, maxValue) {
+function drawGrid(ctx, width, height, padding, maxValue, points) {
   ctx.strokeStyle = "rgba(160, 190, 230, 0.18)";
   ctx.lineWidth = 1;
   ctx.font = "12px Inter, system-ui, sans-serif";
   ctx.fillStyle = "#8da8c9";
+  ctx.textAlign = "right";
   for (let i = 0; i <= 4; i += 1) {
     const y = padding.top + ((height - padding.top - padding.bottom) * i) / 4;
     const value = Math.round(maxValue - (maxValue * i) / 4);
@@ -400,16 +420,16 @@ function drawGrid(ctx, width, height, padding, maxValue) {
     ctx.moveTo(padding.left, y);
     ctx.lineTo(width - padding.right, y);
     ctx.stroke();
+    ctx.fillText(String(value), padding.left - 10, y + 4);
   }
 
   ctx.strokeStyle = "rgba(160, 190, 230, 0.12)";
-  for (let i = 0; i <= 4; i += 1) {
-    const x = padding.left + ((width - padding.left - padding.right) * i) / 4;
+  points.forEach((point) => {
     ctx.beginPath();
-    ctx.moveTo(x, padding.top);
-    ctx.lineTo(x, height - padding.bottom);
+    ctx.moveTo(point.x, padding.top);
+    ctx.lineTo(point.x, height - padding.bottom);
     ctx.stroke();
-  }
+  });
 }
 
 function drawArea(ctx, points, height, padding) {
@@ -472,13 +492,14 @@ function drawSmoothPath(ctx, points, options = {}) {
 function drawProjectedLine(ctx, points) {
   const projectedIndex = points.findIndex((point) => point.projected !== null);
   const projectedPoint = points[projectedIndex];
-  const previousPoint = points[projectedIndex - 1];
-  if (!previousPoint || !projectedPoint?.projectedPoint) return;
+  if (!projectedPoint?.projectedPoint) return;
+  // Without a previous year in view the trend starts at the same year's observed point.
+  const startPoint = points[projectedIndex - 1] ?? projectedPoint;
 
   drawLine(
     ctx,
     [
-      { x: previousPoint.x, y: previousPoint.y },
+      { x: startPoint.x, y: startPoint.y },
       { x: projectedPoint.projectedPoint.x, y: projectedPoint.projectedPoint.y },
     ],
     "#41e2c0",
@@ -504,17 +525,16 @@ function drawPoints(ctx, points) {
   });
 }
 
-function drawLabels(ctx, points, projection) {
-  ctx.font = "700 16px Inter, system-ui, sans-serif";
-  ctx.fillStyle = "#eef5ff";
+function drawLabels(ctx, points, projection, height, padding) {
+  const yearLabelY = height - padding.bottom + 20;
   ctx.textAlign = "center";
   points.forEach((point) => {
+    ctx.font = "700 16px Inter, system-ui, sans-serif";
+    ctx.fillStyle = "#eef5ff";
     ctx.fillText(String(point.observed), point.x, point.y - 14);
     ctx.font = "12px Inter, system-ui, sans-serif";
     ctx.fillStyle = "#9bb9dc";
-    ctx.fillText(String(point.year), point.x, 394);
-    ctx.font = "700 16px Inter, system-ui, sans-serif";
-    ctx.fillStyle = "#eef5ff";
+    ctx.fillText(String(point.year), point.x, yearLabelY);
   });
   const current = points.find((point) => point.year === projection.currentYear);
   if (current?.projectedPoint) {
@@ -522,7 +542,7 @@ function drawLabels(ctx, points, projection) {
     ctx.font = "700 16px Inter, system-ui, sans-serif";
     ctx.fillText(String(projection.projected), current.projectedPoint.x, Math.max(34, current.projectedPoint.y - 8));
     ctx.font = "12px Inter, system-ui, sans-serif";
-    ctx.fillText("projected", current.projectedPoint.x, Math.max(50, current.projectedPoint.y + 10));
+    ctx.fillText(t("chartProjectedWord"), current.projectedPoint.x, Math.max(50, current.projectedPoint.y + 10));
   }
 }
 
@@ -535,7 +555,7 @@ function renderProviderBreakdown(models) {
         <div class="provider-row">
           <div class="provider-name">
             <span class="swatch" style="background:${providerColors[row.provider] || "#8da8c9"}"></span>
-            ${row.provider}
+            ${escapeHtml(row.provider)}
           </div>
           <div class="bar-track">
             <span style="width:${(row.releases / maxReleases) * 100}%; background:${providerColors[row.provider] || "#8da8c9"}"></span>
@@ -558,13 +578,13 @@ function renderTable(models) {
     .map(
       (item) => `
         <tr>
-          <td>${item.releaseDate}</td>
-          <td>${item.provider}</td>
-          <td>${item.model}</td>
-          <td>${item.group}</td>
+          <td>${escapeHtml(item.releaseDate)}</td>
+          <td>${escapeHtml(item.provider)}</td>
+          <td>${escapeHtml(item.model)}</td>
+          <td>${escapeHtml(item.group)}</td>
           <td class="${item.codingIndex !== null ? "good-score" : ""}">${item.codingIndex ?? "n/a"}</td>
-          <td>${item.notes}</td>
-          <td><a href="${item.sourceUrl}" target="_blank" rel="noreferrer">${t("makerLink")}</a></td>
+          <td>${escapeHtml(item.notes)}</td>
+          <td><a href="${escapeHtml(item.sourceUrl)}" target="_blank" rel="noreferrer">${t("makerLink")}</a></td>
         </tr>
       `,
     )
@@ -575,7 +595,7 @@ function updateSortButtons() {
   document.querySelectorAll("[data-sort-key]").forEach((button) => {
     const isActive = button.dataset.sortKey === state.tableSort.key;
     button.classList.toggle("active", isActive);
-    button.setAttribute("aria-sort", isActive ? (state.tableSort.direction === "asc" ? "ascending" : "descending") : "none");
+    button.closest("th").setAttribute("aria-sort", isActive ? (state.tableSort.direction === "asc" ? "ascending" : "descending") : "none");
     button.querySelector(".sort-arrow").textContent = isActive ? (state.tableSort.direction === "asc" ? "▲" : "▼") : "↕";
   });
 }

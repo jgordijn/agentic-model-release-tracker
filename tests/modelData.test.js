@@ -104,7 +104,9 @@ test("Claude Fable 5 carries the available Artificial Analysis coding score", ()
 test("July-August 2026 release refresh records verified scores and unknowns", () => {
   const expected = new Map([
     ["Leanstral 1.5", ["2026-07-02", null]],
-    ["GPT-5.6", ["2026-07-09", 78.3]],
+    ["GPT-5.6 Sol", ["2026-07-09", 78.3]],
+    ["GPT-5.6 Terra", ["2026-07-09", 70.6]],
+    ["GPT-5.6 Luna", ["2026-07-09", 68.6]],
     ["Qwen3.7-Flash", ["2026-07-15", null]],
     ["Grok 4.5", ["2026-07-16", 72.4]],
     ["Gemini 3.6 Flash", ["2026-07-21", 69.2]],

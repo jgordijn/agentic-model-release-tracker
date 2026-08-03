@@ -3,6 +3,8 @@ import test from "node:test";
 
 import { RELEASES } from "../src/modelData.js";
 
+const aaCodingIndexPage = "https://artificialanalysis.ai/models/capabilities/coding";
+
 test("release dataset starts in 2022 and spans every year through 2026", () => {
   const years = [...new Set(RELEASES.map((release) => release.releaseDate.slice(0, 4)))].sort();
   assert.deepEqual(years, ["2022", "2023", "2024", "2025", "2026"]);
@@ -84,8 +86,8 @@ test("MiniMax M3 is tracked as the latest MiniMax base release", () => {
 
   assert.equal(m3?.provider, "MiniMax");
   assert.equal(m3?.releaseDate, "2026-06-01");
-  assert.equal(m3?.codingIndex, 43.4);
-  assert.match(m3?.scoreSourceUrl, /artificial_analysis_coding_index/);
+  assert.equal(m3?.codingIndex, 58.6);
+  assert.equal(m3?.scoreSourceUrl, aaCodingIndexPage);
   assert.match(m3?.sourceUrl, /minimax-m3/);
 });
 
@@ -104,9 +106,9 @@ test("Claude Fable 5 carries the available Artificial Analysis coding score", ()
 test("July-August 2026 release refresh records verified scores and unknowns", () => {
   const expected = new Map([
     ["Leanstral 1.5", ["2026-07-02", null]],
-    ["GPT-5.6 Sol", ["2026-07-09", 78.3]],
-    ["GPT-5.6 Terra", ["2026-07-09", 70.6]],
-    ["GPT-5.6 Luna", ["2026-07-09", 68.6]],
+    ["GPT-5.6 Sol", ["2026-07-09", 77.4]],
+    ["GPT-5.6 Terra", ["2026-07-09", 76.7]],
+    ["GPT-5.6 Luna", ["2026-07-09", 71.4]],
     ["Qwen3.7-Flash", ["2026-07-15", null]],
     ["Grok 4.5", ["2026-07-16", 72.4]],
     ["Gemini 3.6 Flash", ["2026-07-21", 69.2]],
@@ -124,9 +126,43 @@ test("July-August 2026 release refresh records verified scores and unknowns", ()
     assert.equal(release.releaseDate, releaseDate, model);
     assert.equal(release.codingIndex, codingIndex, model);
     assert.match(release.sourceUrl, /^https?:\/\//, model);
-    if (codingIndex !== null) assert.match(release.scoreSourceUrl, /artificial_analysis_coding_index/, model);
+    if (codingIndex !== null) assert.match(release.scoreSourceUrl, /^https?:\/\//, model);
   }
 
+});
+
+test("GPT-5.6 variant scores use the direct Artificial Analysis Coding Index max rows", () => {
+  const expected = {
+    "GPT-5.6 Sol": [77.4, aaCodingIndexPage],
+    "GPT-5.6 Terra": [76.7, aaCodingIndexPage],
+    "GPT-5.6 Luna": [71.4, aaCodingIndexPage],
+  };
+
+  for (const [model, [codingIndex, scoreSourceUrl]] of Object.entries(expected)) {
+    const release = RELEASES.find((item) => item.model === model);
+
+    assert.equal(release?.codingIndex, codingIndex, model);
+    assert.equal(release?.scoreSourceUrl, scoreSourceUrl, model);
+    assert.match(release?.notes, /max configuration/, model);
+  }
+});
+
+test("refreshed AA Coding Index rows use the direct Coding Index page", () => {
+  const expected = {
+    "GPT-5.4": [71.1, aaCodingIndexPage],
+    "Kimi K2.6": [61.8, aaCodingIndexPage],
+    "MiMo-V2.5-Pro": [60.2, aaCodingIndexPage],
+    "Qwen3.7-Max": [66.0, aaCodingIndexPage],
+    "MiniMax M3": [58.6, aaCodingIndexPage],
+    "NVIDIA Nemotron 3 Ultra 550B-A55B": [49.3, aaCodingIndexPage],
+  };
+
+  for (const [model, [codingIndex, scoreSourceUrl]] of Object.entries(expected)) {
+    const release = RELEASES.find((item) => item.model === model);
+
+    assert.equal(release?.codingIndex, codingIndex, model);
+    assert.equal(release?.scoreSourceUrl, scoreSourceUrl, model);
+  }
 });
 
 test("Mistral Medium 3.5 carries the Artificial Analysis coding score", () => {

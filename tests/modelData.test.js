@@ -64,6 +64,7 @@ test("xAI releases cover base Grok generations and distinct coding lines", () =>
     "Grok 4.1 Fast",
     "Grok 4.20",
     "Grok 4.3",
+    "Grok 4.5",
     "Grok Build 0.1",
     "Grok Code Fast 1",
   ]);
@@ -98,6 +99,34 @@ test("Claude Fable 5 carries the available Artificial Analysis coding score", ()
 
   assert.equal(fable?.codingIndex, 76.5);
   assert.match(fable?.scoreSourceUrl, /artificial_analysis_coding_index/);
+});
+
+test("July-August 2026 release refresh records verified scores and unknowns", () => {
+  const expected = new Map([
+    ["Leanstral 1.5", ["2026-07-02", null]],
+    ["GPT-5.6 Sol", ["2026-07-09", 78.3]],
+    ["GPT-5.6 Terra", ["2026-07-09", 70.6]],
+    ["GPT-5.6 Luna", ["2026-07-09", 68.6]],
+    ["Qwen3.7-Flash", ["2026-07-15", null]],
+    ["Grok 4.5", ["2026-07-16", 72.4]],
+    ["Gemini 3.6 Flash", ["2026-07-21", 69.2]],
+    ["Gemini 3.5 Flash Cyber", ["2026-07-21", null]],
+    ["Kimi K3", ["2026-07-22", 76.2]],
+    ["Claude Opus 5", ["2026-07-24", 78.0]],
+    ["DeepSeek V4 Flash", ["2026-07-31", 69.1]],
+    ["Qwen3.8-Max", ["2026-08-02", null]],
+  ]);
+
+  for (const [model, [releaseDate, codingIndex]] of expected) {
+    const release = RELEASES.find((item) => item.model === model);
+
+    assert.ok(release, model);
+    assert.equal(release.releaseDate, releaseDate, model);
+    assert.equal(release.codingIndex, codingIndex, model);
+    assert.match(release.sourceUrl, /^https?:\/\//, model);
+    if (codingIndex !== null) assert.match(release.scoreSourceUrl, /artificial_analysis_coding_index/, model);
+  }
+
 });
 
 test("Mistral Medium 3.5 carries the Artificial Analysis coding score", () => {

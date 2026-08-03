@@ -1125,17 +1125,6 @@ export const RELEASES = [
     notes: "DeepSeek V4 Flash public-beta update; the API model name remains deepseek-v4-flash. AA score uses the 0731 Reasoning, Max Effort row.",
   }),
   release({
-    model: "MiniMax H3",
-    provider: "MiniMax",
-    group: "Chinese+Other",
-    releaseDate: "2026-07-31",
-    codingIndex: null,
-    focus: [],
-    releaseCategory: "specialized-base",
-    sourceUrl: "https://www.minimax.io/blog/minimax-h3",
-    notes: "Explicitly requested addition. MiniMax H3 is a newly launched text/image/video/audio-to-video model, not a programming model; no Artificial Analysis Coding Index score is applicable or available yet.",
-  }),
-  release({
     model: "Qwen3.8-Max",
     provider: "Alibaba",
     group: "Chinese+Other",

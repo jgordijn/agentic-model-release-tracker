@@ -112,7 +112,6 @@ test("July-August 2026 release refresh records verified scores and unknowns", ()
     ["Kimi K3", ["2026-07-22", 76.2]],
     ["Claude Opus 5", ["2026-07-24", 78.0]],
     ["DeepSeek V4 Flash", ["2026-07-31", 69.1]],
-    ["MiniMax H3", ["2026-07-31", null]],
     ["Qwen3.8-Max", ["2026-08-02", null]],
   ]);
 
@@ -126,7 +125,6 @@ test("July-August 2026 release refresh records verified scores and unknowns", ()
     if (codingIndex !== null) assert.match(release.scoreSourceUrl, /artificial_analysis_coding_index/, model);
   }
 
-  assert.deepEqual(RELEASES.find((release) => release.model === "MiniMax H3")?.focus, []);
 });
 
 test("Mistral Medium 3.5 carries the Artificial Analysis coding score", () => {

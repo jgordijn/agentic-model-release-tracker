@@ -1158,6 +1158,26 @@ export const RELEASES = [
     sourceUrl: "https://qwen.ai/blog?id=qwen3.8",
     notes: "Qwen3.8-Max (the requested QN 3.8 Max) was released through QwenCloud; no current Artificial Analysis Coding Index score was available at the time of the update.",
   }),
+  release({
+    model: "Grok 4.6",
+    provider: "xAI",
+    group: "Chinese+Other",
+    releaseDate: "2026-08-12",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://x.ai/news/grok-4-6",
+    notes: "xAI's frontier model for coding, long-running agents, and knowledge work; no exact Artificial Analysis Coding Index row was available in the checked source window.",
+  }),
+  release({
+    model: "Gemini 3.7 Flash",
+    provider: "Google",
+    group: "Frontier labs",
+    releaseDate: "2026-08-13",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-3-7-flash/",
+    notes: "Google's workhorse model for coding and agents; no exact Artificial Analysis Coding Index score was available in the checked source window.",
+  }),
 ];
 
 export const DATA_SOURCES = [

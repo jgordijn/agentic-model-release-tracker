@@ -65,6 +65,7 @@ test("xAI releases cover base Grok generations and distinct coding lines", () =>
     "Grok 4.20",
     "Grok 4.3",
     "Grok 4.5",
+    "Grok 4.6",
     "Grok Build 0.1",
     "Grok Code Fast 1",
   ]);
@@ -77,6 +78,14 @@ test("dataset does not include preview, mini, nano, spark, air, plus, lite, or s
     if (release.model === "Grok Code Fast 1") continue;
     assert.doesNotMatch(release.model, /\b(Preview|mini|nano|Spark|Air|Plus|Lite|Speciale)\b/i, release.model);
   }
+});
+
+test("August 2026 safety- and modality-only candidates remain excluded", () => {
+  const models = new Set(RELEASES.map((release) => release.model));
+
+  assert.equal(models.has("Shieldstral"), false);
+  assert.equal(models.has("MiniMax Music 3.0"), false);
+  assert.equal(models.has("Imagine Image 2.0"), false);
 });
 
 test("MiniMax M3 is tracked as the latest MiniMax base release", () => {
@@ -115,6 +124,8 @@ test("July-August 2026 release refresh records verified scores and unknowns", ()
     ["Claude Opus 5", ["2026-07-24", 78.0]],
     ["DeepSeek V4 Flash", ["2026-07-31", 69.1]],
     ["Qwen3.8-Max", ["2026-08-02", null]],
+    ["Grok 4.6", ["2026-08-12", null]],
+    ["Gemini 3.7 Flash", ["2026-08-13", null]],
   ]);
 
   for (const [model, [releaseDate, codingIndex]] of expected) {

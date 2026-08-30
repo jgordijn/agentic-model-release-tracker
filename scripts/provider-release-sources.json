@@ -46,6 +46,20 @@
       "excludeSignals": ["app feature", "Workspace", "subscription"]
     },
     {
+      "name": "Meta",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://huggingface.co/meta-models",
+        "https://ai.meta.com/blog/"
+      ],
+      "searchQueries": [
+        "site:huggingface.co/meta-models Meta Muse Llama model agentic coding after:{since}",
+        "site:ai.meta.com Meta model release agentic coding after:{since}"
+      ],
+      "includeSignals": ["Meta", "Muse", "Llama", "model", "agentic", "coding", "tool use", "local"],
+      "excludeSignals": ["quantization only", "adapter", "image-only", "audio-only"]
+    },
+    {
       "name": "xAI",
       "group": "Chinese+Other",
       "primarySources": [
@@ -91,14 +105,32 @@
       "group": "Chinese+Other",
       "primarySources": [
         "https://qwenlm.github.io/blog",
-        "https://qwen.ai/blog"
+        "https://qwen.ai/blog",
+        "https://www.qwencloud.com/models"
       ],
       "searchQueries": [
         "site:qwenlm.github.io/blog Qwen model release coding agentic after:{since}",
-        "site:qwen.ai/blog Qwen model release coding agentic after:{since}"
+        "site:qwen.ai/blog Qwen model release coding agentic after:{since}",
+        "site:qwencloud.com/models Qwen model coding agentic after:{since}"
       ],
       "includeSignals": ["Qwen", "Coder", "model", "agentic", "tool use", "coding", "SWE", "Terminal", "MCP", "language world model"],
       "excludeSignals": ["embedding", "reranker", "image edit"]
+    },
+    {
+      "name": "Tencent",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://ui-mate.github.io/",
+        "https://huggingface.co/tencent",
+        "https://github.com/Tencent"
+      ],
+      "searchQueries": [
+        "site:ui-mate.github.io Tencent UI-Mate model agentic after:{since}",
+        "site:huggingface.co/tencent Tencent Hunyuan UI-Mate model coding agentic after:{since}",
+        "site:github.com/Tencent model release coding GUI agent after:{since}"
+      ],
+      "includeSignals": ["Tencent", "Hunyuan", "UI-Mate", "model", "agentic", "coding", "computer use", "GUI"],
+      "excludeSignals": ["preview-only", "image-only", "audio-only", "video-only"]
     },
     {
       "name": "DeepSeek",

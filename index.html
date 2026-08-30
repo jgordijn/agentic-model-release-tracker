@@ -3,32 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Release intelligence for agentic and programming-focused AI models." />
+  <meta name="theme-color" content="#020814" />
   <title>Agentic Model Release Tracker</title>
   <link rel="icon" type="image/png" href="./assets/app-icon.png" />
   <link rel="apple-touch-icon" href="./assets/app-icon.png" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <main class="app-shell">
-    <section class="hero">
+  <a class="skip-link" href="#main-content" data-i18n="skipToContent">Ga naar release-inzichten</a>
+
+  <main id="main-content" class="app-shell" aria-labelledby="pageTitle" tabindex="-1">
+    <header class="hero">
       <div class="hero-copy">
-        <p class="eyebrow" data-i18n="eyebrow">Agentic work + programming</p>
-        <h1 data-i18n="title">AI model releases versnellen</h1>
+        <p class="eyebrow">
+          <svg class="section-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M12 3v3M12 18v3M3 12h3M18 12h3" />
+            <path d="m5.64 5.64 2.12 2.12m8.48 8.48 2.12 2.12m0-12.72-2.12 2.12m-8.48 8.48-2.12 2.12" />
+            <circle cx="12" cy="12" r="3.25" />
+          </svg>
+          <span data-i18n="eyebrow">Agentic werk + programmeren</span>
+        </p>
+        <h1 id="pageTitle" data-i18n="title">AI-modelreleases versnellen</h1>
         <p class="subtitle" data-i18n="subtitle">Volg releases van frontier labs, Chinese labs en andere impactvolle spelers, inclusief de AA Coding Index-notities in de release dataset.</p>
       </div>
-      <div class="hero-actions">
-        <div class="language-toggle" role="group" aria-label="Language">
-          <button id="langEn" type="button" class="language-button" data-language="en" aria-label="English">🇬🇧</button>
-          <button id="langNl" type="button" class="language-button" data-language="nl" aria-label="Nederlands">🇳🇱</button>
-        </div>
-        <button id="downloadChart" type="button" data-i18n="downloadChart">Download plaatje</button>
-        <button id="resetFilters" type="button" class="secondary" data-i18n="resetFilters">Reset filters</button>
-      </div>
-    </section>
 
-    <section class="filters-panel">
-      <label>
-        <span data-i18n="groupLabel">Groep</span>
+      <div class="hero-actions">
+        <div class="language-toggle" role="group" aria-label="Taal kiezen" data-i18n-attr="aria-label:languageLabel">
+          <button id="langEn" type="button" class="language-button" data-language="en" lang="en" aria-label="English">
+            <span aria-hidden="true">🇬🇧</span>
+          </button>
+          <button id="langNl" type="button" class="language-button" data-language="nl" lang="nl" aria-label="Nederlands">
+            <span aria-hidden="true">🇳🇱</span>
+          </button>
+        </div>
+        <button id="downloadChart" type="button">
+          <svg class="button-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M12 3v11" />
+            <path d="m8 10 4 4 4-4" />
+            <path d="M5 14v5h14v-5" />
+          </svg>
+          <span class="button-label" data-i18n="downloadChart">Download plaatje</span>
+        </button>
+        <button id="resetFilters" type="button" class="secondary">
+          <svg class="button-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M4.5 9A8 8 0 1 1 6 17.5" />
+            <path d="M4.5 4.5V9H9" />
+          </svg>
+          <span class="button-label" data-i18n="resetFilters">Reset filters</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="filter-disclosure">
+      <div class="filter-disclosure-bar">
+        <button id="filterToggle" class="filter-toggle secondary" type="button" aria-expanded="true" aria-controls="filterControls">
+          <svg class="filter-toggle-icon button-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M4 5h16l-6.5 7.25V18l-3 1.5v-7.25L4 5Z" />
+          </svg>
+          <span class="filter-toggle-label" data-i18n="filtersTitle">Releasefilters</span>
+          <span id="activeFilterCount" class="filter-count" aria-live="polite" aria-atomic="true" hidden></span>
+          <svg class="filter-toggle-chevron" viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="m5 7.5 5 5 5-5" />
+          </svg>
+        </button>
+      </div>
+
+      <div id="filterControls" class="filter-controls">
+    <section class="filters-panel" aria-labelledby="filtersTitle">
+      <h2 id="filtersTitle" class="sr-only" data-i18n="filtersTitle">Releasefilters</h2>
+
+      <label class="filter-field" for="groupFilter">
+        <span class="filter-label-row">
+          <span data-i18n="groupLabel">Groep</span>
+        </span>
         <select id="groupFilter">
           <option value="all" data-i18n="groupAll">Alle groepen</option>
           <option value="Frontier labs">Frontier labs</option>
@@ -36,95 +84,194 @@
           <option value="custom" hidden data-i18n="groupCustom">Aangepaste groep</option>
         </select>
       </label>
-      <label>
-        <span data-i18n="minCodingIndex">Minimum Coding Index</span>
-        <span class="range-value" id="scoreValue">0.0</span>
-        <input id="scoreFilter" type="range" min="0" max="60" step="0.1" value="0" />
+
+      <label class="filter-field score-filter-field" for="scoreFilter">
+        <span class="filter-label-row">
+          <span data-i18n="minCodingIndex">Minimum Coding Index</span>
+          <span class="info-icon" role="img" aria-label="Filter modellen op hun minimale AA Coding Index-score" data-i18n-attr="aria-label:minScoreHelp">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <circle cx="10" cy="10" r="7.25" />
+              <path d="M10 9v4" />
+              <path d="M10 6.5h.01" />
+            </svg>
+          </span>
+        </span>
+        <span class="range-control">
+          <span class="range-scale">
+            <output class="range-value" id="scoreValue" for="scoreFilter" aria-live="polite">0.0</output>
+            <span aria-hidden="true">100+</span>
+          </span>
+          <input id="scoreFilter" type="range" min="0" max="100" step="0.1" value="0" aria-describedby="scoreFilterHelp" />
+        </span>
+        <span id="scoreFilterHelp" class="sr-only" data-i18n="minScoreHelp">Filter modellen op hun minimale AA Coding Index-score.</span>
       </label>
-      <label>
-        <span data-i18n="fromDate">Vanaf</span>
+
+      <label class="filter-field" for="dateAfter">
+        <span class="filter-label-row">
+          <span data-i18n="fromDate">Vanaf</span>
+        </span>
         <input id="dateAfter" type="date" />
       </label>
-      <label>
-        <span data-i18n="toDate">Tot</span>
+
+      <label class="filter-field" for="dateBefore">
+        <span class="filter-label-row">
+          <span data-i18n="toDate">Tot</span>
+        </span>
         <input id="dateBefore" type="date" />
       </label>
-      <label class="checkbox-label">
+
+      <label class="checkbox-label filter-field filter-checkbox" for="scoredOnly">
         <input id="scoredOnly" type="checkbox" />
         <span data-i18n="scoredOnly">Alleen met AA-score</span>
       </label>
     </section>
 
-    <section class="provider-filter" id="providerFilters" aria-label="Provider filters"></section>
+    <section class="provider-filter-region" aria-labelledby="providersTitle">
+      <h2 id="providersTitle" class="sr-only" data-i18n="providersTitle">Providers</h2>
+      <div class="provider-filter" id="providerFilters" role="group" aria-labelledby="providersTitle"></div>
+    </section>
+      </div>
+    </div>
 
-    <section class="kpis">
-      <article>
-        <span data-i18n="kpiTotal">Totaal</span>
-        <strong id="kpiTotal">0</strong>
+    <section class="kpis" aria-labelledby="kpiSectionTitle">
+      <h2 id="kpiSectionTitle" class="sr-only" data-i18n="kpiSectionTitle">Belangrijkste release-indicatoren</h2>
+
+      <article class="kpi-card" aria-labelledby="kpiTotalLabel">
+        <div class="kpi-content">
+          <span id="kpiTotalLabel" data-i18n="kpiTotal">Totaal</span>
+          <strong id="kpiTotal">0</strong>
+        </div>
+        <svg class="kpi-icon section-icon" viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <path d="m13 14 9-5 9 5-9 5-9-5Z" />
+          <path d="m13 14v10l9 5 9-5V14M22 19v10" />
+          <path d="m4 29 9-5 9 5-9 5-9-5Z" />
+          <path d="m4 29v10l9 5 9-5V29M13 34v10" />
+          <path d="m22 29 9-5 9 5-9 5-9-5Z" />
+          <path d="m22 29v10l9 5 9-5V29M31 34v10" />
+        </svg>
       </article>
-      <article>
-        <span data-i18n="kpiYtd">2026 YTD</span>
-        <strong id="kpiYtd">0</strong>
+
+      <article class="kpi-card" aria-labelledby="kpiYtdLabel">
+        <div class="kpi-content">
+          <span id="kpiYtdLabel" data-i18n="kpiYtd">2026 tot nu toe</span>
+          <strong id="kpiYtd">0</strong>
+        </div>
+        <svg class="kpi-icon section-icon" viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <rect x="8" y="11" width="32" height="29" rx="3" />
+          <path d="M15 7v8M33 7v8M8 19h32" />
+          <path d="M16 26h.01M24 26h.01M32 26h.01M16 33h.01M24 33h.01M32 33h.01" stroke-width="3" />
+        </svg>
       </article>
-      <article>
-        <span data-i18n="kpiProjected">2026 projectie</span>
-        <strong id="kpiProjected">0</strong>
+
+      <article class="kpi-card" aria-labelledby="kpiProjectedLabel">
+        <div class="kpi-content">
+          <span id="kpiProjectedLabel" data-i18n="kpiProjected">2026 projectie</span>
+          <strong id="kpiProjected">0</strong>
+        </div>
+        <svg class="kpi-icon section-icon" viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <path d="M8 39V28M17 39V22M26 39V27M35 39V15" />
+          <path d="m7 23 10-9 9 6L40 7" />
+          <path d="M33 7h7v7" />
+        </svg>
       </article>
-      <article>
-        <span data-i18n="kpiQualified">Groene AA-score</span>
-        <strong id="kpiQualified">0</strong>
+
+      <article class="kpi-card" aria-labelledby="kpiQualifiedLabel">
+        <div class="kpi-content">
+          <span id="kpiQualifiedLabel" data-i18n="kpiQualified">Groene AA-score</span>
+          <strong id="kpiQualified">0</strong>
+        </div>
+        <svg class="kpi-icon section-icon" viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <path d="M39 9C24 10 13 16 10 27c-2 8 4 13 10 12 12-2 17-14 19-30Z" />
+          <path d="M8 41c5-10 12-17 23-23" />
+        </svg>
       </article>
-      <article class="wide-kpi">
-        <span data-i18n="kpiBest">Beste score</span>
-        <strong id="kpiBest">Geen score</strong>
+
+      <article class="kpi-card wide-kpi" aria-labelledby="kpiBestLabel">
+        <div class="kpi-content">
+          <span id="kpiBestLabel" data-i18n="kpiBest">Beste score</span>
+          <strong id="kpiBest">Geen score</strong>
+        </div>
+        <svg class="kpi-icon section-icon" viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <path d="M15 8h18v8c0 8-4 13-9 15-5-2-9-7-9-15V8Z" />
+          <path d="M15 12H8v4c0 6 4 9 10 9M33 12h7v4c0 6-4 9-10 9" />
+          <path d="M24 31v7M17 41h14" />
+        </svg>
       </article>
     </section>
 
-    <section class="visual-grid">
-      <article class="chart-panel">
+    <section class="visual-grid" aria-label="Release intelligence">
+      <article class="chart-panel" aria-labelledby="chartTitle">
         <div class="panel-heading">
           <div>
-            <h2 data-i18n="chartTitle">Gecombineerde modelreleases</h2>
-            <p id="thresholdText" data-i18n="chartSubtitle">Observed releases with 2026 YTD and projection</p>
+            <h2 id="chartTitle" data-i18n="chartTitle">Gecombineerde modelreleases</h2>
+            <p id="thresholdText" data-i18n="chartSubtitle">Geobserveerde releases met 2026 tot nu toe en projectie</p>
           </div>
-          <span data-i18n="projectionNote">Projectie t/m 31 december 2026</span>
+          <span class="projection-note" data-i18n="projectionNote">Projectie t/m 31 december 2026</span>
         </div>
+
+        <div class="chart-legend" role="list">
+          <span class="legend-item" role="listitem">
+            <span class="legend-line actual" aria-hidden="true"><span></span></span>
+            <span data-i18n="chartActualLabel">Werkelijk</span>
+          </span>
+          <span class="legend-item" role="listitem">
+            <span class="legend-line projected" aria-hidden="true"></span>
+            <span data-i18n="chartProjectedWord">projectie</span>
+          </span>
+        </div>
+        <p class="chart-axis-label" data-i18n="chartAxisLabel">Aantal releases</p>
+
         <div class="chart-stage">
-          <canvas id="releaseCanvas"></canvas>
-          <aside class="chart-callouts" aria-label="Chart summary" data-i18n-attr="aria-label:chartSummaryLabel">
+          <canvas id="releaseCanvas" role="img" aria-labelledby="chartTitle" aria-describedby="thresholdText chartSummary" aria-label="Geobserveerde releases met 2026 tot nu toe en projectie" data-i18n-attr="aria-label:chartSubtitle"></canvas>
+          <aside id="chartSummary" class="chart-callouts" aria-label="Grafieksamenvatting" data-i18n-attr="aria-label:chartSummaryLabel">
             <div class="callout projected">
-              <span data-i18n="chartProjectedLabel">2026 projected</span>
-              <strong id="chartProjected">0</strong>
-              <small data-i18n="chartProjectedSmall">combined releases</small>
+              <div class="callout-content">
+                <span data-i18n="chartProjectedLabel">2026 projectie</span>
+                <strong id="chartProjected">0</strong>
+                <small data-i18n="chartProjectedSmall">gecombineerde releases</small>
+              </div>
+              <svg class="callout-icon section-icon" viewBox="0 0 28 28" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M5 21 21 5M13 5h8v8" />
+              </svg>
             </div>
             <div class="callout ytd">
-              <span data-i18n="chartYtdLabel">2026 YTD</span>
-              <strong id="chartYtd">0</strong>
-              <small data-i18n="chartYtdSmall">already released</small>
+              <div class="callout-content">
+                <span data-i18n="chartYtdLabel">2026 tot nu toe</span>
+                <strong id="chartYtd">0</strong>
+                <small data-i18n="chartYtdSmall">al uitgebracht</small>
+              </div>
+              <svg class="callout-icon section-icon" viewBox="0 0 28 28" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <rect x="4" y="6" width="20" height="18" rx="2" />
+                <path d="M9 3v6M19 3v6M4 12h20" />
+              </svg>
             </div>
           </aside>
         </div>
       </article>
 
-      <article class="breakdown-panel">
+      <article class="breakdown-panel" aria-labelledby="providerBreakdownTitle">
         <div class="panel-heading compact">
           <div>
-          <h2 data-i18n="providerBreakdownTitle">Provideroverzicht</h2>
+            <h2 id="providerBreakdownTitle" data-i18n="providerBreakdownTitle">Provideroverzicht</h2>
             <p data-i18n="providerBreakdownSubtitle">Releases en hoogste AA-score</p>
           </div>
+          <div class="provider-column-labels" aria-hidden="true">
+            <span data-i18n="providerReleasesLabel">Releases</span>
+            <span data-i18n="providerBestScoreLabel">Beste AA-score</span>
+          </div>
         </div>
-        <div id="providerBreakdown" class="provider-breakdown"></div>
+        <div id="providerBreakdown" class="provider-breakdown" role="list" aria-labelledby="providerBreakdownTitle"></div>
       </article>
     </section>
 
-    <section class="data-section">
+    <section class="data-section" aria-labelledby="datasetTitle">
       <div class="panel-heading">
         <div>
-          <h2 data-i18n="datasetTitle">Release-dataset</h2>
-          <p data-i18n="datasetSubtitle">Seed-data met datum, provider, score en notitie.</p>
+          <h2 id="datasetTitle" data-i18n="datasetTitle">Release-dataset</h2>
+          <p id="datasetSubtitle" data-i18n="datasetSubtitle">Seed-data met datum, provider, score en notitie.</p>
         </div>
-        <div class="table-controls" aria-label="Tabel paginering" data-i18n-attr="aria-label:tablePaginationLabel">
-          <label>
+        <div class="table-controls" aria-label="Tabelpaginering" data-i18n-attr="aria-label:tablePaginationLabel">
+          <label for="rowsPerPage">
             <span data-i18n="rowsLabel">Rijen</span>
             <select id="rowsPerPage">
               <option value="10">10</option>
@@ -133,25 +280,42 @@
               <option value="100">100</option>
             </select>
           </label>
-          <span id="pageRange">-</span>
+          <output id="pageRange" aria-live="polite">-</output>
           <div class="page-buttons">
-            <button id="prevPage" type="button" aria-label="Vorige pagina" data-i18n-attr="aria-label:previousPage">‹</button>
-            <span id="pageCount">Pagina 1 / 1</span>
-            <button id="nextPage" type="button" aria-label="Volgende pagina" data-i18n-attr="aria-label:nextPage">›</button>
+            <button id="prevPage" type="button" aria-label="Vorige pagina" data-i18n-attr="aria-label:previousPage" aria-controls="releaseTable">
+              <svg class="button-icon" viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="m12.5 4.5-5 5 5 5" />
+              </svg>
+            </button>
+            <output id="pageCount" aria-live="polite">Pagina 1 / 1</output>
+            <button id="nextPage" type="button" aria-label="Volgende pagina" data-i18n-attr="aria-label:nextPage" aria-controls="releaseTable">
+              <svg class="button-icon" viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="m7.5 4.5 5 5-5 5" />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
-      <div class="table-wrap">
+
+      <p id="tableScrollHint" class="table-scroll-hint">
+        <svg class="section-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <path d="M4 12h16M8 8l-4 4 4 4M16 8l4 4-4 4" />
+        </svg>
+        <span data-i18n="tableScrollHint">Scroll horizontaal om alle kolommen te bekijken.</span>
+      </p>
+
+      <div class="table-wrap" role="region" aria-labelledby="datasetTitle" aria-describedby="datasetSubtitle tableScrollHint" tabindex="0">
         <table id="releaseTable">
+          <caption class="sr-only" data-i18n="datasetTitle">Release-dataset</caption>
           <thead>
             <tr>
-              <th><button type="button" data-sort-key="releaseDate"><span data-i18n="dateColumn">Datum</span> <span class="sort-arrow">↕</span></button></th>
-              <th><button type="button" data-sort-key="provider"><span data-i18n="providerColumn">Provider</span> <span class="sort-arrow">↕</span></button></th>
-              <th><button type="button" data-sort-key="model"><span data-i18n="modelColumn">Model</span> <span class="sort-arrow">↕</span></button></th>
-              <th><button type="button" data-sort-key="group"><span data-i18n="groupColumn">Groep</span> <span class="sort-arrow">↕</span></button></th>
-              <th><button type="button" data-sort-key="codingIndex"><span data-i18n="codingIndexColumn">AA Coding Index</span> <span class="sort-arrow">↕</span></button></th>
-              <th><button type="button" data-sort-key="notes"><span data-i18n="notesColumn">Notitie</span> <span class="sort-arrow">↕</span></button></th>
-              <th><button type="button" data-sort-key="sourceUrl"><span data-i18n="sourceColumn">Bron</span> <span class="sort-arrow">↕</span></button></th>
+              <th scope="col" aria-sort="none"><button type="button" data-sort-key="releaseDate"><span data-i18n="dateColumn">Datum</span> <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
+              <th scope="col" aria-sort="none"><button type="button" data-sort-key="provider"><span data-i18n="providerColumn">Provider</span> <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
+              <th scope="col" aria-sort="none"><button type="button" data-sort-key="model"><span data-i18n="modelColumn">Model</span> <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
+              <th scope="col" aria-sort="none"><button type="button" data-sort-key="group"><span data-i18n="groupColumn">Groep</span> <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
+              <th scope="col" aria-sort="none"><button type="button" data-sort-key="codingIndex"><span data-i18n="codingIndexColumn">AA Coding Index</span> <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
+              <th scope="col" aria-sort="none"><button type="button" data-sort-key="notes"><span data-i18n="notesColumn">Notitie</span> <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
+              <th scope="col" aria-sort="none"><button type="button" data-sort-key="sourceUrl"><span data-i18n="sourceColumn">Bron</span> <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -159,16 +323,43 @@
       </div>
     </section>
 
-    <section class="notes-section">
-      <article>
-        <h2 data-i18n="maybeAddTitle">Misschien nog toevoegen</h2>
+    <section class="notes-section" aria-labelledby="notesSectionTitle">
+      <h2 id="notesSectionTitle" class="sr-only" data-i18n="notesSectionTitle">Dekking en bronnen</h2>
+
+      <article aria-labelledby="maybeAddTitle">
+        <h2 id="maybeAddTitle">
+          <svg class="section-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="8" />
+            <path d="M12 8v8M8 12h8" />
+          </svg>
+          <span data-i18n="maybeAddTitle">Misschien nog toevoegen</span>
+        </h2>
         <p id="missingLabs"></p>
       </article>
-      <article>
-        <h2 data-i18n="sourcesTitle">Bronnen</h2>
-        <div id="sourceList" class="source-list"></div>
+
+      <article aria-labelledby="sourcesTitle">
+        <h2 id="sourcesTitle">
+          <svg class="section-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M7 4h10v16H7z" />
+            <path d="M10 8h4M10 12h4M10 16h3" />
+          </svg>
+          <span data-i18n="sourcesTitle">Bronnen</span>
+        </h2>
+        <nav id="sourceList" class="source-list" aria-labelledby="sourcesTitle"></nav>
       </article>
     </section>
+
+    <footer class="app-footer">
+      <p class="data-status" role="status" aria-live="polite">
+        <svg class="section-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <path d="M12 3 20 6v6c0 4.7-3.2 7.5-8 9-4.8-1.5-8-4.3-8-9V6l8-3Z" />
+          <path d="m8.5 12 2.2 2.2 4.8-5" />
+        </svg>
+        <span id="dataFreshness" data-i18n="dataFreshnessLabel">Data geverifieerd t/m {date}</span>
+        <span class="status-separator" aria-hidden="true">·</span>
+        <span data-i18n="dataUtcLabel">Alle datums in UTC</span>
+      </p>
+    </footer>
   </main>
   <script type="module" src="./src/app.js?v=20260830a"></script>
 </body>

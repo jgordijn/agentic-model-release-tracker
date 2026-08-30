@@ -16,6 +16,32 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
+test("HTML and module imports use the August 30 data cache key", async () => {
+  const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
+
+  assert.match(html, /src="\.\/src\/app\.js\?v=20260830a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20260830a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260830a"/);
+});
+
+test("provider release checklist covers Meta and Tencent primary sources", async () => {
+  const source = await readFile(new URL("../scripts/provider-release-sources.json", import.meta.url), "utf8");
+  const config = JSON.parse(source);
+
+  for (const providerName of ["Meta", "Tencent"]) {
+    const provider = config.providers.find((entry) => entry.name === providerName);
+
+    assert.ok(provider, providerName);
+    assert.ok(provider.primarySources.length > 0, providerName);
+    assert.ok(provider.searchQueries.length > 0, providerName);
+  }
+
+  const alibaba = config.providers.find((entry) => entry.name === "Alibaba");
+  assert.ok(alibaba.primarySources.includes("https://www.qwencloud.com/models"));
+  assert.ok(alibaba.searchQueries.some((query) => query.includes("qwencloud.com/models")));
+});
+
 test("chart projection is drawn as a green dashed trend with a same-year fallback start", async () => {
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 

@@ -30,20 +30,21 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the August 30 data cache key", async () => {
+test("HTML and module imports use the September 3 data cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20260830a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20260830a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260830a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20260903a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20260903a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260903a"/);
+  assert.doesNotMatch(`${html}\n${app}`, /20260830a/);
 });
 
-test("provider release checklist covers Meta and Tencent primary sources", async () => {
+test("provider release checklist covers Meta, Tencent, and Apodex primary sources", async () => {
   const source = await readFile(new URL("../scripts/provider-release-sources.json", import.meta.url), "utf8");
   const config = JSON.parse(source);
 
-  for (const providerName of ["Meta", "Tencent"]) {
+  for (const providerName of ["Meta", "Tencent", "Apodex"]) {
     const provider = config.providers.find((entry) => entry.name === providerName);
 
     assert.ok(provider, providerName);
@@ -54,6 +55,21 @@ test("provider release checklist covers Meta and Tencent primary sources", async
   const alibaba = config.providers.find((entry) => entry.name === "Alibaba");
   assert.ok(alibaba.primarySources.includes("https://www.qwencloud.com/models"));
   assert.ok(alibaba.searchQueries.some((query) => query.includes("qwencloud.com/models")));
+
+  const apodex = config.providers.find((entry) => entry.name === "Apodex");
+  assert.equal(apodex.group, "Chinese+Other");
+  assert.deepEqual(apodex.primarySources, [
+    "https://www.apodex.com/",
+    "https://www.apodex.com/blog/apodex-1.1-scaling-agentic-intelligence-for-complex-work",
+    "https://www.apodex.com/api",
+  ]);
+  assert.ok(apodex.searchQueries.every((query) => query.includes("{since}")));
+  for (const signal of ["Apodex", "model", "coding", "agentic", "tool calling", "code execution"]) {
+    assert.ok(apodex.includeSignals.includes(signal), signal);
+  }
+  for (const signal of ["Mini", "Deep Research", "product-only", "benchmark-only", "integration"]) {
+    assert.ok(apodex.excludeSignals.includes(signal), signal);
+  }
 });
 
 test("chart projection is drawn as a green dashed same-year trend", async () => {

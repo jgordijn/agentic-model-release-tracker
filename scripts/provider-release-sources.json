@@ -60,6 +60,21 @@
       "excludeSignals": ["quantization only", "adapter", "image-only", "audio-only"]
     },
     {
+      "name": "Apodex",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://www.apodex.com/",
+        "https://www.apodex.com/blog/apodex-1.1-scaling-agentic-intelligence-for-complex-work",
+        "https://www.apodex.com/api"
+      ],
+      "searchQueries": [
+        "site:apodex.com/blog Apodex model coding agentic tool calling after:{since}",
+        "site:apodex.com/api Apodex model code execution after:{since}"
+      ],
+      "includeSignals": ["Apodex", "model", "coding", "agentic", "tool calling", "code execution"],
+      "excludeSignals": ["Mini", "Deep Research", "product-only", "benchmark-only", "integration"]
+    },
+    {
       "name": "xAI",
       "group": "Chinese+Other",
       "primarySources": [

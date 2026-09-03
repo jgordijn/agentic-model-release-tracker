@@ -212,6 +212,11 @@ test("the explicitly missing lab list remains unchanged", () => {
   assert.deepEqual(IMPORTANT_MISSING_LABS, ["Amazon", "Cohere", "StepFun", "AI21 Labs"]);
 });
 
+test("IFM is tracked as a newly discovered provider rather than a missing lab", () => {
+  assert.equal(IMPORTANT_MISSING_LABS.includes("IFM"), false);
+  assert.equal(RELEASES.find((release) => release.provider === "IFM")?.model, "K2 Horizon 375B A23B");
+});
+
 test("September 3 refresh records the five verified release decisions", () => {
   const expected = {
     "Apodex 1.1": {
@@ -268,6 +273,59 @@ test("September 3 refresh records the five verified release decisions", () => {
     assert.equal(rows[0].sourceType, "official", model);
     for (const [field, value] of Object.entries(fields)) assert.equal(rows[0][field], value, `${model}: ${field}`);
   }
+});
+
+test("late September 3 refresh records Astra, Cyber, and K2 Horizon decisions", () => {
+  const expected = {
+    "Gemini 3.8 Flash Cyber": {
+      provider: "Google",
+      group: "Frontier labs",
+      releaseDate: "2026-09-02",
+      codingIndex: null,
+      releaseCategory: "specialized-base",
+      sourceUrl: "https://blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber/",
+    },
+    "GPT-6 Astra": {
+      provider: "OpenAI",
+      group: "Frontier labs",
+      releaseDate: "2026-09-03",
+      codingIndex: 76.9,
+      releaseCategory: "base",
+      sourceUrl: "https://openai.com/index/safety-overview-gpt-6-astra/",
+      scoreSourceUrl: "https://artificialanalysis.ai/models/gpt-6-astra",
+    },
+    "K2 Horizon 375B A23B": {
+      provider: "IFM",
+      group: "Chinese+Other",
+      releaseDate: "2026-09-03",
+      codingIndex: 61.5,
+      releaseCategory: "base",
+      sourceUrl: "https://ifm.ai/k2/press-release/",
+      scoreSourceUrl: "https://artificialanalysis.ai/models/k2-horizon-375b-a23b",
+    },
+  };
+
+  for (const [model, fields] of Object.entries(expected)) {
+    const rows = RELEASES.filter((release) => release.model === model);
+
+    assert.equal(rows.length, 1, model);
+    assert.equal(rows[0].sourceType, "official", model);
+    for (const [field, value] of Object.entries(fields)) assert.equal(rows[0][field], value, `${model}: ${field}`);
+  }
+});
+
+test("late September 3 AA scores retain exact configurations and evidence limits", () => {
+  const astra = RELEASES.find((item) => item.model === "GPT-6 Astra");
+  const k2 = RELEASES.find((item) => item.model === "K2 Horizon 375B A23B");
+  const cyber = RELEASES.find((item) => item.model === "Gemini 3.8 Flash Cyber");
+
+  assert.match(astra?.notes, /GPT-6 Astra \(max\)/);
+  assert.match(astra?.notes, /76\.9433173810514/);
+  assert.match(astra?.notes, /other effort\/configuration rows are not separate releases/);
+  assert.match(k2?.notes, /375B-A23B identity/);
+  assert.match(k2?.notes, /61\.5203218199473/);
+  assert.match(cyber?.notes, /no exact Coding Index row/i);
+  assert.equal(cyber?.scoreSourceUrl, undefined);
 });
 
 test("September 3 AA scores retain exact configurations and retrieval provenance", () => {

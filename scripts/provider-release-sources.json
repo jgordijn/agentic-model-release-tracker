@@ -232,6 +232,21 @@
       ],
       "includeSignals": ["NVIDIA", "Nemotron", "model", "agentic", "tool use", "coding", "SWE-Bench"],
       "excludeSignals": ["GPU", "platform only", "customer story"]
+    },
+    {
+      "name": "IFM",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://ifm.ai/k2/",
+        "https://ifm.ai/k2/press-release/",
+        "https://docs.ifm.ai/"
+      ],
+      "searchQueries": [
+        "site:ifm.ai/k2 IFM K2 Horizon model release coding agentic after:{since}",
+        "site:docs.ifm.ai K2 Horizon model tool calling reasoning after:{since}"
+      ],
+      "includeSignals": ["IFM", "K2 Horizon", "model", "foundation", "coding", "agentic", "tool use", "reasoning"],
+      "excludeSignals": ["dataset-only", "benchmark-only", "quantization", "adapter"]
     }
   ]
 }

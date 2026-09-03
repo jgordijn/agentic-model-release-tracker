@@ -30,21 +30,21 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the September 3 data cache key", async () => {
+test("HTML and module imports use the late September 3 data cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20260903a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20260903a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260903a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20260903b"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20260903b"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260903b"/);
   assert.doesNotMatch(`${html}\n${app}`, /20260830a/);
 });
 
-test("provider release checklist covers Meta, Tencent, and Apodex primary sources", async () => {
+test("provider release checklist covers Meta, Tencent, Apodex, and IFM primary sources", async () => {
   const source = await readFile(new URL("../scripts/provider-release-sources.json", import.meta.url), "utf8");
   const config = JSON.parse(source);
 
-  for (const providerName of ["Meta", "Tencent", "Apodex"]) {
+  for (const providerName of ["Meta", "Tencent", "Apodex", "IFM"]) {
     const provider = config.providers.find((entry) => entry.name === providerName);
 
     assert.ok(provider, providerName);
@@ -69,6 +69,21 @@ test("provider release checklist covers Meta, Tencent, and Apodex primary source
   }
   for (const signal of ["Mini", "Deep Research", "product-only", "benchmark-only", "integration"]) {
     assert.ok(apodex.excludeSignals.includes(signal), signal);
+  }
+
+  const ifm = config.providers.find((entry) => entry.name === "IFM");
+  assert.equal(ifm.group, "Chinese+Other");
+  assert.deepEqual(ifm.primarySources, [
+    "https://ifm.ai/k2/",
+    "https://ifm.ai/k2/press-release/",
+    "https://docs.ifm.ai/",
+  ]);
+  assert.ok(ifm.searchQueries.every((query) => query.includes("{since}")));
+  for (const signal of ["IFM", "K2 Horizon", "model", "foundation", "coding", "agentic", "tool use", "reasoning"]) {
+    assert.ok(ifm.includeSignals.includes(signal), signal);
+  }
+  for (const signal of ["dataset-only", "benchmark-only", "quantization", "adapter"]) {
+    assert.ok(ifm.excludeSignals.includes(signal), signal);
   }
 });
 

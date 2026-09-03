@@ -89,8 +89,10 @@ test("xAI releases cover base Grok generations and distinct coding lines", () =>
 });
 
 test("dataset does not include preview, mini, nano, spark, air, plus, lite, or speciale config rows as standalone releases", () => {
+  const canonicalNamesContainingTierWords = new Set(["Grok Code Fast 1", "Muse Spark 1.3"]);
+
   for (const release of RELEASES) {
-    if (release.model === "Grok Code Fast 1") continue;
+    if (canonicalNamesContainingTierWords.has(release.model)) continue;
     assert.doesNotMatch(release.model, /\b(Preview|mini|nano|Spark|Air|Plus|Lite|Speciale)\b/i, release.model);
   }
 });
@@ -204,6 +206,109 @@ test("new August 2026 rows preserve exact provider, category, and maker provenan
 test("included Meta and Tencent providers are no longer marked missing", () => {
   assert.equal(IMPORTANT_MISSING_LABS.includes("Meta"), false);
   assert.equal(IMPORTANT_MISSING_LABS.includes("Tencent"), false);
+});
+
+test("the explicitly missing lab list remains unchanged", () => {
+  assert.deepEqual(IMPORTANT_MISSING_LABS, ["Amazon", "Cohere", "StepFun", "AI21 Labs"]);
+});
+
+test("September 3 refresh records the five verified release decisions", () => {
+  const expected = {
+    "Apodex 1.1": {
+      provider: "Apodex",
+      group: "Chinese+Other",
+      releaseDate: "2026-08-24",
+      codingIndex: 60.8,
+      releaseCategory: "base",
+      sourceUrl: "https://www.apodex.com/blog/apodex-1.1-scaling-agentic-intelligence-for-complex-work",
+      scoreSourceUrl: "https://artificialanalysis.ai/models/apodex-1-1",
+    },
+    ContextPilot: {
+      provider: "Tencent",
+      group: "Chinese+Other",
+      releaseDate: "2026-08-30",
+      codingIndex: null,
+      releaseCategory: "specialized-base",
+      sourceUrl: "https://github.com/Tencent/ContextPilot",
+      scoreSourceUrl: undefined,
+    },
+    "Claude Fable 5.1": {
+      provider: "Anthropic",
+      group: "Frontier labs",
+      releaseDate: "2026-09-01",
+      codingIndex: 81.6,
+      releaseCategory: "base",
+      sourceUrl: "https://www.anthropic.com/claude-fable-and-mythos-5-1",
+      scoreSourceUrl: "https://artificialanalysis.ai/models/claude-fable-5-1",
+    },
+    "Gemini 3.8 Flash": {
+      provider: "Google",
+      group: "Frontier labs",
+      releaseDate: "2026-09-02",
+      codingIndex: 76.3,
+      releaseCategory: "base",
+      sourceUrl: "https://ai.google.dev/gemini-api/docs/changelog",
+      scoreSourceUrl: "https://artificialanalysis.ai/models/gemini-3-8-flash",
+    },
+    "Muse Spark 1.3": {
+      provider: "Meta",
+      group: "Chinese+Other",
+      releaseDate: "2026-09-02",
+      codingIndex: 76.5,
+      releaseCategory: "base",
+      sourceUrl: "https://research.meta.ai/blog/introducing-muse-spark-1-3",
+      scoreSourceUrl: "https://artificialanalysis.ai/models/muse-spark-1-3-xhigh",
+    },
+  };
+
+  for (const [model, fields] of Object.entries(expected)) {
+    const rows = RELEASES.filter((release) => release.model === model);
+
+    assert.equal(rows.length, 1, model);
+    assert.equal(rows[0].sourceType, "official", model);
+    for (const [field, value] of Object.entries(fields)) assert.equal(rows[0][field], value, `${model}: ${field}`);
+  }
+});
+
+test("September 3 AA scores retain exact configurations and retrieval provenance", () => {
+  const expected = {
+    "Apodex 1.1": [60.8, "Apodex 1.1 (no effort suffix)"],
+    "Claude Fable 5.1": [81.6, "Claude Fable 5.1 (Adaptive Reasoning, Max Effort, Default Fallback)"],
+    "Gemini 3.8 Flash": [76.3, "Gemini 3.8 Flash (high)"],
+    "Muse Spark 1.3": [76.5, "Muse Spark 1.3 (xhigh)"],
+  };
+
+  for (const [model, [codingIndex, configuration]] of Object.entries(expected)) {
+    const release = RELEASES.find((item) => item.model === model);
+
+    assert.equal(release?.codingIndex, codingIndex, model);
+    assert.ok(release?.notes.includes(configuration), model);
+    assert.ok(release?.notes.includes("2026-09-03"), model);
+  }
+});
+
+test("September 3 family variants and excluded candidates are not duplicated", () => {
+  const models = new Set(RELEASES.map((release) => release.model));
+  const contextPilot = RELEASES.find((release) => release.model === "ContextPilot");
+
+  assert.match(contextPilot?.notes, /8B, 14B, and E4B/);
+  assert.match(contextPilot?.notes, /2026-09-03/);
+  assert.match(contextPilot?.notes, /no exact AA Coding Index row/i);
+
+  for (const excluded of [
+    "Apodex 1.1 Mini",
+    "ContextPilot-8B",
+    "ContextPilot-14B",
+    "ContextPilot-E4B",
+    "Claude Mythos 5.1",
+    "Gemini Omni Flash",
+    "Gemini 3.5 Transcribe",
+    "Gemini 3.5 Transcribe Live",
+    "Muse Spark 1.3 (max)",
+    "Qwen3.8-Max-0902",
+  ]) {
+    assert.equal(models.has(excluded), false, excluded);
+  }
 });
 
 test("GPT-5.6 variant scores use exact Artificial Analysis max model rows", () => {

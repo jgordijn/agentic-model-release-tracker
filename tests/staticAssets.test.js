@@ -30,21 +30,21 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the late September 3 data cache key", async () => {
+test("HTML and module imports use the September 8 data cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20260903b"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20260903b"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260903b"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20260908a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20260908a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260908a"/);
   assert.doesNotMatch(`${html}\n${app}`, /20260830a/);
 });
 
-test("provider release checklist covers Meta, Tencent, Apodex, and IFM primary sources", async () => {
+test("provider release checklist covers Meta, Tencent, Apodex, IFM, and OpenBMB primary sources", async () => {
   const source = await readFile(new URL("../scripts/provider-release-sources.json", import.meta.url), "utf8");
   const config = JSON.parse(source);
 
-  for (const providerName of ["Meta", "Tencent", "Apodex", "IFM"]) {
+  for (const providerName of ["Meta", "Tencent", "Apodex", "IFM", "OpenBMB"]) {
     const provider = config.providers.find((entry) => entry.name === providerName);
 
     assert.ok(provider, providerName);
@@ -84,6 +84,21 @@ test("provider release checklist covers Meta, Tencent, Apodex, and IFM primary s
   }
   for (const signal of ["dataset-only", "benchmark-only", "quantization", "adapter"]) {
     assert.ok(ifm.excludeSignals.includes(signal), signal);
+  }
+
+  const openbmb = config.providers.find((entry) => entry.name === "OpenBMB");
+  assert.equal(openbmb.group, "Chinese+Other");
+  assert.deepEqual(openbmb.primarySources, [
+    "https://huggingface.co/OpenBMB",
+    "https://github.com/OpenBMB",
+    "https://github.com/OpenBMB/MiniCPM",
+  ]);
+  assert.ok(openbmb.searchQueries.every((query) => query.includes("{since}")));
+  for (const signal of ["OpenBMB", "MiniCPM", "model", "coding", "agentic", "tool use", "on-device"]) {
+    assert.ok(openbmb.includeSignals.includes(signal), signal);
+  }
+  for (const signal of ["quantization only", "SFT checkpoint", "midtrain checkpoint", "base checkpoint", "DSpark", "image-only", "audio-only"]) {
+    assert.ok(openbmb.excludeSignals.includes(signal), signal);
   }
 });
 

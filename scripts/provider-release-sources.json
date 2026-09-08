@@ -60,6 +60,22 @@
       "excludeSignals": ["quantization only", "adapter", "image-only", "audio-only"]
     },
     {
+      "name": "OpenBMB",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://huggingface.co/OpenBMB",
+        "https://github.com/OpenBMB",
+        "https://github.com/OpenBMB/MiniCPM"
+      ],
+      "searchQueries": [
+        "site:github.com/OpenBMB/MiniCPM MiniCPM model release coding agentic after:{since}",
+        "site:huggingface.co/openbmb MiniCPM model coding agentic after:{since}",
+        "OpenBMB MiniCPM model release coding agentic after:{since}"
+      ],
+      "includeSignals": ["OpenBMB", "MiniCPM", "model", "coding", "agentic", "tool use", "on-device"],
+      "excludeSignals": ["quantization only", "SFT checkpoint", "midtrain checkpoint", "base checkpoint", "DSpark", "image-only", "audio-only"]
+    },
+    {
       "name": "Apodex",
       "group": "Chinese+Other",
       "primarySources": [

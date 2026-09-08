@@ -447,3 +447,26 @@ test("frontier labs include pre-2025 releases for the requested chart range", ()
 
   assert.ok(frontierBefore2025.length >= 10);
 });
+
+test("September 7 2026 OpenBMB release preserves scope, provenance, and exact AA evidence", () => {
+  const release = RELEASES.find((item) => item.model === "MiniCPM5-2B");
+
+  assert.ok(release);
+  assert.equal(release.provider, "OpenBMB");
+  assert.equal(release.group, "Chinese+Other");
+  assert.equal(release.releaseDate, "2026-09-07");
+  assert.equal(release.releaseCategory, "base");
+  assert.equal(release.sourceType, "official");
+  assert.equal(release.codingIndex, 14.5);
+  assert.equal(release.sourceUrl, "https://github.com/OpenBMB/MiniCPM");
+  assert.equal(release.scoreSourceUrl, "https://artificialanalysis.ai/leaderboards/models");
+  assert.match(release.notes, /coding agents, tool-use workflows, and agentic tasks/);
+  assert.match(release.notes, /reasoning, no effort suffix/);
+  assert.match(release.notes, /14\.5005375225413/);
+  assert.match(release.notes, /not an Intelligence Index substitution/);
+});
+
+test("OpenBMB is covered as a configured provider rather than an explicit missing lab", () => {
+  assert.equal(IMPORTANT_MISSING_LABS.includes("OpenBMB"), false);
+  assert.equal(RELEASES.filter((release) => release.provider === "OpenBMB").length, 1);
+});

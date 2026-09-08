@@ -1344,6 +1344,17 @@ export const RELEASES = [
     scoreSourceUrl: "https://artificialanalysis.ai/models/k2-horizon-375b-a23b",
     notes: "Flagship line from IFM's six-model K2 Horizon fleet, released fully open with weights, code, training data, and methodology for coding, reasoning, tool use, and agentic work. The tracker preserves the exact AA-scored 375B-A23B identity rather than copying its score onto the 0.9B, 3.7B, 7B, 32B, or 36B-A4B siblings; the 2026-09-03 direct AA embedded leaderboard audit uses K2 Horizon 375B A23B (no effort suffix), raw codingIndex 61.5203218199473 rounded to one decimal.",
   }),
+  release({
+    model: "MiniCPM5-2B",
+    provider: "OpenBMB",
+    group: "Chinese+Other",
+    releaseDate: "2026-09-07",
+    codingIndex: 14.5,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://github.com/OpenBMB/MiniCPM",
+    scoreSourceUrl: "https://artificialanalysis.ai/leaderboards/models",
+    notes: "OpenBMB's official MiniCPM repository records the final MiniCPM5-2B release on 2026-09-07 for on-device/local deployment, coding agents, tool-use workflows, and agentic tasks. SFT, midtrain, base, quantized/GGUF/MLX/GPTQ, and DSpark artifacts are not separate releases. The 2026-09-08 direct AA embedded leaderboard record uses MiniCPM5-2B (reasoning, no effort suffix), raw codingIndex 14.5005375225413 rounded to one decimal; the AA model page currently exposes its Intelligence Index summary rather than a visible Coding Index, so this value is retained only from the exact embedded Coding Index field and is not an Intelligence Index substitution.",
+  }),
 ];
 
 export const DATA_SOURCES = [

@@ -30,21 +30,22 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the September 8 data cache key", async () => {
+test("HTML and module imports use the September 11 data cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20260908a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20260908a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260908a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20260911a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20260911a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260911a"/);
+  assert.doesNotMatch(`${html}\n${app}`, /20260908a/);
   assert.doesNotMatch(`${html}\n${app}`, /20260830a/);
 });
 
-test("provider release checklist covers Meta, Tencent, Apodex, IFM, and OpenBMB primary sources", async () => {
+test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, and Agnes AI primary sources", async () => {
   const source = await readFile(new URL("../scripts/provider-release-sources.json", import.meta.url), "utf8");
   const config = JSON.parse(source);
 
-  for (const providerName of ["Meta", "Tencent", "Apodex", "IFM", "OpenBMB"]) {
+  for (const providerName of ["Meta", "Tencent", "Apodex", "IFM", "OpenBMB", "Agnes AI"]) {
     const provider = config.providers.find((entry) => entry.name === providerName);
 
     assert.ok(provider, providerName);
@@ -99,6 +100,22 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, and OpenBMB 
   }
   for (const signal of ["quantization only", "SFT checkpoint", "midtrain checkpoint", "base checkpoint", "DSpark", "image-only", "audio-only"]) {
     assert.ok(openbmb.excludeSignals.includes(signal), signal);
+  }
+
+  const agnes = config.providers.find((entry) => entry.name === "Agnes AI");
+  assert.equal(agnes.group, "Chinese+Other");
+  assert.deepEqual(agnes.primarySources, [
+    "https://agnes-ai.com/",
+    "https://www.agnes-ai.com/zh-Hans/docs/agnes-30-flash",
+    "https://platform.agnes-ai.com",
+    "https://github.com/AgnesAI-Labs",
+  ]);
+  assert.ok(agnes.searchQueries.every((query) => query.includes("{since}")));
+  for (const signal of ["Agnes AI", "Agnes", "model", "agent", "coding", "agentic", "tool calling", "foundation"]) {
+    assert.ok(agnes.includeSignals.includes(signal), signal);
+  }
+  for (const signal of ["image-only", "video-only", "audio-only", "product-only", "integration", "preview-only"]) {
+    assert.ok(agnes.excludeSignals.includes(signal), signal);
   }
 });
 

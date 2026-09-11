@@ -1355,6 +1355,26 @@ export const RELEASES = [
     scoreSourceUrl: "https://artificialanalysis.ai/leaderboards/models",
     notes: "OpenBMB's official MiniCPM repository records the final MiniCPM5-2B release on 2026-09-07 for on-device/local deployment, coding agents, tool-use workflows, and agentic tasks. SFT, midtrain, base, quantized/GGUF/MLX/GPTQ, and DSpark artifacts are not separate releases. The 2026-09-08 direct AA embedded leaderboard record uses MiniCPM5-2B (reasoning, no effort suffix), raw codingIndex 14.5005375225413 rounded to one decimal; the AA model page currently exposes its Intelligence Index summary rather than a visible Coding Index, so this value is retained only from the exact embedded Coding Index field and is not an Intelligence Index substitution.",
   }),
+  release({
+    model: "Agnes 3.0 Flash",
+    provider: "Agnes AI",
+    group: "Chinese+Other",
+    releaseDate: "2026-09-08",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://www.agnes-ai.com/zh-Hans/docs/agnes-30-flash",
+    notes: "Agnes AI/Sapiens AI's official documentation describes Agnes 3.0 Flash as a new text model for agent programming, tool-driven tasks, long-task context, and end-to-end execution. The page's JSON-LD dateModified is 2026-09-08T07:30:32.100Z and is used as the earliest maker documentation/availability marker; the page does not state a separate launch timestamp. Artificial Analysis lists Agnes 3.0 Flash (reasoning, no effort suffix) with releaseDate 2026-09-11 and creator Sapiens AI, but the fetched model page and leaderboard expose no exact Coding Index field, so the score remains unknown; no Intelligence Index or maker benchmark is substituted.",
+  }),
+  release({
+    model: "DeepSeek V4.1 Flash",
+    provider: "DeepSeek",
+    group: "Chinese+Other",
+    releaseDate: "2026-09-10",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://api-docs.deepseek.com/news/news260910",
+    notes: "DeepSeek's official 2026-09-10 release makes V4.1 Flash live on the API with native visual understanding and a smaller, faster architecture for agent workloads; the documented production alias deepseek-flash is retained as an alias, not a second row. The exact Artificial Analysis catalog record is DeepSeek V4.1 Flash (Reasoning, Max Effort), releaseDate 2026-09-10, creator DeepSeek. The fetched AA leaderboard/model page exposes no exact Coding Index field, and maker Terminal-Bench/other benchmark claims are not substitutes, so the score remains unknown.",
+  }),
 ];
 
 export const DATA_SOURCES = [

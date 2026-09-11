@@ -470,3 +470,42 @@ test("OpenBMB is covered as a configured provider rather than an explicit missin
   assert.equal(IMPORTANT_MISSING_LABS.includes("OpenBMB"), false);
   assert.equal(RELEASES.filter((release) => release.provider === "OpenBMB").length, 1);
 });
+
+test("September 8 2026 Agnes AI release preserves scope, maker-date limitation, and unknown AA score", () => {
+  const release = RELEASES.find((item) => item.model === "Agnes 3.0 Flash");
+
+  assert.ok(release);
+  assert.equal(release.provider, "Agnes AI");
+  assert.equal(release.group, "Chinese+Other");
+  assert.equal(release.releaseDate, "2026-09-08");
+  assert.equal(release.releaseCategory, "base");
+  assert.equal(release.sourceType, "official");
+  assert.equal(release.codingIndex, null);
+  assert.equal(release.sourceUrl, "https://www.agnes-ai.com/zh-Hans/docs/agnes-30-flash");
+  assert.match(release.notes, /agent programming, tool-driven tasks/);
+  assert.match(release.notes, /2026-09-08T07:30:32\.100Z/);
+  assert.match(release.notes, /Agnes 3\.0 Flash \(reasoning, no effort suffix\)/);
+  assert.match(release.notes, /score remains unknown/);
+});
+
+test("September 10 2026 DeepSeek release preserves official alias mapping and unknown AA score", () => {
+  const release = RELEASES.find((item) => item.model === "DeepSeek V4.1 Flash");
+
+  assert.ok(release);
+  assert.equal(release.provider, "DeepSeek");
+  assert.equal(release.group, "Chinese+Other");
+  assert.equal(release.releaseDate, "2026-09-10");
+  assert.equal(release.releaseCategory, "base");
+  assert.equal(release.sourceType, "official");
+  assert.equal(release.codingIndex, null);
+  assert.equal(release.sourceUrl, "https://api-docs.deepseek.com/news/news260910");
+  assert.match(release.notes, /deepseek-flash/);
+  assert.match(release.notes, /Reasoning, Max Effort/);
+  assert.match(release.notes, /maker Terminal-Bench\/other benchmark claims are not substitutes/);
+  assert.match(release.notes, /score remains unknown/);
+});
+
+test("Agnes AI is covered as a configured provider rather than an explicit missing lab", () => {
+  assert.equal(IMPORTANT_MISSING_LABS.includes("Agnes AI"), false);
+  assert.equal(RELEASES.filter((release) => release.provider === "Agnes AI").length, 1);
+});

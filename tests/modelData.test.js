@@ -505,6 +505,23 @@ test("September 10 2026 DeepSeek release preserves official alias mapping and un
   assert.match(release.notes, /score remains unknown/);
 });
 
+test("September 4 2026 InclusionAI release preserves backfilled agentic scope and unknown AA score", () => {
+  const release = RELEASES.find((item) => item.model === "Ling-3.0-flash-VL");
+
+  assert.ok(release);
+  assert.equal(release.provider, "InclusionAI");
+  assert.equal(release.group, "Chinese+Other");
+  assert.equal(release.releaseDate, "2026-09-04");
+  assert.equal(release.releaseCategory, "specialized-base");
+  assert.equal(release.sourceType, "official");
+  assert.equal(release.codingIndex, null);
+  assert.equal(release.sourceUrl, "https://x.com/AntLingAGI/status/2095935971556782372");
+  assert.match(release.notes, /visual-agent capabilities/);
+  assert.match(release.notes, /frontend coding/);
+  assert.match(release.notes, /modality-only skip/);
+  assert.match(release.notes, /no exact Coding Index field/);
+});
+
 test("Agnes AI is covered as a configured provider rather than an explicit missing lab", () => {
   assert.equal(IMPORTANT_MISSING_LABS.includes("Agnes AI"), false);
   assert.equal(RELEASES.filter((release) => release.provider === "Agnes AI").length, 1);

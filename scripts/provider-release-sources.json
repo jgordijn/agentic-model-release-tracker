@@ -280,6 +280,25 @@
       ],
       "includeSignals": ["Agnes AI", "Agnes", "model", "agent", "coding", "agentic", "tool calling", "foundation"],
       "excludeSignals": ["image-only", "video-only", "audio-only", "product-only", "integration", "preview-only"]
+    },
+    {
+      "name": "InclusionAI",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://huggingface.co/inclusionAI",
+        "https://huggingface.co/inclusionAI/Ling-3.0-flash-VL",
+        "https://www.inclusion-ai.org/model",
+        "https://github.com/inclusionAI",
+        "https://x.com/AntLingAGI"
+      ],
+      "searchQueries": [
+        "site:huggingface.co/inclusionAI InclusionAI Ling Ring model agentic coding after:{since}",
+        "site:inclusion-ai.org/model InclusionAI Ling model release agentic coding after:{since}",
+        "site:github.com/inclusionAI Ling model release coding agentic after:{since}",
+        "site:x.com/AntLingAGI Ling model release agentic coding after:{since}"
+      ],
+      "includeSignals": ["InclusionAI", "Ling", "Ring", "model", "agentic", "coding", "multimodal", "tool use"],
+      "excludeSignals": ["quantization", "base checkpoint", "fine-tune", "tiny", "lite", "preview-only", "image-only", "audio-only"]
     }
   ]
 }

@@ -1345,6 +1345,17 @@ export const RELEASES = [
     notes: "Flagship line from IFM's six-model K2 Horizon fleet, released fully open with weights, code, training data, and methodology for coding, reasoning, tool use, and agentic work. The tracker preserves the exact AA-scored 375B-A23B identity rather than copying its score onto the 0.9B, 3.7B, 7B, 32B, or 36B-A4B siblings; the 2026-09-03 direct AA embedded leaderboard audit uses K2 Horizon 375B A23B (no effort suffix), raw codingIndex 61.5203218199473 rounded to one decimal.",
   }),
   release({
+    model: "Ling-3.0-flash-VL",
+    provider: "InclusionAI",
+    group: "Chinese+Other",
+    releaseDate: "2026-09-04",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    releaseCategory: "specialized-base",
+    sourceUrl: "https://x.com/AntLingAGI/status/2095935971556782372",
+    notes: "Backfilled from the official Ant Ling release post dated 2026-09-04: Ling-3.0-flash-VL is a distinct native multimodal model with visual-agent capabilities, frontend coding, and vision integrated into reasoning, acting, and verification. This corrects the 2026-09-11 audit's modality-only skip; it is not a preview, quantization, alias, or modality-only model line. The official Hugging Face card is https://huggingface.co/inclusionAI/Ling-3.0-flash-VL. Artificial Analysis lists the exact Ling-3.0-flash-VL (reasoning, no effort suffix) catalog row with releaseDate 2026-09-10, but the fetched AA model/leaderboard HTML exposes no exact Coding Index field; the score remains unknown and no Intelligence Index or maker benchmark is substituted.",
+  }),
+  release({
     model: "MiniCPM5-2B",
     provider: "OpenBMB",
     group: "Chinese+Other",

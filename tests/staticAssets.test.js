@@ -30,22 +30,22 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the September 11 data cache key", async () => {
+test("HTML and module imports use the September 16 data cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20260911a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20260911a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260911a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20260916a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20260916a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260916a"/);
   assert.doesNotMatch(`${html}\n${app}`, /20260908a/);
   assert.doesNotMatch(`${html}\n${app}`, /20260830a/);
 });
 
-test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, and Agnes AI primary sources", async () => {
+test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agnes AI, and InclusionAI primary sources", async () => {
   const source = await readFile(new URL("../scripts/provider-release-sources.json", import.meta.url), "utf8");
   const config = JSON.parse(source);
 
-  for (const providerName of ["Meta", "Tencent", "Apodex", "IFM", "OpenBMB", "Agnes AI"]) {
+  for (const providerName of ["Meta", "Tencent", "Apodex", "IFM", "OpenBMB", "Agnes AI", "InclusionAI"]) {
     const provider = config.providers.find((entry) => entry.name === providerName);
 
     assert.ok(provider, providerName);
@@ -116,6 +116,18 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, and
   }
   for (const signal of ["image-only", "video-only", "audio-only", "product-only", "integration", "preview-only"]) {
     assert.ok(agnes.excludeSignals.includes(signal), signal);
+  }
+
+  const inclusion = config.providers.find((entry) => entry.name === "InclusionAI");
+  assert.equal(inclusion.group, "Chinese+Other");
+  assert.ok(inclusion.primarySources.includes("https://huggingface.co/inclusionAI/Ling-3.0-flash-VL"));
+  assert.ok(inclusion.primarySources.includes("https://x.com/AntLingAGI"));
+  assert.ok(inclusion.searchQueries.every((query) => query.includes("{since}")));
+  for (const signal of ["InclusionAI", "Ling", "Ring", "model", "agentic", "coding", "multimodal", "tool use"]) {
+    assert.ok(inclusion.includeSignals.includes(signal), signal);
+  }
+  for (const signal of ["quantization", "base checkpoint", "fine-tune", "tiny", "lite", "preview-only", "image-only", "audio-only"]) {
+    assert.ok(inclusion.excludeSignals.includes(signal), signal);
   }
 });
 

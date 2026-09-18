@@ -505,6 +505,44 @@ test("September 10 2026 DeepSeek release preserves official alias mapping and un
   assert.match(release.notes, /score remains unknown/);
 });
 
+test("September 18 refresh preserves InclusionAI backfills, scope, and score evidence limits", () => {
+  const expected = {
+    "Ling-3.0-flash-Fin": {
+      releaseDate: "2026-09-03",
+      releaseCategory: "specialized-base",
+      focus: ["agentic"],
+      sourceUrl: "https://huggingface.co/inclusionAI/Ling-3.0-flash-Fin",
+    },
+    "LLaDA-UI": {
+      releaseDate: "2026-09-09",
+      releaseCategory: "specialized-base",
+      focus: ["agentic"],
+      sourceUrl: "https://www.inclusion-ai.org/LLaDA-UI/",
+    },
+  };
+
+  for (const [model, fields] of Object.entries(expected)) {
+    const release = RELEASES.find((item) => item.model === model);
+
+    assert.ok(release, model);
+    assert.equal(release.provider, "InclusionAI", model);
+    assert.equal(release.group, "Chinese+Other", model);
+    assert.equal(release.sourceType, "official", model);
+    assert.equal(release.codingIndex, null, model);
+    assert.equal(release.scoreSourceUrl, undefined, model);
+    for (const [field, value] of Object.entries(fields)) assert.deepEqual(release[field], value, `${model}: ${field}`);
+  }
+
+  const finance = RELEASES.find((item) => item.model === "Ling-3.0-flash-Fin");
+  const llada = RELEASES.find((item) => item.model === "LLaDA-UI");
+  assert.match(finance.notes, /weights.*next week/i);
+  assert.match(finance.notes, /createdAt marker is 2026-09-03T06:09:53Z/);
+  assert.match(finance.notes, /no Coding Index field/i);
+  assert.match(llada.notes, /2026-09-09T05:53:39Z/);
+  assert.match(llada.notes, /direct candidate URL returned 404/);
+  assert.match(llada.notes, /backfill one day before/);
+});
+
 test("September 4 2026 InclusionAI release preserves backfilled agentic scope and unknown AA score", () => {
   const release = RELEASES.find((item) => item.model === "Ling-3.0-flash-VL");
 

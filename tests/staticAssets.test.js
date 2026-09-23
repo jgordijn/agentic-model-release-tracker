@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import vm from "node:vm";
+import { execFileSync } from "node:child_process";
 
 async function loadAppLogic() {
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
@@ -30,13 +31,13 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the September 18 data cache key", async () => {
+test("HTML and module imports use the September 22 data cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20260918a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20260918a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260918a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20260922a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20260922a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260922a"/);
   assert.doesNotMatch(`${html}\n${app}`, /20260916a/);
   assert.doesNotMatch(`${html}\n${app}`, /20260908a/);
   assert.doesNotMatch(`${html}\n${app}`, /20260830a/);
@@ -132,6 +133,39 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
   for (const signal of ["quantization", "base checkpoint", "fine-tune", "tiny", "lite", "preview-only", "image-only", "audio-only"]) {
     assert.ok(inclusion.excludeSignals.includes(signal), signal);
   }
+});
+
+test("Xiaomi checklist includes the official MiMo-V2.6 release surface", async () => {
+  const source = await readFile(new URL("../scripts/provider-release-sources.json", import.meta.url), "utf8");
+  const config = JSON.parse(source);
+  const xiaomi = config.providers.find((entry) => entry.name === "Xiaomi");
+
+  assert.ok(xiaomi);
+  assert.ok(xiaomi.primarySources.includes("https://mimo.xiaomi.com/mimo-v2-6"));
+  assert.ok(xiaomi.searchQueries.includes("site:mimo.xiaomi.com/mimo-v2-6 MiMo model coding agentic after:{since}"));
+  assert.ok(xiaomi.includeSignals.includes("coding"));
+  assert.ok(xiaomi.includeSignals.includes("agentic"));
+});
+
+test("provider checklist config covers every explicit missing lab", async () => {
+  const source = await readFile(new URL("../scripts/provider-release-sources.json", import.meta.url), "utf8");
+  const config = JSON.parse(source);
+  const missingLabs = config.missingLabs ?? [];
+  const checkerPath = new URL("../scripts/check-provider-releases.mjs", import.meta.url);
+
+  assert.deepEqual(missingLabs.map((entry) => entry.name), ["Amazon", "Cohere", "StepFun", "AI21 Labs"]);
+  for (const entry of missingLabs) {
+    assert.ok(entry.primarySources.length >= 2, entry.name);
+    assert.ok(entry.searchQueries.some((query) => query.includes("{since}")), entry.name);
+  }
+
+  const output = execFileSync(process.execPath, [checkerPath.pathname, "--markdown"], { encoding: "utf8" });
+  const names = [...config.providers, ...missingLabs].map((entry) => entry.name);
+  assert.equal(config.providers.length, 20);
+  assert.equal(missingLabs.length, 4);
+  for (const name of names) assert.ok(output.includes(`## ${name}\n`), `checker output includes ${name}`);
+  assert.equal((output.match(/^## (?!Explicitly missing labs$).+/gm) ?? []).length, names.length, "checker emits every provider exactly once");
+  assert.ok(output.includes("## Explicitly missing labs\n"));
 });
 
 test("chart projection is drawn as a green dashed same-year trend", async () => {

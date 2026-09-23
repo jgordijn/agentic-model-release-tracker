@@ -226,11 +226,13 @@
       "group": "Chinese+Other",
       "primarySources": [
         "https://github.com/XiaomiMiMo",
-        "https://huggingface.co/XiaomiMiMo"
+        "https://huggingface.co/XiaomiMiMo",
+        "https://mimo.xiaomi.com/mimo-v2-6"
       ],
       "searchQueries": [
         "Xiaomi MiMo model release coding agentic after:{since}",
-        "site:huggingface.co/XiaomiMiMo MiMo model after:{since}"
+        "site:huggingface.co/XiaomiMiMo MiMo model after:{since}",
+        "site:mimo.xiaomi.com/mimo-v2-6 MiMo model coding agentic after:{since}"
       ],
       "includeSignals": ["MiMo", "model", "coding", "agentic"],
       "excludeSignals": ["demo-only"]
@@ -301,6 +303,66 @@
       ],
       "includeSignals": ["InclusionAI", "Ling", "Ring", "model", "agentic", "coding", "multimodal", "tool use"],
       "excludeSignals": ["quantization", "base checkpoint", "fine-tune", "tiny", "lite", "preview-only", "image-only", "audio-only"]
+    }
+  ],
+  "missingLabs": [
+    {
+      "name": "Amazon",
+      "group": "Missing labs",
+      "primarySources": [
+        "https://aws.amazon.com/about-aws/whats-new/",
+        "https://www.amazon.science/index.rss"
+      ],
+      "searchQueries": [
+        "site:aws.amazon.com/new Amazon Nova model coding agentic after:{since}",
+        "site:amazon.science Amazon model release coding agentic after:{since}"
+      ],
+      "includeSignals": ["Amazon", "Nova", "model", "coding", "agentic", "tool use"],
+      "excludeSignals": ["product feature", "partner integration", "benchmark-only"]
+    },
+    {
+      "name": "Cohere",
+      "group": "Missing labs",
+      "primarySources": [
+        "https://cohere.com/blog",
+        "https://docs.cohere.com/changelog",
+        "https://huggingface.co/CohereLabs"
+      ],
+      "searchQueries": [
+        "site:cohere.com/blog Cohere model release coding agentic after:{since}",
+        "site:docs.cohere.com/v2/changelog Cohere model after:{since}",
+        "site:huggingface.co/CohereLabs Cohere model coding agentic after:{since}"
+      ],
+      "includeSignals": ["Cohere", "Command", "Aya", "model", "coding", "agentic", "tool use"],
+      "excludeSignals": ["tiny", "vision-only", "translation-only", "adapter", "quantization"]
+    },
+    {
+      "name": "StepFun",
+      "group": "Missing labs",
+      "primarySources": [
+        "https://www.stepfun.com/",
+        "https://huggingface.co/stepfun-ai"
+      ],
+      "searchQueries": [
+        "site:stepfun.com StepFun model release coding agentic after:{since}",
+        "site:huggingface.co/stepfun-ai Step model coding agentic after:{since}"
+      ],
+      "includeSignals": ["StepFun", "Step", "model", "coding", "agentic", "tool use"],
+      "excludeSignals": ["quantization", "fine-tune", "image-only", "audio-only"]
+    },
+    {
+      "name": "AI21 Labs",
+      "group": "Missing labs",
+      "primarySources": [
+        "https://www.ai21.com/blog",
+        "https://studio.ai21.com/"
+      ],
+      "searchQueries": [
+        "site:ai21.com/blog AI21 model release coding agentic after:{since}",
+        "site:studio.ai21.com AI21 model coding agentic after:{since}"
+      ],
+      "includeSignals": ["AI21", "Jamba", "model", "coding", "agentic", "tool use"],
+      "excludeSignals": ["product feature", "partner integration", "embedding-only", "reranker-only"]
     }
   ]
 }

@@ -1408,6 +1408,36 @@ export const RELEASES = [
     sourceUrl: "https://api-docs.deepseek.com/news/news260910",
     notes: "DeepSeek's official 2026-09-10 release makes V4.1 Flash live on the API with native visual understanding and a smaller, faster architecture for agent workloads; the documented production alias deepseek-flash is retained as an alias, not a second row. The exact Artificial Analysis catalog record is DeepSeek V4.1 Flash (Reasoning, Max Effort), releaseDate 2026-09-10, creator DeepSeek. The fetched AA leaderboard/model page exposes no exact Coding Index field, and maker Terminal-Bench/other benchmark claims are not substitutes, so the score remains unknown.",
   }),
+  release({
+    model: "Grok 4.7",
+    provider: "xAI",
+    group: "Chinese+Other",
+    releaseDate: "2026-09-21",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://x.ai/news/grok-4-7",
+    notes: "xAI's official 2026-09-21 release describes Grok 4.7 as a new base model for long-running coding and knowledge work, available through the Grok API, Cursor, and Grok Build; the official developer model docs separately document agentic tool calling. Artificial Analysis lists the exact Grok 4.7 family with xhigh and high configurations, but the fetched AA model/leaderboard pages expose no exact Coding Index field; the Easy Benchmarks mirror snapshot retrieved 2026-09-23 also had no Grok 4.7 Coding Index row. The score remains unknown rather than substituting xAI's CursorBench/DeepSWE results or an Intelligence Index value.",
+  }),
+  release({
+    model: "Claude Opus 5.5",
+    provider: "Anthropic",
+    group: "Frontier labs",
+    releaseDate: "2026-09-22",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://www.anthropic.com/claude-opus-5-5",
+    notes: "Anthropic's official 2026-09-22 announcement introduces Claude Opus 5.5 as a new Claude 5.5 base model for agentic coding, long-running software work, and knowledge work, available across the Claude Platform and cloud platforms. Artificial Analysis lists the exact family with Adaptive Reasoning Max, Xhigh, and High Effort configurations, but the fetched AA model/leaderboard pages expose no exact Coding Index field; the Easy Benchmarks mirror snapshot retrieved 2026-09-23 also had no Opus 5.5 Coding Index row. The score remains unknown rather than substituting Anthropic's Terminal-Bench/FrontierCode results or an Intelligence Index value.",
+  }),
+  release({
+    model: "MiMo-V2.6-Pro",
+    provider: "Xiaomi",
+    group: "Chinese+Other",
+    releaseDate: "2026-09-22",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://mimo.xiaomi.com/mimo-v2-6",
+    notes: "Xiaomi's official 2026-09-22 MiMo-V2.6 announcement releases and open-sources MiMo-V2.6-Pro for coding, long-horizon software engineering, tool use, and agentic workflows; the official Pro RL model card maps the open checkpoint to Xiaomi's production line. Artificial Analysis lists the exact MiMo-V2.6-Pro family row, but the fetched AA model/leaderboard pages expose no exact Coding Index field; the Easy Benchmarks mirror snapshot retrieved 2026-09-23 also had no MiMo-V2.6-Pro Coding Index row. The score remains unknown rather than substituting Xiaomi's DeepSWE/Terminal Bench results or an Intelligence Index value. MiMo-V2.6-Flash and Pro-UltraSpeed are excluded as non-Pro family/tier or serving-mode variants under the existing Xiaomi collapse policy.",
+  }),
 ];
 
 export const DATA_SOURCES = [

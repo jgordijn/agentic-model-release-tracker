@@ -76,9 +76,10 @@ function main() {
   const args = parseArgs(process.argv.slice(2));
   const config = loadJson(configPath);
   const since = args.since ?? latestReleaseDate() ?? config.since;
-  const providers = config.providers.filter((provider) => providerMatches(provider, args.provider));
+  const configuredProviders = config.providers.filter((provider) => providerMatches(provider, args.provider));
+  const missingLabs = (config.missingLabs ?? []).filter((provider) => providerMatches(provider, args.provider));
 
-  if (providers.length === 0) {
+  if (configuredProviders.length === 0 && missingLabs.length === 0) {
     throw new Error(`No provider matched ${args.provider}`);
   }
 
@@ -92,7 +93,12 @@ function main() {
     console.log("Add providers or sources in scripts/provider-release-sources.json.");
   }
 
-  for (const provider of providers) printProvider(provider, since, args.markdown);
+  for (const provider of configuredProviders) printProvider(provider, since, args.markdown);
+
+  if (missingLabs.length > 0) {
+    console.log(args.markdown ? "## Explicitly missing labs" : "\n=== Explicitly missing labs ===");
+    for (const provider of missingLabs) printProvider(provider, since, args.markdown);
+  }
 }
 
 try {

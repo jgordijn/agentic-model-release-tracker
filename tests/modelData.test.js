@@ -26,6 +26,14 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
+test("September 23 refresh preserves the 130-row baseline, adds three unique rows, and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 3, 130, "baseline row count before the September 21-22 refresh");
+  assert.equal(RELEASES.length, 133);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 133);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-09-22"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-09-23"), "no row is later than the research cutoff");
+});
+
 test("every scored release stores a valid score source URL", () => {
   for (const release of RELEASES) {
     if (release.codingIndex === null) continue;
@@ -81,6 +89,7 @@ test("xAI releases cover base Grok generations and distinct coding lines", () =>
     "Grok 4.3",
     "Grok 4.5",
     "Grok 4.6",
+    "Grok 4.7",
     "Grok Build 0.1",
     "Grok Code Fast 1",
   ]);
@@ -563,4 +572,52 @@ test("September 4 2026 InclusionAI release preserves backfilled agentic scope an
 test("Agnes AI is covered as a configured provider rather than an explicit missing lab", () => {
   assert.equal(IMPORTANT_MISSING_LABS.includes("Agnes AI"), false);
   assert.equal(RELEASES.filter((release) => release.provider === "Agnes AI").length, 1);
+});
+
+test("September 21-22 refresh adds only verified base releases with unknown exact AA Coding scores", () => {
+  const expected = {
+    "Grok 4.7": {
+      provider: "xAI",
+      releaseDate: "2026-09-21",
+      releaseCategory: "base",
+      sourceUrl: "https://x.ai/news/grok-4-7",
+      focus: ["agentic", "programming"],
+    },
+    "Claude Opus 5.5": {
+      provider: "Anthropic",
+      releaseDate: "2026-09-22",
+      releaseCategory: "base",
+      sourceUrl: "https://www.anthropic.com/claude-opus-5-5",
+      focus: ["agentic", "programming"],
+    },
+    "MiMo-V2.6-Pro": {
+      provider: "Xiaomi",
+      releaseDate: "2026-09-22",
+      releaseCategory: "base",
+      sourceUrl: "https://mimo.xiaomi.com/mimo-v2-6",
+      focus: ["agentic", "programming"],
+    },
+  };
+
+  for (const [model, fields] of Object.entries(expected)) {
+    const rows = RELEASES.filter((release) => release.model === model);
+
+    assert.equal(rows.length, 1, model);
+    const release = rows[0];
+    assert.equal(release.sourceType, "official", model);
+    assert.equal(release.codingIndex, null, model);
+    assert.equal(release.scoreSourceUrl, undefined, model);
+    for (const [field, value] of Object.entries(fields)) assert.deepEqual(release[field], value, `${model}: ${field}`);
+    assert.match(release.notes, /no exact Coding Index field/);
+    assert.match(release.notes, /Easy Benchmarks mirror snapshot retrieved 2026-09-23/);
+    assert.match(release.notes, /score remains unknown/);
+  }
+});
+
+test("September 21-22 scope decisions exclude Xiaomi serving and non-Pro variants", () => {
+  const models = new Set(RELEASES.map((release) => release.model));
+
+  for (const excluded of ["MiMo-V2.6-Flash", "MiMo-V2.6-Pro-UltraSpeed", "Grok 4.7 (high)", "Grok 4.7 (xhigh)"]) {
+    assert.equal(models.has(excluded), false, excluded);
+  }
 });

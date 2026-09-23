@@ -1438,6 +1438,26 @@ export const RELEASES = [
     sourceUrl: "https://mimo.xiaomi.com/mimo-v2-6",
     notes: "Xiaomi's official 2026-09-22 MiMo-V2.6 announcement releases and open-sources MiMo-V2.6-Pro for coding, long-horizon software engineering, tool use, and agentic workflows; the official Pro RL model card maps the open checkpoint to Xiaomi's production line. Artificial Analysis lists the exact MiMo-V2.6-Pro family row, but the fetched AA model/leaderboard pages expose no exact Coding Index field; the Easy Benchmarks mirror snapshot retrieved 2026-09-23 also had no MiMo-V2.6-Pro Coding Index row. The score remains unknown rather than substituting Xiaomi's DeepSWE/Terminal Bench results or an Intelligence Index value. MiMo-V2.6-Flash and Pro-UltraSpeed are excluded as non-Pro family/tier or serving-mode variants under the existing Xiaomi collapse policy.",
   }),
+  release({
+    model: "GPT-6 Sol",
+    provider: "OpenAI",
+    group: "Frontier labs",
+    releaseDate: "2026-09-22",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://openai.com/index/introducing-gpt-6-sol-and-luna/",
+    notes: "OpenAI's 2026-09-22 announcement introduces GPT-6 Sol as an API model and describes coding-agent/Codex use, coding results, and agentic workflows. Artificial Analysis has an exact GPT-6 Sol family page, but the fetched page exposes Intelligence Index rather than an exact Coding Index value; the current Easy Benchmarks snapshot did not provide a verified exact Coding Index row for this family. The score remains unknown; OpenAI's FrontierCode and DeepSWE figures are not substitutes.",
+  }),
+  release({
+    model: "GPT-6 Luna",
+    provider: "OpenAI",
+    group: "Frontier labs",
+    releaseDate: "2026-09-22",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://openai.com/index/introducing-gpt-6-sol-and-luna/",
+    notes: "OpenAI's 2026-09-22 announcement introduces GPT-6 Luna as an API model and describes coding-agent/Codex use, coding results, and agentic workflows. Artificial Analysis has an exact GPT-6 Luna family page, but the fetched page exposes Intelligence Index rather than an exact Coding Index value; the current Easy Benchmarks snapshot did not provide a verified exact Coding Index row for this family. The score remains unknown; OpenAI's DeepSWE and other coding benchmark figures are not substitutes.",
+  }),
 ];
 
 export const DATA_SOURCES = [

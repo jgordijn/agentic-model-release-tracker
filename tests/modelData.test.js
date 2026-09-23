@@ -26,12 +26,24 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("September 23 refresh preserves the 130-row baseline, adds three unique rows, and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 3, 130, "baseline row count before the September 21-22 refresh");
-  assert.equal(RELEASES.length, 133);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 133);
+test("September 23 refresh preserves the 130-row baseline, adds five unique rows, and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 5, 130, "baseline row count before the September 21-22 refresh and follow-up correction");
+  assert.equal(RELEASES.length, 135);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 135);
   assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-09-22"));
   assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-09-23"), "no row is later than the research cutoff");
+});
+
+test("OpenAI GPT-6 Sol and Luna are included as September 22 coding-agent releases", () => {
+  for (const model of ["GPT-6 Sol", "GPT-6 Luna"]) {
+    const rows = RELEASES.filter((release) => release.model === model);
+    assert.equal(rows.length, 1, model);
+    assert.equal(rows[0].provider, "OpenAI");
+    assert.equal(rows[0].releaseDate, "2026-09-22");
+    assert.equal(rows[0].codingIndex, null);
+    assert.equal(rows[0].sourceUrl, "https://openai.com/index/introducing-gpt-6-sol-and-luna/");
+    assert.deepEqual(rows[0].focus, ["agentic", "programming"]);
+  }
 });
 
 test("every scored release stores a valid score source URL", () => {

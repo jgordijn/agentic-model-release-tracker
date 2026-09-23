@@ -31,13 +31,13 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the September 22 data cache key", async () => {
+test("HTML and module imports use the September 23 data cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20260922a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20260922a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260922a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20260923a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20260923a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260923a"/);
   assert.doesNotMatch(`${html}\n${app}`, /20260916a/);
   assert.doesNotMatch(`${html}\n${app}`, /20260908a/);
   assert.doesNotMatch(`${html}\n${app}`, /20260830a/);

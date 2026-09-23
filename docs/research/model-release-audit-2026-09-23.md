@@ -98,4 +98,14 @@ These labs remain in `IMPORTANT_MISSING_LABS` and were checked separately as req
 - New row count: 133.
 - Newest tracked release date: `2026-09-22`.
 - Scores added: 0; all three exact Coding Index values remain unknown.
+
+## Follow-up correction — 2026-09-23
+
+A post-publication review found two qualifying OpenAI model releases omitted from the original provider sweep. The original OpenAI “no add” decision above is superseded for these two rows.
+
+- **GPT-6 Sol — add, base model; release date `2026-09-22`.** OpenAI's [official announcement](https://openai.com/index/introducing-gpt-6-sol-and-luna/) appears in its news archive dated September 22, identifies API model `gpt-6-sol`, and explicitly describes coding-agent/Codex work and coding benchmarks. The [OpenAI model catalog](https://platform.openai.com/docs/models) describes GPT-6 Sol as built for complex coding and agentic workflows. The exact [Artificial Analysis family page](https://artificialanalysis.ai/models/gpt-6-sol) exposes Intelligence Index material, not an exact Coding Index value; the fetched Easy Benchmarks Coding Index snapshot did not provide a verified exact row. Keep `codingIndex: null`; FrontierCode/DeepSWE and Intelligence Index values are not substitutes.
+- **GPT-6 Luna — add, base model; release date `2026-09-22`.** Same dated OpenAI announcement identifies API model `gpt-6-luna`, describes coding-agent/Codex use and coding results, and its availability section says the API models are available. The exact [Artificial Analysis family page](https://artificialanalysis.ai/models/gpt-6-luna) exposes Intelligence Index material, not an exact Coding Index value; the fetched Easy Benchmarks Coding Index snapshot did not provide a verified exact row. Keep `codingIndex: null`; DeepSWE and Intelligence Index values are not substitutes.
+- **Result:** two additional unique rows; dataset total is now 135 (130 pre-refresh rows + the original three rows + these two corrections). Newest date remains `2026-09-22`; both new rows use the shared OpenAI announcement URL and focus `agentic` / `programming`.
+- **Cause/evidence limit:** OpenAI news/index extraction was initially blocked and the model docs were checked, but the separate dated announcement was missed. A later direct extraction of the official news archive surfaced the September 22 item. This correction does not claim that OpenAI was absent from the provider checklist; it corrects the earlier candidate decision.
+
 - Skips/unresolved: provider-level decisions and explicit candidate exclusions are recorded above; OpenAI, xAI, Z.ai, and IFM had direct-fetch access limitations documented rather than hidden.

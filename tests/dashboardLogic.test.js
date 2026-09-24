@@ -74,6 +74,23 @@ test("applyFilters treats a zero score floor as no score filter", () => {
   assert.equal(applyFilters(sampleModels, { minScore: 0 }).length, sampleModels.length);
 });
 
+test("score filters can switch between Coding Index and Intelligence Index", () => {
+  const models = [
+    { ...sampleModels[0], codingIndex: 90, intelligenceIndex: 20 },
+    { ...sampleModels[1], codingIndex: 30, intelligenceIndex: 55 },
+    { ...sampleModels[2], codingIndex: null, intelligenceIndex: null },
+  ];
+
+  assert.deepEqual(
+    applyFilters(models, { scoreKey: "intelligenceIndex", minScore: 50, scoredOnly: true }).map((model) => model.model),
+    ["GPT-5.5"],
+  );
+  assert.deepEqual(
+    applyFilters(models, { scoreKey: "codingIndex", minScore: 50, scoredOnly: true }).map((model) => model.model),
+    ["Claude Opus 4.5"],
+  );
+});
+
 test("applyFilters excludes unscored and low-scoring models at a score floor", () => {
   const filtered = applyFilters(sampleModels, {
     minScore: OPUS_45_CODING_THRESHOLD,
@@ -162,6 +179,20 @@ test("summarizeReleases reports totals, YTD, qualified count, and best model", (
   assert.equal(summary.scored, 3);
   assert.equal(summary.best.model, "GPT-5.5");
   assert.equal(summary.threshold, OPUS_45_CODING_THRESHOLD);
+});
+
+test("summarizeReleases ranks by Intelligence Index without applying a Coding threshold", () => {
+  const models = [
+    { ...sampleModels[0], codingIndex: 90, intelligenceIndex: 20 },
+    { ...sampleModels[1], codingIndex: 30, intelligenceIndex: 55 },
+    { ...sampleModels[2], codingIndex: null, intelligenceIndex: null },
+  ];
+  const summary = summarizeReleases(models, "2026-06-04", "intelligenceIndex");
+
+  assert.equal(summary.best.model, "GPT-5.5");
+  assert.equal(summary.scored, 2);
+  assert.equal(summary.qualified, 0);
+  assert.equal(summary.threshold, null);
 });
 
 test("calculateProjection extrapolates current-year releases to a full year", () => {
@@ -314,6 +345,18 @@ test("groupByProvider sorts by highest score first with unscored providers last"
     grouped.map((row) => row.provider),
     ["OpenAI", "Alibaba", "Anthropic", "Cohere", "Mistral"],
   );
+});
+
+test("groupByProvider computes the selected metric independently", () => {
+  const models = [
+    { ...sampleModels[0], codingIndex: 90, intelligenceIndex: 20 },
+    { ...sampleModels[1], codingIndex: 30, intelligenceIndex: 55 },
+    { ...sampleModels[2], codingIndex: null, intelligenceIndex: null },
+  ];
+  const grouped = groupByProvider(models, "intelligenceIndex");
+
+  assert.equal(grouped.find((row) => row.provider === "OpenAI").latestMaxScore, 55);
+  assert.equal(grouped.find((row) => row.provider === "Anthropic").latestMaxScore, 20);
 });
 
 test("sortReleases sorts by table columns with stable null handling", () => {

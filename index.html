@@ -85,10 +85,21 @@
         </select>
       </label>
 
+      <label class="filter-field" for="scoreMetric">
+        <span class="filter-label-row">
+          <span data-i18n="rankingMetricLabel">Rangschik op</span>
+        </span>
+        <select id="scoreMetric">
+          <option value="intelligenceIndex" data-i18n="intelligenceIndexOption">Intelligence Index</option>
+          <option value="codingIndex" data-i18n="codingIndexOption">Coding Index (historisch)</option>
+        </select>
+        <span id="scoreMetricNote" class="score-metric-note" aria-live="polite"></span>
+      </label>
+
       <label class="filter-field score-filter-field" for="scoreFilter">
         <span class="filter-label-row">
-          <span data-i18n="minCodingIndex">Minimum Coding Index</span>
-          <span class="info-icon" role="img" aria-label="Filter modellen op hun minimale AA Coding Index-score" data-i18n-attr="aria-label:minScoreHelp">
+          <span id="scoreFilterLabel">Minimum Intelligence Index</span>
+          <span class="info-icon" role="img" aria-label="Filter modellen op hun minimale Intelligence Index-score" id="scoreFilterInfo">
             <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
               <circle cx="10" cy="10" r="7.25" />
               <path d="M10 9v4" />
@@ -103,7 +114,7 @@
           </span>
           <input id="scoreFilter" type="range" min="0" max="100" step="0.1" value="0" aria-describedby="scoreFilterHelp" />
         </span>
-        <span id="scoreFilterHelp" class="sr-only" data-i18n="minScoreHelp">Filter modellen op hun minimale AA Coding Index-score.</span>
+        <span id="scoreFilterHelp" class="sr-only">Filter op minimale Intelligence Index-score</span>
       </label>
 
       <label class="filter-field" for="dateAfter">
@@ -313,7 +324,7 @@
               <th scope="col" aria-sort="none"><button type="button" data-sort-key="provider"><span data-i18n="providerColumn">Provider</span> <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
               <th scope="col" aria-sort="none"><button type="button" data-sort-key="model"><span data-i18n="modelColumn">Model</span> <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
               <th scope="col" aria-sort="none"><button type="button" data-sort-key="group"><span data-i18n="groupColumn">Groep</span> <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
-              <th scope="col" aria-sort="none"><button type="button" data-sort-key="codingIndex"><span data-i18n="codingIndexColumn">AA Coding Index</span> <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
+              <th scope="col" aria-sort="descending"><button type="button" data-score-column data-sort-key="intelligenceIndex"><span id="scoreColumnLabel">Intelligence Index</span> <span class="sort-arrow" aria-hidden="true">▼</span></button></th>
               <th scope="col" aria-sort="none"><button type="button" data-sort-key="notes"><span data-i18n="notesColumn">Notitie</span> <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
               <th scope="col" aria-sort="none"><button type="button" data-sort-key="sourceUrl"><span data-i18n="sourceColumn">Bron</span> <span class="sort-arrow" aria-hidden="true">↕</span></button></th>
             </tr>
@@ -361,6 +372,6 @@
       </p>
     </footer>
   </main>
-  <script type="module" src="./src/app.js?v=20260923a"></script>
+  <script type="module" src="./src/app.js?v=20260923b"></script>
 </body>
 </html>

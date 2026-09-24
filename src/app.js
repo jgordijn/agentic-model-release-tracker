@@ -1,4 +1,4 @@
-import { DATA_SOURCES, IMPORTANT_MISSING_LABS, RELEASES } from "./modelData.js?v=20260923a";
+import { DATA_SOURCES, IMPORTANT_MISSING_LABS, RELEASES } from "./modelData.js?v=20260923b";
 import {
   applyFilters,
   buildChartSeries,
@@ -10,7 +10,7 @@ import {
   paginateRows,
   sortReleases,
   summarizeReleases,
-} from "./dashboardLogic.js?v=20260923a";
+} from "./dashboardLogic.js?v=20260923b";
 
 const TODAY = RELEASES.reduce(
   (latest, release) => (release.releaseDate > latest ? release.releaseDate : latest),
@@ -31,22 +31,27 @@ const translations = {
     eyebrow: "Agentic werk + programmeren",
     title: "AI-modelreleases versnellen",
     subtitle:
-      "Volg releases van frontier labs, Chinese labs en andere impactvolle spelers, inclusief de AA Coding Index-notities in de release dataset.",
+      "Volg releases van frontier labs, Chinese labs en andere impactvolle spelers. Kies zelf of je rangschikt op de Artificial Analysis Intelligence Index of de historische Coding Index.",
     downloadChart: "Download plaatje",
     resetFilters: "Reset filters",
     groupLabel: "Groep",
     groupAll: "Alle groepen",
     groupCustom: "Aangepaste groep",
-    minCodingIndex: "Minimum Coding Index",
-    minScoreHelp: "Filter op minimale AA Coding Index-score",
+    rankingMetricLabel: "Rangschik op",
+    intelligenceIndexOption: "Intelligence Index",
+    codingIndexOption: "Coding Index (historisch)",
+    intelligenceMetricNote: "Artificial Analysis Intelligence Index; per model-familie gebruiken we de hoogste beschikbare configuratie.",
+    codingMetricNote: "Artificial Analysis werkt de Coding Index niet meer bij; dit zijn laatst bekende historische scores.",
+    minScoreLabel: "Minimum {metric}",
+    minScoreHelp: "Filter op minimale {metric}-score",
     fromDate: "Vanaf",
     toDate: "Tot",
-    scoredOnly: "Alleen met AA-score",
+    scoredOnly: "Alleen met geselecteerde indexscore",
     kpiTotal: "Totaal",
     kpiYtd: "{year} tot nu toe",
     kpiProjected: "{year} projectie",
-    kpiQualified: "Groene AA-score",
-    kpiBest: "Beste score",
+    kpiQualified: "Met score voor deze index",
+    kpiBest: "Hoogst gerangschikt",
     noScore: "Geen score",
     chartSubtitle: "Geobserveerde releases met {year} tot nu toe en projectie",
     chartTitle: "Gecombineerde modelreleases",
@@ -66,10 +71,10 @@ const translations = {
     chartYtdSmall: "al uitgebracht",
     projectionNote: "Projectie t/m 31 december {year}",
     providerBreakdownTitle: "Provideroverzicht",
-    providerBreakdownSubtitle: "Releases en hoogste AA-score",
+    providerBreakdownSubtitle: "Releases en hoogste score op de geselecteerde index",
     providerReleasesLabel: "Releases",
-    providerBestScoreLabel: "Beste AA-score",
-    providerRowLabel: "Filter op {provider}: {releases} releases, beste AA-score {score}",
+    providerBestScoreLabel: "Beste indexscore",
+    providerRowLabel: "Filter op {provider}: {releases} releases, beste indexscore {score}",
     noProviders: "Geen providers voor deze filters",
     filterByProvider: "Filter op {provider}",
     datasetTitle: "Release-dataset",
@@ -82,7 +87,7 @@ const translations = {
     providerColumn: "Provider",
     modelColumn: "Model",
     groupColumn: "Groep",
-    codingIndexColumn: "AA Coding Index",
+    scoreColumn: "Geselecteerde index",
     notesColumn: "Notitie",
     sourceColumn: "Bron",
     makerLink: "maker",
@@ -111,22 +116,27 @@ const translations = {
     eyebrow: "Agentic work + programming",
     title: "AI model releases are accelerating",
     subtitle:
-      "Track releases from frontier labs, Chinese labs, and other high-impact players, including AA Coding Index notes in the release dataset.",
+      "Track releases from frontier labs, Chinese labs, and other high-impact players. Choose whether to rank by the Artificial Analysis Intelligence Index or the historical Coding Index.",
     downloadChart: "Download image",
     resetFilters: "Reset filters",
     groupLabel: "Group",
     groupAll: "All groups",
     groupCustom: "Custom group",
-    minCodingIndex: "Minimum Coding Index",
-    minScoreHelp: "Filter by minimum AA Coding Index score",
+    rankingMetricLabel: "Rank by",
+    intelligenceIndexOption: "Intelligence Index",
+    codingIndexOption: "Coding Index (historical)",
+    intelligenceMetricNote: "Artificial Analysis Intelligence Index; for each model family, the highest available listed configuration is used.",
+    codingMetricNote: "Artificial Analysis no longer updates the Coding Index; displayed values are the last known historical scores.",
+    minScoreLabel: "Minimum {metric}",
+    minScoreHelp: "Filter by minimum {metric} score",
     fromDate: "From",
     toDate: "To",
-    scoredOnly: "Only with AA score",
+    scoredOnly: "Only with selected index score",
     kpiTotal: "Total",
     kpiYtd: "{year} YTD",
     kpiProjected: "{year} projected",
-    kpiQualified: "Green AA score",
-    kpiBest: "Best score",
+    kpiQualified: "With selected index score",
+    kpiBest: "Highest ranked",
     noScore: "No score",
     chartSubtitle: "Observed releases with {year} YTD and projection",
     chartTitle: "Combined model releases",
@@ -146,10 +156,10 @@ const translations = {
     chartYtdSmall: "already released",
     projectionNote: "Projection through December 31, {year}",
     providerBreakdownTitle: "Provider breakdown",
-    providerBreakdownSubtitle: "Releases and highest AA score",
+    providerBreakdownSubtitle: "Releases and top score on the selected index",
     providerReleasesLabel: "Releases",
-    providerBestScoreLabel: "Best AA score",
-    providerRowLabel: "Filter by {provider}: {releases} releases, best AA score {score}",
+    providerBestScoreLabel: "Best index score",
+    providerRowLabel: "Filter by {provider}: {releases} releases, best index score {score}",
     noProviders: "No providers match these filters",
     filterByProvider: "Filter by {provider}",
     datasetTitle: "Release dataset",
@@ -162,7 +172,7 @@ const translations = {
     providerColumn: "Provider",
     modelColumn: "Model",
     groupColumn: "Group",
-    codingIndexColumn: "AA Coding Index",
+    scoreColumn: "Selected index",
     notesColumn: "Note",
     sourceColumn: "Source",
     makerLink: "maker",
@@ -185,12 +195,13 @@ const state = {
   language: getInitialLanguage(),
   group: "all",
   providers: [],
+  scoreKey: "intelligenceIndex",
   minScore: 0,
   scoredOnly: false,
   after: "",
   before: "",
   tableSort: {
-    key: "releaseDate",
+    key: "intelligenceIndex",
     direction: "desc",
   },
   tablePage: 1,
@@ -389,6 +400,7 @@ function applyLanguage() {
   });
   const freshness = document.querySelector("#dataFreshness");
   if (freshness) freshness.textContent = t("dataFreshnessLabel", { date: formatDisplayDate(TODAY) });
+  updateMetricLabels();
   updateScoreOutput();
   updateActiveFilterCount();
 }
@@ -407,10 +419,30 @@ function setDateDefaults() {
 
 function configureScoreFilter() {
   const scoreFilter = document.querySelector("#scoreFilter");
-  const highestScore = Math.max(0, ...RELEASES.map((release) => release.codingIndex ?? 0));
+  const highestScore = Math.max(0, ...RELEASES.map((release) => release[state.scoreKey] ?? 0));
   scoreFilter.max = String(Math.max(100, Math.ceil(highestScore / 10) * 10));
   if (!scoreFilter.hasAttribute("aria-describedby")) scoreFilter.setAttribute("aria-describedby", "scoreFilterHelp");
   updateScoreOutput();
+}
+
+function updateMetricLabels() {
+  const isIntelligence = state.scoreKey === "intelligenceIndex";
+  const metricLabel = t(isIntelligence ? "intelligenceIndexOption" : "codingIndexOption");
+  const metricSelect = document.querySelector("#scoreMetric");
+  if (metricSelect) metricSelect.value = state.scoreKey;
+  const filterLabel = document.querySelector("#scoreFilterLabel");
+  if (filterLabel) filterLabel.textContent = t("minScoreLabel", { metric: metricLabel });
+  const filterHelp = t("minScoreHelp", { metric: metricLabel });
+  const filterInfo = document.querySelector("#scoreFilterInfo");
+  if (filterInfo) filterInfo.setAttribute("aria-label", filterHelp);
+  const filterHelpElement = document.querySelector("#scoreFilterHelp");
+  if (filterHelpElement) filterHelpElement.textContent = filterHelp;
+  const metricNote = document.querySelector("#scoreMetricNote");
+  if (metricNote) metricNote.textContent = t(isIntelligence ? "intelligenceMetricNote" : "codingMetricNote");
+  const scoreColumnLabel = document.querySelector("#scoreColumnLabel");
+  if (scoreColumnLabel) scoreColumnLabel.textContent = metricLabel;
+  const scoreSortButton = document.querySelector("[data-score-column]");
+  if (scoreSortButton) scoreSortButton.dataset.sortKey = state.scoreKey;
 }
 
 function updateScoreOutput() {
@@ -515,6 +547,16 @@ function bindControls() {
     state.tablePage = 1;
     render();
   });
+  document.querySelector("#scoreMetric").addEventListener("change", (event) => {
+    state.scoreKey = event.target.value;
+    state.minScore = 0;
+    document.querySelector("#scoreFilter").value = "0";
+    state.tableSort = { key: state.scoreKey, direction: "desc" };
+    state.tablePage = 1;
+    updateMetricLabels();
+    configureScoreFilter();
+    render();
+  });
   document.querySelector("#scoreFilter").addEventListener("input", (event) => {
     state.minScore = Number(event.target.value);
     updateScoreOutput();
@@ -550,7 +592,7 @@ function bindControls() {
     state.tableSort =
       state.tableSort.key === key
         ? { key, direction: state.tableSort.direction === "asc" ? "desc" : "asc" }
-        : { key, direction: key === "releaseDate" || key === "codingIndex" ? "desc" : "asc" };
+        : { key, direction: ["releaseDate", "codingIndex", "intelligenceIndex"].includes(key) ? "desc" : "asc" };
     state.tablePage = 1;
     render();
   });
@@ -671,7 +713,7 @@ function resetFilters() {
   state.scoredOnly = false;
   state.after = [...RELEASES.map((release) => release.releaseDate)].sort()[0];
   state.before = TODAY;
-  state.tableSort = { key: "releaseDate", direction: "desc" };
+  state.tableSort = { key: state.scoreKey, direction: "desc" };
   state.tablePage = 1;
   state.tablePageSize = 25;
   state.expandedNotes.clear();
@@ -704,14 +746,14 @@ function syncProviderControls() {
 }
 
 function renderKpis(models) {
-  const summary = summarizeReleases(models, TODAY);
+  const summary = summarizeReleases(models, TODAY, state.scoreKey);
   const projection = calculateProjection(models, TODAY);
   const best = summary.best;
   document.querySelector("#kpiTotal").textContent = summary.total;
   document.querySelector("#kpiYtd").textContent = summary.ytd;
   document.querySelector("#kpiProjected").textContent = projection.projected;
-  document.querySelector("#kpiQualified").textContent = summary.qualified;
-  document.querySelector("#kpiBest").textContent = best ? `${best.model} (${best.codingIndex})` : t("noScore");
+  document.querySelector("#kpiQualified").textContent = summary.scored;
+  document.querySelector("#kpiBest").textContent = best ? `${best.model} (${best[state.scoreKey]})` : t("noScore");
   document.querySelector("#thresholdText").textContent = t("chartSubtitle");
   document.querySelector("#chartYtd").textContent = projection.ytd;
   document.querySelector("#chartProjected").textContent = projection.projected;
@@ -997,7 +1039,7 @@ function drawActiveChartTarget(ctx) {
 }
 
 function renderProviderBreakdown(models) {
-  const rows = groupByProvider(models);
+  const rows = groupByProvider(models, state.scoreKey);
   const container = document.querySelector("#providerBreakdown");
   if (rows.length === 0) {
     container.innerHTML = `<p class="provider-empty" role="listitem">${escapeHtml(t("noProviders"))}</p>`;
@@ -1053,7 +1095,15 @@ function renderTable(models) {
       const noteKey = encodeURIComponent(`${item.releaseDate}\u0000${item.provider}\u0000${item.model}`);
       const expanded = state.expandedNotes.has(noteKey);
       const color = providerColors[item.provider] || "#8da8c9";
-      const score = item.codingIndex ?? "n/a";
+      const scoreValue = item[state.scoreKey] ?? null;
+      const score = scoreValue ?? "n/a";
+      const scoreSource = state.scoreKey === "intelligenceIndex" ? item.intelligenceIndexSourceUrl : item.scoreSourceUrl;
+      const configuration = state.scoreKey === "intelligenceIndex" ? item.intelligenceIndexConfiguration : null;
+      const metricLabel = t(state.scoreKey === "intelligenceIndex" ? "intelligenceIndexOption" : "codingIndexOption");
+      const scoreLabel = scoreValue === null ? t("notAvailable") : `${metricLabel}: ${score}${configuration ? ` (${configuration})` : ""}`;
+      const scoreContent = scoreValue !== null && scoreSource
+        ? `<a class="score-source-link" href="${escapeHtml(scoreSource)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(`${metricLabel} ${score} — ${item.model}`)}" title="${escapeHtml(scoreLabel)}">${escapeHtml(score)}</a>`
+        : escapeHtml(score);
       return `
         <tr data-provider="${escapeHtml(item.provider)}">
           <td class="cell-date"><time datetime="${escapeHtml(item.releaseDate)}">${escapeHtml(item.releaseDate)}</time></td>
@@ -1066,8 +1116,8 @@ function renderTable(models) {
           </td>
           <td class="cell-model"><strong>${escapeHtml(item.model)}</strong></td>
           <td class="cell-group"><span class="group-tag">${escapeHtml(item.group)}</span></td>
-          <td class="cell-score ${item.codingIndex !== null ? "good-score" : "no-score"}">
-            <span aria-label="${item.codingIndex !== null ? score : escapeHtml(t("notAvailable"))}">${score}</span>
+          <td class="cell-score ${scoreValue !== null ? "good-score" : "no-score"}" title="${escapeHtml(scoreLabel)}">
+            <span aria-label="${escapeHtml(scoreLabel)}">${scoreContent}</span>
           </td>
           <td class="cell-notes">
             <span class="note-summary" ${expanded ? "hidden" : ""}>${escapeHtml(note.text)}</span>

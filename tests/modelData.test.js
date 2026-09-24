@@ -10,8 +10,40 @@ test("release dataset starts in 2022 and spans every year through 2026", () => {
 
 test("every release stores a maker or benchmark source URL", () => {
   for (const release of RELEASES) {
-    assert.match(release.sourceUrl, /^https?:\/\//, release.model);
+    assert.ok(release.sourceUrl.startsWith("http://") || release.sourceUrl.startsWith("https://"), release.model);
   }
+});
+
+test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 31);
+  for (const release of RELEASES) {
+    assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
+    if (release.intelligenceIndex === null) {
+      assert.equal(release.intelligenceIndexSourceUrl, null, release.model);
+      assert.equal(release.intelligenceIndexConfiguration, null, release.model);
+      continue;
+    }
+    assert.equal(Number.isFinite(release.intelligenceIndex), true, release.model);
+    assert.ok(release.intelligenceIndexSourceUrl.startsWith("https://artificialanalysis.ai/models/"), release.model);
+    assert.equal(typeof release.intelligenceIndexConfiguration, "string");
+  }
+
+  const expected = {
+    "GPT-6 Sol": [48, "max"],
+    "GPT-6 Luna": [37, "max"],
+    "GPT-6 Astra": [53, "max"],
+    "Claude Opus 5.5": [58, "max with fallback"],
+    "Grok 4.7": [46, "xhigh"],
+    "MiniCPM5-2B": [12, "default"],
+  };
+  for (const [model, [score, configuration]] of Object.entries(expected)) {
+    const release = RELEASES.find((item) => item.model === model);
+    assert.equal(release?.intelligenceIndex, score, model);
+    assert.equal(release?.intelligenceIndexConfiguration, configuration, model);
+    assert.ok(release?.intelligenceIndexSourceUrl.startsWith("https://artificialanalysis.ai/models/"), model);
+  }
+  assert.equal(RELEASES.find((release) => release.model === "GPT-6 Sol")?.codingIndex, null);
+  assert.equal(RELEASES.find((release) => release.model === "GPT-5.6 Sol")?.codingIndex, 77.4);
 });
 
 test("source URLs do not contain accidental whitespace", () => {

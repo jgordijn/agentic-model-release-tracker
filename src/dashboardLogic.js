@@ -4,6 +4,7 @@ export function applyFilters(models, filters = {}) {
   const {
     group = "all",
     providers = [],
+    scoreKey = "codingIndex",
     minScore = null,
     scoredOnly = false,
     after = "",
@@ -11,13 +12,14 @@ export function applyFilters(models, filters = {}) {
   } = filters;
 
   return models.filter((model) => {
+    const score = model[scoreKey] ?? null;
     if (group === "custom" && providers.length === 0) return false;
     if (group !== "all" && group !== "custom" && model.group !== group) return false;
     if (providers.length > 0 && !providers.includes(model.provider)) return false;
     if (after && model.releaseDate < after) return false;
     if (before && model.releaseDate > before) return false;
-    if (scoredOnly && model.codingIndex === null) return false;
-    if (minScore > 0 && (model.codingIndex === null || model.codingIndex < minScore)) return false;
+    if (scoredOnly && score === null) return false;
+    if (minScore > 0 && (score === null || score < minScore)) return false;
     return true;
   });
 }
@@ -28,14 +30,15 @@ export function getProvidersForGroup(models, group) {
   return providers.filter((provider) => models.some((model) => model.provider === provider && model.group === group));
 }
 
-export function summarizeReleases(models, today) {
+export function summarizeReleases(models, today, scoreKey = "codingIndex") {
   const currentYear = getYear(today);
-  const scoredModels = models.filter((model) => model.codingIndex !== null);
-  const qualifiedModels = models.filter(
-    (model) => model.codingIndex !== null && model.codingIndex >= OPUS_45_CODING_THRESHOLD,
-  );
+  const scoredModels = models.filter((model) => model[scoreKey] !== null && model[scoreKey] !== undefined);
+  const threshold = scoreKey === "codingIndex" ? OPUS_45_CODING_THRESHOLD : null;
+  const qualifiedModels = threshold === null
+    ? []
+    : scoredModels.filter((model) => model[scoreKey] >= threshold);
   const best = scoredModels.reduce(
-    (leader, model) => (leader === null || model.codingIndex > leader.codingIndex ? model : leader),
+    (leader, model) => (leader === null || model[scoreKey] > leader[scoreKey] ? model : leader),
     null,
   );
 
@@ -45,7 +48,7 @@ export function summarizeReleases(models, today) {
     scored: scoredModels.length,
     qualified: qualifiedModels.length,
     best,
-    threshold: OPUS_45_CODING_THRESHOLD,
+    threshold,
   };
 }
 
@@ -110,15 +113,15 @@ export function getProjectedChartPoints(series, padding, width, height) {
   });
 }
 
-export function groupByProvider(models) {
+export function groupByProvider(models, scoreKey = "codingIndex") {
   const providers = [...new Set(models.map((model) => model.provider))].sort();
 
   return providers
     .map((provider) => {
       const releases = models.filter((model) => model.provider === provider);
-      const scored = releases.filter((model) => model.codingIndex !== null);
+      const scored = releases.filter((model) => model[scoreKey] !== null && model[scoreKey] !== undefined);
       const latestMaxScore = scored.reduce(
-        (maxScore, model) => (maxScore === null || model.codingIndex > maxScore ? model.codingIndex : maxScore),
+        (maxScore, model) => (maxScore === null || model[scoreKey] > maxScore ? model[scoreKey] : maxScore),
         null,
       );
 
@@ -126,7 +129,7 @@ export function groupByProvider(models) {
         provider,
         releases: releases.length,
         scored: scored.length,
-        qualified: scored.filter((model) => model.codingIndex >= OPUS_45_CODING_THRESHOLD).length,
+        qualified: scoreKey === "codingIndex" ? scored.filter((model) => model[scoreKey] >= OPUS_45_CODING_THRESHOLD).length : 0,
         latestMaxScore,
       };
     })

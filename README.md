@@ -33,8 +33,9 @@ Update rules:
 3. Use secondary sources only when the maker confirms availability somewhere non-extractable, and mark the row with `sourceType: "secondary"`.
 4. Add rows only for base model lines or distinct specialized base lines relevant to agentic/programming work.
 5. Do not add preview-only configs, mini/nano/lite tiers, app features, partner integrations, or modality-only releases unless they are directly relevant to programming/agentic workflows.
-6. If Artificial Analysis Coding Index has a score, add `codingIndex` and `scoreSourceUrl`.
-7. Run tests before pushing:
+6. Retain any historically verified `codingIndex` values and label them as historical; Artificial Analysis no longer updates this index.
+7. If the live Artificial Analysis Intelligence Index has an exact score for a model/configuration, store `intelligenceIndex`, `intelligenceIndexConfiguration`, and `intelligenceIndexSourceUrl`. Use the highest listed configuration for a family-level row and leave unmatched families `null`; never copy a score from a newer or sibling model.
+8. Run tests before pushing:
 
 ```bash
 npm test

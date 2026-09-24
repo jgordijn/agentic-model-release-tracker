@@ -31,16 +31,31 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the September 23 data cache key", async () => {
+test("HTML and module imports use the September 23 metric-toggle cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20260923a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20260923a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260923a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20260923b"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20260923b"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260923b"/);
+  assert.doesNotMatch(`${html}\n${app}`, /20260923a/);
   assert.doesNotMatch(`${html}\n${app}`, /20260916a/);
   assert.doesNotMatch(`${html}\n${app}`, /20260908a/);
   assert.doesNotMatch(`${html}\n${app}`, /20260830a/);
+});
+
+test("the dashboard lets users rank by Intelligence Index or historical Coding Index", async () => {
+  const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
+
+  assert.match(html, /<select id="scoreMetric">[\s\S]*value="intelligenceIndex"[\s\S]*value="codingIndex"/);
+  assert.match(html, /id="scoreMetricNote"/);
+  assert.match(app, /scoreKey: "intelligenceIndex"/);
+  assert.match(app, /state\.scoreKey = event\.target\.value/);
+  assert.match(app, /summarizeReleases\(models, TODAY, state\.scoreKey\)/);
+  assert.match(app, /groupByProvider\(models, state\.scoreKey\)/);
+  assert.match(app, /item\[state\.scoreKey\]/);
+  assert.match(app, /codingMetricNote:/);
 });
 
 test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agnes AI, and InclusionAI primary sources", async () => {

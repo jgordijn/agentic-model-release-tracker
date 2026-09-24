@@ -1,10 +1,51 @@
 const aaCodingSource = "https://easy-benchmarks.com/benchmarks/artificial_analysis_coding_index";
 const aaModelLeaderboard = "https://artificialanalysis.ai/leaderboards/models";
 
+// AA Intelligence Index snapshot retrieved 2026-09-23. Family-level rows use
+// the highest scored exact configuration listed by AA; no sibling-release
+// scores are copied. Missing exact family matches remain null.
+const aaIntelligenceScores = {
+  "Agnes 3.0 Flash": [36, "default", "https://artificialanalysis.ai/models/agnes-3-0-flash"],
+  "Apodex 1.1": [30, "default", "https://artificialanalysis.ai/models/apodex-1-1"],
+  "Claude Fable 5.1": [53, "max with fallback", "https://artificialanalysis.ai/models/claude-fable-5-1"],
+  "Claude Opus 5": [51, "max", "https://artificialanalysis.ai/models/claude-opus-5"],
+  "Claude Opus 5.5": [58, "max with fallback", "https://artificialanalysis.ai/models/claude-opus-5-5"],
+  "Claude Sonnet 5": [38, "max", "https://artificialanalysis.ai/models/claude-sonnet-5"],
+  "DeepSeek V4.1 Flash": [39, "max", "https://artificialanalysis.ai/models/deepseek-v4-1-flash"],
+  "Devstral 2": [9, "default", "https://artificialanalysis.ai/models/devstral-2"],
+  "GLM-5.3": [45, "max", "https://artificialanalysis.ai/models/glm-5-3"],
+  "GLM-5.3-Flash": [42, "default", "https://artificialanalysis.ai/models/glm-5-3-flash"],
+  "GPT-5.6 Luna": [37, "max", "https://artificialanalysis.ai/models/gpt-5-6-luna"],
+  "GPT-5.6 Sol": [47, "max", "https://artificialanalysis.ai/models/gpt-5-6-sol"],
+  "GPT-5.6 Terra": [42, "max", "https://artificialanalysis.ai/models/gpt-5-6-terra"],
+  "GPT-6 Astra": [53, "max", "https://artificialanalysis.ai/models/gpt-6-astra"],
+  "GPT-6 Luna": [37, "max", "https://artificialanalysis.ai/models/gpt-6-luna"],
+  "GPT-6 Sol": [48, "max", "https://artificialanalysis.ai/models/gpt-6-sol"],
+  "Gemini 3.8 Flash": [41, "high", "https://artificialanalysis.ai/models/gemini-3-8-flash"],
+  "Grok 4.6": [44, "high", "https://artificialanalysis.ai/models/grok-4-6"],
+  "Grok 4.7": [46, "xhigh", "https://artificialanalysis.ai/models/grok-4-7"],
+  "K2 Horizon 375B A23B": [31, "default", "https://artificialanalysis.ai/models/k2-horizon-375b-a23b"],
+  "Kimi K2.7 Code": [26, "default", "https://artificialanalysis.ai/models/kimi-k2-7-code"],
+  "Kimi K3": [44, "max", "https://artificialanalysis.ai/models/kimi-k3"],
+  "Ling-3.0-flash-Fin": [23, "default", "https://artificialanalysis.ai/models/ling-3-0-flash-fin"],
+  "Ling-3.0-flash-VL": [25, "default", "https://artificialanalysis.ai/models/ling-3-0-flash-vl"],
+  "MiMo-V2.5-Pro": [26, "default", "https://artificialanalysis.ai/models/mimo-v2-5-pro"],
+  "MiMo-V2.6-Pro": [46, "default", "https://artificialanalysis.ai/models/mimo-v2-6-pro"],
+  "MiniCPM5-2B": [12, "default", "https://artificialanalysis.ai/models/minicpm5-2b"],
+  "Mistral Large 3": [9, "default", "https://artificialanalysis.ai/models/mistral-large-3"],
+  "Mistral Medium 3.5": [14, "default", "https://artificialanalysis.ai/models/mistral-medium-3-5"],
+  "Muse Spark 1.3": [48, "max", "https://artificialanalysis.ai/models/muse-spark-1-3"],
+  o3: [20, "default", "https://artificialanalysis.ai/models/o3"],
+};
+
 function release(row) {
+  const intelligenceScore = aaIntelligenceScores[row.model];
   return {
     releaseCategory: "base",
     sourceType: "official",
+    intelligenceIndex: intelligenceScore?.[0] ?? null,
+    intelligenceIndexConfiguration: intelligenceScore?.[1] ?? null,
+    intelligenceIndexSourceUrl: intelligenceScore?.[2] ?? null,
     ...row,
   };
 }
@@ -1462,11 +1503,11 @@ export const RELEASES = [
 
 export const DATA_SOURCES = [
   {
-    label: "Artificial Analysis Coding Index",
+    label: "Artificial Analysis Intelligence Index leaderboard",
     url: "https://artificialanalysis.ai/leaderboards/models",
   },
   {
-    label: "Easy Benchmarks AA Coding Index snapshot",
+    label: "Historical Coding Index snapshot (Easy Benchmarks)",
     url: aaCodingSource,
   },
   {

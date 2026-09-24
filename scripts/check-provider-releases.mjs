@@ -60,7 +60,7 @@ function printProvider(provider, since, markdown) {
     console.log("  - [ ] Checked primary sources");
     console.log("  - [ ] Checked search queries");
     console.log("  - [ ] Confirmed whether each candidate is a base/specialized model release rather than a feature, preview-only config, mini/nano/lite tier, app feature, or provider integration");
-    console.log("  - [ ] Added release rows with sourceUrl and scoreSourceUrl when AA Coding Index has a score");
+    console.log("  - [ ] Added release rows with maker provenance and exact AA Intelligence Index score/configuration when listed");
   } else {
     console.log(`Group: ${provider.group}`);
     console.log("Primary sources:");

@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 31);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 40);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -58,12 +58,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("September 23 refresh preserves the 130-row baseline, adds five unique rows, and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 5, 130, "baseline row count before the September 21-22 refresh and follow-up correction");
-  assert.equal(RELEASES.length, 135);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 135);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-09-22"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-09-23"), "no row is later than the research cutoff");
+test("September 30 refresh preserves the 135-row HEAD baseline and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 10, 135, "baseline row count before the continued September 29-30 refresh");
+  assert.equal(RELEASES.length, 145);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 145);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-09-29"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-09-30"), "no row is later than the research cutoff");
 });
 
 test("OpenAI GPT-6 Sol and Luna are included as September 22 coding-agent releases", () => {
@@ -84,6 +84,11 @@ test("every scored release stores a valid score source URL", () => {
 
     assert.equal(Number.isFinite(release.codingIndex), true, release.model);
     assert.match(release.scoreSourceUrl, /^https?:\/\//, release.model);
+    if (release.scoreSourceType === "secondary-mirror") {
+      assert.equal(release.scoreConfiguration, "no effort suffix", release.model);
+      assert.match(release.scoreSourceUrl, /^https:\/\/easy-benchmarks\.com\/models\//, release.model);
+      assert.match(release.scoreAuthorityUrl, /^https:\/\/artificialanalysis\.ai\/models\//, release.model);
+    }
   }
 });
 
@@ -664,4 +669,48 @@ test("September 21-22 scope decisions exclude Xiaomi serving and non-Pro variant
   for (const excluded of ["MiMo-V2.6-Flash", "MiMo-V2.6-Pro-UltraSpeed", "Grok 4.7 (high)", "Grok 4.7 (xhigh)"]) {
     assert.equal(models.has(excluded), false, excluded);
   }
+});
+
+test("continued September 29-30 refresh preserves new provider scope and score provenance", () => {
+  const expected = {
+    "Trinity-Large-Thinking": ["Arcee AI", "2026-04-01", "specialized-base", null],
+    "LongCat 2.0": ["LongCat", "2026-06-29", "base", 45.3],
+    Inkling: ["Thinking Machines", "2026-07-15", "base", null],
+    "Granite 4.2 3B": ["IBM Granite", "2026-08-25", "base", 17.5],
+    "Granite 4.2 8B": ["IBM Granite", "2026-08-25", "base", 22.4],
+    "Granite 4.2 30B": ["IBM Granite", "2026-08-25", "base", 29.9],
+    "Celeris-1 Magnus": ["Celeris", "2026-08-31", "specialized-base", null],
+    "Mercury 2.5": ["Inception", "2026-09-08", "base", null],
+    "Claude Sonnet 5.5": ["Anthropic", "2026-09-28", "base", null],
+    "GPT-6.1 Sol": ["OpenAI", "2026-09-29", "base", null],
+  };
+
+  for (const [model, [provider, releaseDate, releaseCategory, codingIndex]] of Object.entries(expected)) {
+    const release = RELEASES.find((item) => item.model === model);
+
+    assert.ok(release, model);
+    assert.equal(release.provider, provider, model);
+    assert.equal(release.releaseDate, releaseDate, model);
+    assert.equal(release.releaseCategory, releaseCategory, model);
+    assert.equal(release.sourceType, "official", model);
+    assert.equal(release.codingIndex, codingIndex, model);
+    assert.match(release.sourceUrl, /^https?:\/\//, model);
+    if (codingIndex === null) {
+      assert.equal(release.scoreSourceUrl, undefined, model);
+      assert.match(release.notes, /score remains unknown|no exact Coding Index|codingIndex remains null/i, model);
+    } else {
+      assert.match(release.scoreSourceUrl, /^https:\/\/easy-benchmarks\.com\/models\//, model);
+      assert.match(release.scoreAuthorityUrl, /^https:\/\/artificialanalysis\.ai\/models\//, model);
+      assert.equal(release.scoreConfiguration, "no effort suffix", model);
+      assert.equal(release.scoreSourceType, "secondary-mirror", model);
+      assert.match(release.notes, /Easy Benchmarks.*secondary extraction evidence/i, model);
+    }
+  }
+
+  const gpt = RELEASES.find((item) => item.model === "GPT-6.1 Sol");
+  assert.equal(gpt?.intelligenceIndex, 52);
+  assert.equal(gpt?.intelligenceIndexConfiguration, "max");
+  assert.equal(gpt?.intelligenceIndexSourceUrl, "https://artificialanalysis.ai/models/gpt-6-1-sol");
+  assert.match(gpt?.notes, /2026-09-29/);
+  assert.match(gpt?.notes, /effort configurations are not separate release rows/);
 });

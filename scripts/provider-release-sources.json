@@ -303,6 +303,104 @@
       ],
       "includeSignals": ["InclusionAI", "Ling", "Ring", "model", "agentic", "coding", "multimodal", "tool use"],
       "excludeSignals": ["quantization", "base checkpoint", "fine-tune", "tiny", "lite", "preview-only", "image-only", "audio-only"]
+    },
+    {
+      "name": "Inception",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://inceptionlabs.ai/",
+        "https://inceptionlabs.ai/blog/introducing-mercury-2-5",
+        "https://inceptionlabs.ai/models",
+        "https://docs.inceptionlabs.ai/get-started"
+      ],
+      "searchQueries": [
+        "site:inceptionlabs.ai/blog Inception Mercury model coding agentic after:{since}",
+        "site:docs.inceptionlabs.ai Mercury model tool use coding after:{since}"
+      ],
+      "includeSignals": ["Inception", "Mercury", "model", "coding", "agentic", "tool use", "reasoning"],
+      "excludeSignals": ["voice-only", "router", "preview-only", "integration"]
+    },
+    {
+      "name": "IBM Granite",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://research.ibm.com/blog/introducing-granite-4-2",
+        "https://www.ibm.com/granite",
+        "https://huggingface.co/ibm-granite"
+      ],
+      "searchQueries": [
+        "site:research.ibm.com/blog Granite model coding agentic tool calling after:{since}",
+        "site:huggingface.co/ibm-granite Granite model reasoning coding agentic after:{since}"
+      ],
+      "includeSignals": ["IBM", "Granite", "model", "coding", "agentic", "tool calling", "reasoning"],
+      "excludeSignals": ["speech", "vision-only", "embedding", "guardian", "quantization", "adapter"]
+    },
+    {
+      "name": "LongCat",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://longcat.ai/",
+        "https://longcat.ai/blog/longcat-2.0",
+        "https://huggingface.co/meituan-longcat",
+        "https://github.com/meituan-longcat"
+      ],
+      "searchQueries": [
+        "site:longcat.ai LongCat model coding agentic after:{since}",
+        "site:huggingface.co/meituan-longcat LongCat model coding agentic after:{since}",
+        "site:github.com/meituan-longcat LongCat model release coding agentic after:{since}"
+      ],
+      "includeSignals": ["LongCat", "Meituan", "model", "coding", "agentic", "tool use", "long-horizon"],
+      "excludeSignals": ["video", "image", "audio", "preview-only", "harness", "quantization"]
+    },
+    {
+      "name": "Thinking Machines",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://thinkingmachines.ai/",
+        "https://huggingface.co/blog/thinkingmachines-inkling",
+        "https://huggingface.co/thinkingmachines",
+        "https://github.com/thinking-machines-lab"
+      ],
+      "searchQueries": [
+        "site:huggingface.co/blog/thinkingmachines-inkling Inkling model coding agentic after:{since}",
+        "site:huggingface.co/thinkingmachines Inkling model tool use coding after:{since}",
+        "site:thinkingmachines.ai model release coding agentic after:{since}"
+      ],
+      "includeSignals": ["Thinking Machines", "Inkling", "model", "coding", "agentic", "tool use", "multimodal"],
+      "excludeSignals": ["quantization", "preview-only", "image-only", "audio-only", "integration"]
+    },
+    {
+      "name": "Arcee AI",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://arcee.ai/",
+        "https://arcee.ai/trinity",
+        "https://huggingface.co/arcee-ai",
+        "https://docs.arcee.ai/get-started/models-overview"
+      ],
+      "searchQueries": [
+        "site:arcee.ai Trinity model coding agentic after:{since}",
+        "site:huggingface.co/arcee-ai Trinity model tool calling coding after:{since}",
+        "site:docs.arcee.ai Trinity model agentic coding after:{since}"
+      ],
+      "includeSignals": ["Arcee", "Trinity", "model", "coding", "agentic", "tool use", "reasoning"],
+      "excludeSignals": ["mini", "nano", "preview-only", "harness", "partnership"]
+    },
+    {
+      "name": "Celeris",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://celeris.ai/",
+        "https://celeris.ai/celeris-1",
+        "https://celeris.ai/celeris-1-magnus",
+        "https://celeris.ai/blog"
+      ],
+      "searchQueries": [
+        "site:celeris.ai Celeris model coding agentic after:{since}",
+        "site:celeris.ai Celeris Magnus tool use coding after:{since}"
+      ],
+      "includeSignals": ["Celeris", "model", "coding", "agentic", "tool use", "reasoning"],
+      "excludeSignals": ["voice-only", "research-only", "feature", "preview-only", "integration"]
     }
   ],
   "missingLabs": [

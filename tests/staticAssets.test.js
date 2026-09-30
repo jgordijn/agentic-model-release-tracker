@@ -31,13 +31,13 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the September 23 metric-toggle cache key", async () => {
+test("HTML and module imports use the September 30 refresh cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20260923b"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20260923b"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260923b"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20260930a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20260930a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20260930a"/);
   assert.doesNotMatch(`${html}\n${app}`, /20260923a/);
   assert.doesNotMatch(`${html}\n${app}`, /20260916a/);
   assert.doesNotMatch(`${html}\n${app}`, /20260908a/);
@@ -68,6 +68,21 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
     assert.ok(provider, providerName);
     assert.ok(provider.primarySources.length > 0, providerName);
     assert.ok(provider.searchQueries.length > 0, providerName);
+  }
+
+  for (const [providerName, requiredSource] of [
+    ["Inception", "https://inceptionlabs.ai/blog/introducing-mercury-2-5"],
+    ["IBM Granite", "https://research.ibm.com/blog/introducing-granite-4-2"],
+    ["LongCat", "https://longcat.ai/blog/longcat-2.0"],
+    ["Thinking Machines", "https://huggingface.co/blog/thinkingmachines-inkling"],
+    ["Arcee AI", "https://huggingface.co/arcee-ai"],
+    ["Celeris", "https://celeris.ai/celeris-1-magnus"],
+  ]) {
+    const provider = config.providers.find((entry) => entry.name === providerName);
+
+    assert.ok(provider, providerName);
+    assert.ok(provider.primarySources.includes(requiredSource), `${providerName}: ${requiredSource}`);
+    assert.ok(provider.searchQueries.some((query) => query.includes("{since}")), providerName);
   }
 
   const alibaba = config.providers.find((entry) => entry.name === "Alibaba");
@@ -176,7 +191,7 @@ test("provider checklist config covers every explicit missing lab", async () => 
 
   const output = execFileSync(process.execPath, [checkerPath.pathname, "--markdown"], { encoding: "utf8" });
   const names = [...config.providers, ...missingLabs].map((entry) => entry.name);
-  assert.equal(config.providers.length, 20);
+  assert.equal(config.providers.length, 26);
   assert.equal(missingLabs.length, 4);
   for (const name of names) assert.ok(output.includes(`## ${name}\n`), `checker output includes ${name}`);
   assert.equal((output.match(/^## (?!Explicitly missing labs$).+/gm) ?? []).length, names.length, "checker emits every provider exactly once");

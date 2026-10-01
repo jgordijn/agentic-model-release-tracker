@@ -3,8 +3,9 @@ const aaModelLeaderboard = "https://artificialanalysis.ai/leaderboards/models";
 
 // AA Intelligence Index snapshots are stored separately from codingIndex.
 // Existing rows use the dated 2026-09-23 snapshot; entries added during the
-// 2026-09-29/30 refresh use the exact current AA model-page configuration where
-// available. No Intelligence Index value is ever copied into codingIndex.
+// 2026-09-29/30 and 2026-10-01 refreshes use the exact current AA model-page
+// configuration where available. No Intelligence Index value is ever copied
+// into codingIndex.
 const aaIntelligenceScores = {
   "Agnes 3.0 Flash": [36, "default", "https://artificialanalysis.ai/models/agnes-3-0-flash"],
   "Apodex 1.1": [30, "default", "https://artificialanalysis.ai/models/apodex-1-1"],
@@ -22,6 +23,7 @@ const aaIntelligenceScores = {
   "GPT-5.6 Terra": [42, "max", "https://artificialanalysis.ai/models/gpt-5-6-terra"],
   "GPT-6 Astra": [53, "max", "https://artificialanalysis.ai/models/gpt-6-astra"],
   "GPT-6.1 Sol": [52, "max", "https://artificialanalysis.ai/models/gpt-6-1-sol"],
+  "Gemini 4 Argon": [53, "high", "https://artificialanalysis.ai/models/gemini-4-argon"],
   "GPT-6 Luna": [37, "max", "https://artificialanalysis.ai/models/gpt-6-luna"],
   "GPT-6 Sol": [48, "max", "https://artificialanalysis.ai/models/gpt-6-sol"],
   "Gemini 3.8 Flash": [41, "high", "https://artificialanalysis.ai/models/gemini-3-8-flash"],
@@ -1626,6 +1628,16 @@ export const RELEASES = [
     focus: ["agentic", "programming"],
     sourceUrl: "https://openai.com/index/introducing-gpt-6-1-sol/",
     notes: "OpenAI's official 2026-09-29 announcement introduces GPT-6.1 Sol as an upgrade to GPT-6 Sol for agentic coding, computer use, and professional work, available through the API as gpt-6.1-sol. Artificial Analysis exposes the exact GPT-6.1 Sol release and max/xhigh/high/medium/low effort configurations; its fetched page and leaderboard expose Intelligence Index rather than an exact Coding Index, and the Easy Benchmarks snapshot retrieved 2026-09-30 reports Coding as n/a. The score remains unknown; DeepSWE, Terminal-Bench Science, and the Intelligence Index are not substitutes, and effort configurations are not separate release rows.",
+  }),
+  release({
+    model: "Gemini 4 Argon",
+    provider: "Google",
+    group: "Frontier labs",
+    releaseDate: "2026-09-30",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/",
+    notes: "Google's official 2026-09-30 announcement introduces Gemini 4 Argon for real-world software engineering, enterprise knowledge work, and cyber defense; initial access is rolling out to trusted cyber defenders through the Fairwind Program while Google gradually expands access and gathers feedback before wider availability. The model is a distinct frontier line rather than a product feature or serving alias. Artificial Analysis exposes Gemini 4 Argon (high) with Intelligence Index 53 at https://artificialanalysis.ai/models/gemini-4-argon; the exact page exposes no Coding Index field, while the Easy Benchmarks snapshot retrieved 2026-10-01 reports Coding n/a, so codingIndex remains null. DeepSWE, SciCode, Intelligence Index, and other non-Coding metrics are not substitutes, and the high effort configuration is not a separate release row.",
   }),
 ];
 

@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 40);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 41);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -35,6 +35,7 @@ test("Intelligence Index data is metric-specific, sourced, and null for unmatche
     "Claude Opus 5.5": [58, "max with fallback"],
     "Grok 4.7": [46, "xhigh"],
     "MiniCPM5-2B": [12, "default"],
+    "Gemini 4 Argon": [53, "high"],
   };
   for (const [model, [score, configuration]] of Object.entries(expected)) {
     const release = RELEASES.find((item) => item.model === model);
@@ -58,12 +59,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("September 30 refresh preserves the 135-row HEAD baseline and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 10, 135, "baseline row count before the continued September 29-30 refresh");
-  assert.equal(RELEASES.length, 145);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 145);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-09-29"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-09-30"), "no row is later than the research cutoff");
+test("October 1 refresh preserves the 145-row HEAD baseline and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 1, 145, "baseline row count before the October 1 refresh");
+  assert.equal(RELEASES.length, 146);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 146);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-09-30"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-01"), "no row is later than the research cutoff");
 });
 
 test("OpenAI GPT-6 Sol and Luna are included as September 22 coding-agent releases", () => {
@@ -671,7 +672,7 @@ test("September 21-22 scope decisions exclude Xiaomi serving and non-Pro variant
   }
 });
 
-test("continued September 29-30 refresh preserves new provider scope and score provenance", () => {
+test("continued September 29-October 1 refresh preserves new provider scope and score provenance", () => {
   const expected = {
     "Trinity-Large-Thinking": ["Arcee AI", "2026-04-01", "specialized-base", null],
     "LongCat 2.0": ["LongCat", "2026-06-29", "base", 45.3],
@@ -683,6 +684,7 @@ test("continued September 29-30 refresh preserves new provider scope and score p
     "Mercury 2.5": ["Inception", "2026-09-08", "base", null],
     "Claude Sonnet 5.5": ["Anthropic", "2026-09-28", "base", null],
     "GPT-6.1 Sol": ["OpenAI", "2026-09-29", "base", null],
+    "Gemini 4 Argon": ["Google", "2026-09-30", "base", null],
   };
 
   for (const [model, [provider, releaseDate, releaseCategory, codingIndex]] of Object.entries(expected)) {
@@ -713,4 +715,13 @@ test("continued September 29-30 refresh preserves new provider scope and score p
   assert.equal(gpt?.intelligenceIndexSourceUrl, "https://artificialanalysis.ai/models/gpt-6-1-sol");
   assert.match(gpt?.notes, /2026-09-29/);
   assert.match(gpt?.notes, /effort configurations are not separate release rows/);
+
+  const argon = RELEASES.find((item) => item.model === "Gemini 4 Argon");
+  assert.equal(argon?.intelligenceIndex, 53);
+  assert.equal(argon?.intelligenceIndexConfiguration, "high");
+  assert.equal(argon?.intelligenceIndexSourceUrl, "https://artificialanalysis.ai/models/gemini-4-argon");
+  assert.equal(argon?.sourceUrl, "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/");
+  assert.match(argon?.notes, /Fairwind Program/);
+  assert.match(argon?.notes, /Coding n\/a/);
+  assert.match(argon?.notes, /high effort configuration is not a separate release row/);
 });

@@ -3,9 +3,9 @@ const aaModelLeaderboard = "https://artificialanalysis.ai/leaderboards/models";
 
 // AA Intelligence Index snapshots are stored separately from codingIndex.
 // Existing rows use the dated 2026-09-23 snapshot; entries added during the
-// 2026-09-29/30 and 2026-10-01 refreshes use the exact current AA model-page
-// configuration where available. No Intelligence Index value is ever copied
-// into codingIndex.
+// 2026-09-29/30, 2026-10-01, and 2026-10-05 refreshes use the exact current AA
+// model-page configuration where available. No Intelligence Index value is ever
+// copied into codingIndex.
 const aaIntelligenceScores = {
   "Agnes 3.0 Flash": [36, "default", "https://artificialanalysis.ai/models/agnes-3-0-flash"],
   "Apodex 1.1": [30, "default", "https://artificialanalysis.ai/models/apodex-1-1"],
@@ -39,6 +39,7 @@ const aaIntelligenceScores = {
   "LongCat 2.0": [19, "default", "https://artificialanalysis.ai/models/longcat-2-0"],
   "Ling-3.0-flash-Fin": [23, "default", "https://artificialanalysis.ai/models/ling-3-0-flash-fin"],
   "Ling-3.0-flash-VL": [25, "default", "https://artificialanalysis.ai/models/ling-3-0-flash-vl"],
+  "Ling 3.1 Flash": [41, "default", "https://artificialanalysis.ai/models/ling-3-1-flash"],
   "MiMo-V2.5-Pro": [26, "default", "https://artificialanalysis.ai/models/mimo-v2-5-pro"],
   "MiMo-V2.6-Pro": [46, "default", "https://artificialanalysis.ai/models/mimo-v2-6-pro"],
   "MiniCPM5-2B": [12, "default", "https://artificialanalysis.ai/models/minicpm5-2b"],
@@ -1638,6 +1639,17 @@ export const RELEASES = [
     focus: ["agentic", "programming"],
     sourceUrl: "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/",
     notes: "Google's official 2026-09-30 announcement introduces Gemini 4 Argon for real-world software engineering, enterprise knowledge work, and cyber defense; initial access is rolling out to trusted cyber defenders through the Fairwind Program while Google gradually expands access and gathers feedback before wider availability. The model is a distinct frontier line rather than a product feature or serving alias. Artificial Analysis exposes Gemini 4 Argon (high) with Intelligence Index 53 at https://artificialanalysis.ai/models/gemini-4-argon; the exact page exposes no Coding Index field, while the Easy Benchmarks snapshot retrieved 2026-10-01 reports Coding n/a, so codingIndex remains null. DeepSWE, SciCode, Intelligence Index, and other non-Coding metrics are not substitutes, and the high effort configuration is not a separate release row.",
+  }),
+  release({
+    model: "Ling 3.1 Flash",
+    provider: "InclusionAI",
+    group: "Chinese+Other",
+    releaseDate: "2026-09-30",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://x.com/AntLingAGI/status/2105335205741596911",
+    aliases: ["Ling-3.1-flash", "ling-3-1-flash", "inclusionai/ling-3.1-flash"],
+    notes: "InclusionAI's official Ant Ling announcement on 2026-09-30 introduces Ling-3.1-flash as a distinct 560B/25B-active reasoning model for coding, tool use, long-horizon work, and agentic workflows; the same official thread offers a public Novita/Vercel trial, while a 2026-10-02 follow-up confirms it is live on OpenRouter. The maker announcement date controls the dashboard releaseDate; the Artificial Analysis catalog lists the exact Ling 3.1 Flash family with releaseDate 2026-10-01, and the direct AA model page reports Intelligence Index 41 for the reasoning/default page but no Coding Index field. The exact AA Coding Index is therefore unknown and codingIndex remains null; OpenRouter's secondary Intelligence Index 41.1 and maker-reported GDPVal/FrontierSWE scores are not substituted. Open-source weights were announced as forthcoming, not treated as a separate later release.",
   }),
 ];
 

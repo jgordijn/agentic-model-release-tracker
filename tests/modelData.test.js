@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 41);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 42);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -36,6 +36,7 @@ test("Intelligence Index data is metric-specific, sourced, and null for unmatche
     "Grok 4.7": [46, "xhigh"],
     "MiniCPM5-2B": [12, "default"],
     "Gemini 4 Argon": [53, "high"],
+    "Ling 3.1 Flash": [41, "default"],
   };
   for (const [model, [score, configuration]] of Object.entries(expected)) {
     const release = RELEASES.find((item) => item.model === model);
@@ -59,12 +60,30 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("October 1 refresh preserves the 145-row HEAD baseline and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 1, 145, "baseline row count before the October 1 refresh");
-  assert.equal(RELEASES.length, 146);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 146);
+test("October 5 refresh preserves the 146-row HEAD baseline and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 1, 146, "baseline row count before the October 5 refresh");
+  assert.equal(RELEASES.length, 147);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 147);
   assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-09-30"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-01"), "no row is later than the research cutoff");
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-05"), "no row is later than the research cutoff");
+});
+
+test("Ling 3.1 Flash is included as the September 30 InclusionAI agentic model release", () => {
+  const ling = RELEASES.find((release) => release.model === "Ling 3.1 Flash");
+
+  assert.ok(ling);
+  assert.equal(ling.provider, "InclusionAI");
+  assert.equal(ling.group, "Chinese+Other");
+  assert.equal(ling.releaseDate, "2026-09-30");
+  assert.equal(ling.releaseCategory, "base");
+  assert.equal(ling.sourceType, "official");
+  assert.deepEqual(ling.focus, ["agentic", "programming"]);
+  assert.equal(ling.sourceUrl, "https://x.com/AntLingAGI/status/2105335205741596911");
+  assert.deepEqual(ling.aliases, ["Ling-3.1-flash", "ling-3-1-flash", "inclusionai/ling-3.1-flash"]);
+  assert.equal(ling.codingIndex, null);
+  assert.equal(ling.scoreSourceUrl, undefined);
+  assert.match(ling.notes, /2026-10-01/);
+  assert.match(ling.notes, /no Coding Index field/i);
 });
 
 test("OpenAI GPT-6 Sol and Luna are included as September 22 coding-agent releases", () => {

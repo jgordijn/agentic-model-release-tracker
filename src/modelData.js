@@ -3,13 +3,14 @@ const aaModelLeaderboard = "https://artificialanalysis.ai/leaderboards/models";
 
 // AA Intelligence Index snapshots are stored separately from codingIndex.
 // Existing rows use the dated 2026-09-23 snapshot; entries added during the
-// 2026-09-29/30, 2026-10-01, and 2026-10-05 refreshes use the exact current AA
+// 2026-09-29/30, 2026-10-01, 2026-10-05, and 2026-10-08 refreshes use the exact current AA
 // model-page configuration where available. No Intelligence Index value is ever
 // copied into codingIndex.
 const aaIntelligenceScores = {
   "Agnes 3.0 Flash": [36, "default", "https://artificialanalysis.ai/models/agnes-3-0-flash"],
   "Apodex 1.1": [30, "default", "https://artificialanalysis.ai/models/apodex-1-1"],
   "Claude Fable 5.1": [53, "max with fallback", "https://artificialanalysis.ai/models/claude-fable-5-1"],
+  "Claude Haiku 5.5": [43, "max", "https://artificialanalysis.ai/models/claude-haiku-5-5"],
   "Claude Opus 5": [51, "max", "https://artificialanalysis.ai/models/claude-opus-5"],
   "Claude Opus 5.5": [58, "max with fallback", "https://artificialanalysis.ai/models/claude-opus-5-5"],
   "Claude Sonnet 5": [38, "max", "https://artificialanalysis.ai/models/claude-sonnet-5"],
@@ -1618,7 +1619,7 @@ export const RELEASES = [
     codingIndex: null,
     focus: ["agentic", "programming"],
     sourceUrl: "https://www.anthropic.com/claude-sonnet-5-5",
-    notes: "Anthropic's official 2026-09-28 announcement introduces Claude Sonnet 5.5 as a new Claude 5.5 base-model line for fixing bugs, building features, and fast agentic coding. Haiku 5.5 is announced as coming later and is not tracked. Artificial Analysis exposes exact effort variants for Sonnet 5.5, but the fetched model page and Easy Benchmarks snapshot had no exact Coding Index row; Terminal-Bench, FrontierCode, CursorBench, and the Intelligence Index are not substitutes, so codingIndex remains null.",
+    notes: "Anthropic's official 2026-09-28 announcement introduces Claude Sonnet 5.5 as a new Claude 5.5 base-model line for fixing bugs, building features, and fast agentic coding. Haiku 5.5 was announced as coming later and is tracked separately after its official 2026-10-07 release. Artificial Analysis exposes exact effort variants for Sonnet 5.5, but the fetched model page and Easy Benchmarks snapshot had no exact Coding Index row; Terminal-Bench, FrontierCode, CursorBench, and the Intelligence Index are not substitutes, so codingIndex remains null.",
   }),
   release({
     model: "GPT-6.1 Sol",
@@ -1650,6 +1651,17 @@ export const RELEASES = [
     sourceUrl: "https://x.com/AntLingAGI/status/2105335205741596911",
     aliases: ["Ling-3.1-flash", "ling-3-1-flash", "inclusionai/ling-3.1-flash"],
     notes: "InclusionAI's official Ant Ling announcement on 2026-09-30 introduces Ling-3.1-flash as a distinct 560B/25B-active reasoning model for coding, tool use, long-horizon work, and agentic workflows; the same official thread offers a public Novita/Vercel trial, while a 2026-10-02 follow-up confirms it is live on OpenRouter. The maker announcement date controls the dashboard releaseDate; the Artificial Analysis catalog lists the exact Ling 3.1 Flash family with releaseDate 2026-10-01, and the direct AA model page reports Intelligence Index 41 for the reasoning/default page but no Coding Index field. The exact AA Coding Index is therefore unknown and codingIndex remains null; OpenRouter's secondary Intelligence Index 41.1 and maker-reported GDPVal/FrontierSWE scores are not substituted. Open-source weights were announced as forthcoming, not treated as a separate later release.",
+  }),
+  release({
+    model: "Claude Haiku 5.5",
+    provider: "Anthropic",
+    group: "Frontier labs",
+    releaseDate: "2026-10-07",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://www.anthropic.com/claude-haiku-5-5",
+    aliases: ["claude-haiku-5-5"],
+    notes: "Anthropic's official 2026-10-07 announcement introduces Claude Haiku 5.5 as a generally available small model for high-volume, latency-sensitive work; it is explicitly positioned as a subagent on coding work and for browser use. The exact Artificial Analysis model page reports Intelligence Index 43 for Claude Haiku 5.5 (max), stored separately; the fetched AA model/leaderboard pages expose no exact Coding Index field. Anthropic's Terminal-Bench 4.0 and FrontierCode results, plus the Intelligence Index, are not substitutes, so codingIndex remains null; low/medium/high/xhigh/max effort settings are not separate release rows. Direct AA audit retrieved 2026-10-08.",
   }),
 ];
 

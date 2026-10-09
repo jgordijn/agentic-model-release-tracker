@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 42);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 43);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -60,12 +60,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("October 5 refresh preserves the 146-row HEAD baseline and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 1, 146, "baseline row count before the October 5 refresh");
-  assert.equal(RELEASES.length, 147);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 147);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-09-30"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-05"), "no row is later than the research cutoff");
+test("October 8 refresh preserves the 147-row HEAD baseline and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 1, 147, "baseline row count before the October 8 refresh");
+  assert.equal(RELEASES.length, 148);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 148);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-07"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-08"), "no row is later than the research cutoff");
 });
 
 test("Ling 3.1 Flash is included as the September 30 InclusionAI agentic model release", () => {
@@ -84,6 +84,28 @@ test("Ling 3.1 Flash is included as the September 30 InclusionAI agentic model r
   assert.equal(ling.scoreSourceUrl, undefined);
   assert.match(ling.notes, /2026-10-01/);
   assert.match(ling.notes, /no Coding Index field/i);
+});
+
+test("Claude Haiku 5.5 is included as the October 7 Anthropic agentic base release", () => {
+  const haiku = RELEASES.find((release) => release.model === "Claude Haiku 5.5");
+
+  assert.ok(haiku);
+  assert.equal(haiku.provider, "Anthropic");
+  assert.equal(haiku.group, "Frontier labs");
+  assert.equal(haiku.releaseDate, "2026-10-07");
+  assert.equal(haiku.releaseCategory, "base");
+  assert.equal(haiku.sourceType, "official");
+  assert.deepEqual(haiku.focus, ["agentic", "programming"]);
+  assert.equal(haiku.sourceUrl, "https://www.anthropic.com/claude-haiku-5-5");
+  assert.deepEqual(haiku.aliases, ["claude-haiku-5-5"]);
+  assert.equal(haiku.codingIndex, null);
+  assert.equal(haiku.scoreSourceUrl, undefined);
+  assert.equal(haiku.intelligenceIndex, 43);
+  assert.equal(haiku.intelligenceIndexConfiguration, "max");
+  assert.equal(haiku.intelligenceIndexSourceUrl, "https://artificialanalysis.ai/models/claude-haiku-5-5");
+  assert.match(haiku.notes, /subagent on coding work/i);
+  assert.match(haiku.notes, /no exact Coding Index field/i);
+  assert.match(haiku.notes, /2026-10-08/);
 });
 
 test("OpenAI GPT-6 Sol and Luna are included as September 22 coding-agent releases", () => {

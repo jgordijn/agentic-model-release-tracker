@@ -3,7 +3,7 @@ const aaModelLeaderboard = "https://artificialanalysis.ai/leaderboards/models";
 
 // AA Intelligence Index snapshots are stored separately from codingIndex.
 // Existing rows use the dated 2026-09-23 snapshot; entries added during the
-// 2026-09-29/30, 2026-10-01, 2026-10-05, and 2026-10-08 refreshes use the exact current AA
+// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, and 2026-10-10/13 refreshes use the exact current AA
 // model-page configuration where available. No Intelligence Index value is ever
 // copied into codingIndex.
 const aaIntelligenceScores = {
@@ -1662,6 +1662,18 @@ export const RELEASES = [
     sourceUrl: "https://www.anthropic.com/claude-haiku-5-5",
     aliases: ["claude-haiku-5-5"],
     notes: "Anthropic's official 2026-10-07 announcement introduces Claude Haiku 5.5 as a generally available small model for high-volume, latency-sensitive work; it is explicitly positioned as a subagent on coding work and for browser use. The exact Artificial Analysis model page reports Intelligence Index 43 for Claude Haiku 5.5 (max), stored separately; the fetched AA model/leaderboard pages expose no exact Coding Index field. Anthropic's Terminal-Bench 4.0 and FrontierCode results, plus the Intelligence Index, are not substitutes, so codingIndex remains null; low/medium/high/xhigh/max effort settings are not separate release rows. Direct AA audit retrieved 2026-10-08.",
+  }),
+  release({
+    model: "Agnes 3.0 Qwen",
+    provider: "Agnes AI",
+    group: "Chinese+Other",
+    releaseDate: "2026-10-10",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    releaseCategory: "specialized-base",
+    sourceUrl: "https://huggingface.co/Agnes-AI/Agnes-3.0-Qwen",
+    aliases: ["agnes-3.0-qwen"],
+    notes: "Agnes AI's official Hugging Face model card introduces agnes-3.0-qwen as an open-weight multimodal reasoning model for agentic coding, tool use, long-context analysis, and scientific problem solving. The card states a release date of October 2026 and identifies Qwen/Qwen3.8-Flash-Next as the upstream base; this is a distinct Agnes post-trained specialized-base line, not a Qwen alias or duplicate. The official Hugging Face registry createdAt marker is 2026-10-10T14:27:15Z and the official GitHub landing page was created 2026-10-12; because no day-level maker announcement was found, 2026-10-10 is retained as the earliest public-availability fallback rather than an invented announcement date. The exact Artificial Analysis candidate URL https://artificialanalysis.ai/models/agnes-3-0-qwen returned 404 and the fetched leaderboard exposed no exact Coding Index row. Agnes's self-reported Terminal-Bench, IFBench, and other benchmark values are not Artificial Analysis Coding Index values, so codingIndex remains null.",
   }),
 ];
 

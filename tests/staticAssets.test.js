@@ -31,13 +31,14 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the October 8 refresh cache key", async () => {
+test("HTML and module imports use the October 13 refresh cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20261008a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20261008a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261008a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20261013a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20261013a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261013a"/);
+  assert.doesNotMatch(`${html}\n${app}`, /20261008a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261001a/);
   assert.doesNotMatch(`${html}\n${app}`, /20260923a/);
   assert.doesNotMatch(`${html}\n${app}`, /20260916a/);
@@ -142,12 +143,17 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
     "https://www.agnes-ai.com/zh-Hans/docs/agnes-30-flash",
     "https://platform.agnes-ai.com",
     "https://github.com/AgnesAI-Labs",
+    "https://github.com/AgnesAI-Labs/Agnes-3.0-Qwen",
+    "https://huggingface.co/Agnes-AI",
+    "https://huggingface.co/Agnes-AI/Agnes-3.0-Qwen",
   ]);
   assert.ok(agnes.searchQueries.every((query) => query.includes("{since}")));
+  assert.ok(agnes.searchQueries.some((query) => query.includes("Agnes-3.0-Qwen")));
+  assert.ok(agnes.searchQueries.some((query) => query.includes("huggingface.co/Agnes-AI")));
   for (const signal of ["Agnes AI", "Agnes", "model", "agent", "coding", "agentic", "tool calling", "foundation"]) {
     assert.ok(agnes.includeSignals.includes(signal), signal);
   }
-  for (const signal of ["image-only", "video-only", "audio-only", "product-only", "integration", "preview-only"]) {
+  for (const signal of ["image-only", "video-only", "audio-only", "product-only", "integration", "preview-only", "quantization", "base checkpoint"]) {
     assert.ok(agnes.excludeSignals.includes(signal), signal);
   }
 

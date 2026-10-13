@@ -273,15 +273,20 @@
         "https://agnes-ai.com/",
         "https://www.agnes-ai.com/zh-Hans/docs/agnes-30-flash",
         "https://platform.agnes-ai.com",
-        "https://github.com/AgnesAI-Labs"
+        "https://github.com/AgnesAI-Labs",
+        "https://github.com/AgnesAI-Labs/Agnes-3.0-Qwen",
+        "https://huggingface.co/Agnes-AI",
+        "https://huggingface.co/Agnes-AI/Agnes-3.0-Qwen"
       ],
       "searchQueries": [
         "site:agnes-ai.com Agnes model release coding agentic after:{since}",
         "site:platform.agnes-ai.com Agnes model agentic coding tool calling after:{since}",
-        "site:github.com/AgnesAI-Labs Agnes model coding agent tool use after:{since}"
+        "site:github.com/AgnesAI-Labs Agnes model coding agent tool use after:{since}",
+        "site:github.com/AgnesAI-Labs/Agnes-3.0-Qwen Agnes model release coding agentic after:{since}",
+        "site:huggingface.co/Agnes-AI Agnes model coding agentic after:{since}"
       ],
       "includeSignals": ["Agnes AI", "Agnes", "model", "agent", "coding", "agentic", "tool calling", "foundation"],
-      "excludeSignals": ["image-only", "video-only", "audio-only", "product-only", "integration", "preview-only"]
+      "excludeSignals": ["image-only", "video-only", "audio-only", "product-only", "integration", "preview-only", "quantization", "base checkpoint"]
     },
     {
       "name": "InclusionAI",

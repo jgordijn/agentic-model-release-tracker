@@ -60,12 +60,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("October 8 refresh preserves the 147-row HEAD baseline and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 1, 147, "baseline row count before the October 8 refresh");
-  assert.equal(RELEASES.length, 148);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 148);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-07"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-08"), "no row is later than the research cutoff");
+test("October 13 refresh preserves the 148-row HEAD baseline and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 1, 148, "baseline row count before the October 13 refresh");
+  assert.equal(RELEASES.length, 149);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 149);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-10"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-13"), "no row is later than the research cutoff");
 });
 
 test("Ling 3.1 Flash is included as the September 30 InclusionAI agentic model release", () => {
@@ -106,6 +106,27 @@ test("Claude Haiku 5.5 is included as the October 7 Anthropic agentic base relea
   assert.match(haiku.notes, /subagent on coding work/i);
   assert.match(haiku.notes, /no exact Coding Index field/i);
   assert.match(haiku.notes, /2026-10-08/);
+});
+
+test("Agnes 3.0 Qwen is included as the October 10 Agnes agentic specialized-base release", () => {
+  const agnes = RELEASES.find((release) => release.model === "Agnes 3.0 Qwen");
+
+  assert.ok(agnes);
+  assert.equal(agnes.provider, "Agnes AI");
+  assert.equal(agnes.group, "Chinese+Other");
+  assert.equal(agnes.releaseDate, "2026-10-10");
+  assert.equal(agnes.releaseCategory, "specialized-base");
+  assert.equal(agnes.sourceType, "official");
+  assert.deepEqual(agnes.focus, ["agentic", "programming"]);
+  assert.equal(agnes.sourceUrl, "https://huggingface.co/Agnes-AI/Agnes-3.0-Qwen");
+  assert.deepEqual(agnes.aliases, ["agnes-3.0-qwen"]);
+  assert.equal(agnes.codingIndex, null);
+  assert.equal(agnes.scoreSourceUrl, undefined);
+  assert.equal(agnes.intelligenceIndex, null);
+  assert.match(agnes.notes, /release date of October 2026/);
+  assert.match(agnes.notes, /createdAt marker is 2026-10-10T14:27:15Z/);
+  assert.match(agnes.notes, /Qwen3\.8-Flash-Next/);
+  assert.match(agnes.notes, /no exact Coding Index row/i);
 });
 
 test("OpenAI GPT-6 Sol and Luna are included as September 22 coding-agent releases", () => {
@@ -662,7 +683,8 @@ test("September 4 2026 InclusionAI release preserves backfilled agentic scope an
 
 test("Agnes AI is covered as a configured provider rather than an explicit missing lab", () => {
   assert.equal(IMPORTANT_MISSING_LABS.includes("Agnes AI"), false);
-  assert.equal(RELEASES.filter((release) => release.provider === "Agnes AI").length, 1);
+  assert.equal(RELEASES.filter((release) => release.provider === "Agnes AI").length, 2);
+  assert.ok(RELEASES.some((release) => release.model === "Agnes 3.0 Qwen"));
 });
 
 test("September 21-22 refresh adds only verified base releases with unknown exact AA Coding scores", () => {

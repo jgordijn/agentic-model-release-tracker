@@ -3,7 +3,7 @@ const aaModelLeaderboard = "https://artificialanalysis.ai/leaderboards/models";
 
 // AA Intelligence Index snapshots are stored separately from codingIndex.
 // Existing rows use the dated 2026-09-23 snapshot; entries added during the
-// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, and 2026-10-10/13 refreshes use the exact current AA
+// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, 2026-10-10/13, and 2026-10-15 refreshes use the exact current AA
 // model-page configuration where available. No Intelligence Index value is ever
 // copied into codingIndex.
 const aaIntelligenceScores = {
@@ -46,6 +46,8 @@ const aaIntelligenceScores = {
   "MiniCPM5-2B": [12, "default", "https://artificialanalysis.ai/models/minicpm5-2b"],
   "Mistral Large 3": [9, "default", "https://artificialanalysis.ai/models/mistral-large-3"],
   "Mistral Medium 3.5": [14, "default", "https://artificialanalysis.ai/models/mistral-medium-3-5"],
+  "Muse Wonder": [52, "max", "https://artificialanalysis.ai/models/muse-wonder"],
+  "Muse Wonder Full": [56, "max", "https://artificialanalysis.ai/models/muse-wonder-full"],
   "Muse Spark 1.3": [48, "max", "https://artificialanalysis.ai/models/muse-spark-1-3"],
   "Mercury 2.5": [12, "default", "https://artificialanalysis.ai/models/mercury-2-5"],
   o3: [20, "default", "https://artificialanalysis.ai/models/o3"],
@@ -1674,6 +1676,28 @@ export const RELEASES = [
     sourceUrl: "https://huggingface.co/Agnes-AI/Agnes-3.0-Qwen",
     aliases: ["agnes-3.0-qwen"],
     notes: "Agnes AI's official Hugging Face model card introduces agnes-3.0-qwen as an open-weight multimodal reasoning model for agentic coding, tool use, long-context analysis, and scientific problem solving. The card states a release date of October 2026 and identifies Qwen/Qwen3.8-Flash-Next as the upstream base; this is a distinct Agnes post-trained specialized-base line, not a Qwen alias or duplicate. The official Hugging Face registry createdAt marker is 2026-10-10T14:27:15Z and the official GitHub landing page was created 2026-10-12; because no day-level maker announcement was found, 2026-10-10 is retained as the earliest public-availability fallback rather than an invented announcement date. The exact Artificial Analysis candidate URL https://artificialanalysis.ai/models/agnes-3-0-qwen returned 404 and the fetched leaderboard exposed no exact Coding Index row. Agnes's self-reported Terminal-Bench, IFBench, and other benchmark values are not Artificial Analysis Coding Index values, so codingIndex remains null.",
+  }),
+  release({
+    model: "Muse Wonder",
+    provider: "Meta",
+    group: "Chinese+Other",
+    releaseDate: "2026-10-12",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://research.meta.ai/blog/muse-wonder",
+    aliases: ["muse-wonder-1.0"],
+    notes: "Meta's official 2026-10-12 Muse Wonder announcement introduces the named Muse Wonder series with Muse Wonder and Muse Wonder Full as frontier models for personal and professional agents, frontier coding, long-running tasks, and advanced computer use. Muse Wonder is available through the Meta Model API and Muse Code; the official developer docs expose the model ID muse-wonder-1.0. The docs label API access as preview, but the maker announcement presents an available named model release rather than a preview-only configuration, so it is tracked as a base model line. The exact Artificial Analysis Muse Wonder page reports Intelligence Index 52 (max) but no Coding Index field; Meta's DeepSWE, SWE-Marathon, and other maker/third-party benchmark values are not AA Coding Index values, so codingIndex remains null.",
+  }),
+  release({
+    model: "Muse Wonder Full",
+    provider: "Meta",
+    group: "Chinese+Other",
+    releaseDate: "2026-10-12",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://research.meta.ai/blog/muse-wonder",
+    aliases: ["muse-wonder-full-1.0"],
+    notes: "Meta's official 2026-10-12 Muse Wonder announcement introduces Muse Wonder Full as the distinct higher-capability member of the Muse Wonder series, available to Muse Code subscribers for critical coding and agentic workflows. The official developer model page lists muse-wonder-full-1.0 separately from Muse Wonder; Artificial Analysis exposes a separate exact Muse Wonder Full family page with Intelligence Index 56 (max). No exact Artificial Analysis Coding Index field is exposed, and Meta's coding/agentic benchmark claims are not substitutes, so codingIndex remains null. The separate row preserves the maker's named model identity rather than copying a sibling score.",
   }),
 ];
 

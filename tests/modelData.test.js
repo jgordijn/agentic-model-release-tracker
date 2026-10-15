@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 43);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 45);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -37,6 +37,8 @@ test("Intelligence Index data is metric-specific, sourced, and null for unmatche
     "MiniCPM5-2B": [12, "default"],
     "Gemini 4 Argon": [53, "high"],
     "Ling 3.1 Flash": [41, "default"],
+    "Muse Wonder": [52, "max"],
+    "Muse Wonder Full": [56, "max"],
   };
   for (const [model, [score, configuration]] of Object.entries(expected)) {
     const release = RELEASES.find((item) => item.model === model);
@@ -60,12 +62,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("October 13 refresh preserves the 148-row HEAD baseline and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 1, 148, "baseline row count before the October 13 refresh");
-  assert.equal(RELEASES.length, 149);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 149);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-10"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-13"), "no row is later than the research cutoff");
+test("October 15 refresh preserves the 149-row HEAD baseline and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 2, 149, "baseline row count before the October 15 refresh");
+  assert.equal(RELEASES.length, 151);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 151);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-12"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-15"), "no row is later than the research cutoff");
 });
 
 test("Ling 3.1 Flash is included as the September 30 InclusionAI agentic model release", () => {
@@ -127,6 +129,44 @@ test("Agnes 3.0 Qwen is included as the October 10 Agnes agentic specialized-bas
   assert.match(agnes.notes, /createdAt marker is 2026-10-10T14:27:15Z/);
   assert.match(agnes.notes, /Qwen3\.8-Flash-Next/);
   assert.match(agnes.notes, /no exact Coding Index row/i);
+});
+
+test("Meta Muse Wonder models are included as distinct October 12 agentic coding base lines", () => {
+  const expected = {
+    "Muse Wonder": {
+      aliases: ["muse-wonder-1.0"],
+      intelligenceIndex: 52,
+      sourceUrl: "https://research.meta.ai/blog/muse-wonder",
+      intelligenceIndexSourceUrl: "https://artificialanalysis.ai/models/muse-wonder",
+    },
+    "Muse Wonder Full": {
+      aliases: ["muse-wonder-full-1.0"],
+      intelligenceIndex: 56,
+      sourceUrl: "https://research.meta.ai/blog/muse-wonder",
+      intelligenceIndexSourceUrl: "https://artificialanalysis.ai/models/muse-wonder-full",
+    },
+  };
+
+  for (const [model, fields] of Object.entries(expected)) {
+    const release = RELEASES.find((item) => item.model === model);
+
+    assert.ok(release, model);
+    assert.equal(release.provider, "Meta", model);
+    assert.equal(release.group, "Chinese+Other", model);
+    assert.equal(release.releaseDate, "2026-10-12", model);
+    assert.equal(release.releaseCategory, "base", model);
+    assert.equal(release.sourceType, "official", model);
+    assert.deepEqual(release.focus, ["agentic", "programming"], model);
+    assert.deepEqual(release.aliases, fields.aliases, model);
+    assert.equal(release.codingIndex, null, model);
+    assert.equal(release.scoreSourceUrl, undefined, model);
+    assert.equal(release.intelligenceIndex, fields.intelligenceIndex, model);
+    assert.equal(release.intelligenceIndexConfiguration, "max", model);
+    assert.equal(release.sourceUrl, fields.sourceUrl, model);
+    assert.equal(release.intelligenceIndexSourceUrl, fields.intelligenceIndexSourceUrl, model);
+    assert.match(release.notes, /Coding Index field/i, model);
+    assert.match(release.notes, /named Muse Wonder series|distinct/i, model);
+  }
 });
 
 test("OpenAI GPT-6 Sol and Luna are included as September 22 coding-agent releases", () => {

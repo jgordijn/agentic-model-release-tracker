@@ -31,13 +31,13 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the October 13 refresh cache key", async () => {
+test("HTML and module imports use the October 15 refresh cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20261013a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20261013a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261013a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20261015a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20261015a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261015a"/);
   assert.doesNotMatch(`${html}\n${app}`, /20261008a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261001a/);
   assert.doesNotMatch(`${html}\n${app}`, /20260923a/);
@@ -71,6 +71,13 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
     assert.ok(provider.primarySources.length > 0, providerName);
     assert.ok(provider.searchQueries.length > 0, providerName);
   }
+
+  const meta = config.providers.find((entry) => entry.name === "Meta");
+  assert.ok(meta.primarySources.includes("https://www.meta.com/ai/"));
+  assert.ok(meta.primarySources.includes("https://research.meta.ai/blog/muse-wonder"));
+  assert.ok(meta.primarySources.includes("https://developer.meta.com/ai/"));
+  assert.ok(meta.primarySources.includes("https://dev.meta.ai/models/muse-wonder"));
+  assert.ok(meta.searchQueries.some((query) => query.includes("Muse Wonder")));
 
   for (const [providerName, requiredSource] of [
     ["Inception", "https://inceptionlabs.ai/blog/introducing-mercury-2-5"],

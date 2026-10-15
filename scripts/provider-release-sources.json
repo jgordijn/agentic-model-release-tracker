@@ -50,11 +50,18 @@
       "group": "Chinese+Other",
       "primarySources": [
         "https://huggingface.co/meta-models",
-        "https://ai.meta.com/blog/"
+        "https://ai.meta.com/blog/",
+        "https://www.meta.com/ai/",
+        "https://research.meta.ai/blog/muse-wonder",
+        "https://developer.meta.com/ai/",
+        "https://dev.meta.ai/models/muse-wonder"
       ],
       "searchQueries": [
         "site:huggingface.co/meta-models Meta Muse Llama model agentic coding after:{since}",
-        "site:ai.meta.com Meta model release agentic coding after:{since}"
+        "site:ai.meta.com Meta model release agentic coding after:{since}",
+        "site:research.meta.ai/blog Muse Wonder model release coding agentic after:{since}",
+        "site:developer.meta.com/ai Muse Wonder model coding agentic after:{since}",
+        "site:dev.meta.ai/models/muse-wonder Muse Wonder model after:{since}"
       ],
       "includeSignals": ["Meta", "Muse", "Llama", "model", "agentic", "coding", "tool use", "local"],
       "excludeSignals": ["quantization only", "adapter", "image-only", "audio-only"]

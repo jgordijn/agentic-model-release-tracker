@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 45);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 48);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -39,6 +39,9 @@ test("Intelligence Index data is metric-specific, sourced, and null for unmatche
     "Ling 3.1 Flash": [41, "default"],
     "Muse Wonder": [52, "max"],
     "Muse Wonder Full": [56, "max"],
+    "Muse Spark Open": [39, "xhigh"],
+    "Nemotron 3.5 Super VL": [26, "default"],
+    "Nemotron 3.5 Bolt 74B-A9B": [21, "default"],
   };
   for (const [model, [score, configuration]] of Object.entries(expected)) {
     const release = RELEASES.find((item) => item.model === model);
@@ -62,12 +65,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("October 15 refresh preserves the 149-row HEAD baseline and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 2, 149, "baseline row count before the October 15 refresh");
-  assert.equal(RELEASES.length, 151);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 151);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-12"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-15"), "no row is later than the research cutoff");
+test("October 16 refresh preserves the 151-row HEAD baseline and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 3, 151, "baseline row count before the October 16 refresh");
+  assert.equal(RELEASES.length, 154);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 154);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-15"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-16"), "no row is later than the research cutoff");
 });
 
 test("Ling 3.1 Flash is included as the September 30 InclusionAI agentic model release", () => {
@@ -169,6 +172,57 @@ test("Meta Muse Wonder models are included as distinct October 12 agentic coding
   }
 });
 
+test("October 16 refresh adds Muse Spark Open and NVIDIA Nemotron base lines with metric-specific provenance", () => {
+  const expected = {
+    "Muse Spark Open": {
+      provider: "Meta",
+      releaseCategory: "base",
+      sourceUrl: "https://dev.meta.ai/models/muse-spark-open",
+      aliases: ["muse-spark-open", "meta-models/Muse-Spark-Open-816B-A42B"],
+      intelligenceIndex: 39,
+      intelligenceIndexConfiguration: "xhigh",
+      intelligenceIndexSourceUrl: "https://artificialanalysis.ai/models/muse-spark-open",
+    },
+    "Nemotron 3.5 Super VL": {
+      provider: "NVIDIA",
+      releaseCategory: "base",
+      sourceUrl: "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16",
+      aliases: ["nemotron-3.5-super-vl", "NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16"],
+      intelligenceIndex: 26,
+      intelligenceIndexConfiguration: "default",
+      intelligenceIndexSourceUrl: "https://artificialanalysis.ai/models/nemotron-3-5-super-vl",
+    },
+    "Nemotron 3.5 Bolt 74B-A9B": {
+      provider: "NVIDIA",
+      releaseCategory: "specialized-base",
+      sourceUrl: "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16",
+      aliases: ["nemotron-3-5-bolt-74b-a9b", "NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16"],
+      intelligenceIndex: 21,
+      intelligenceIndexConfiguration: "default",
+      intelligenceIndexSourceUrl: "https://artificialanalysis.ai/models/nemotron-3-5-bolt-74b-a9b",
+    },
+  };
+
+  for (const [model, fields] of Object.entries(expected)) {
+    const release = RELEASES.find((item) => item.model === model);
+
+    assert.ok(release, model);
+    assert.equal(release.group, "Chinese+Other", model);
+    assert.equal(release.releaseDate, "2026-10-15", model);
+    assert.equal(release.sourceType, "official", model);
+    assert.deepEqual(release.focus, ["agentic", "programming"], model);
+    assert.equal(release.codingIndex, null, model);
+    assert.equal(release.scoreSourceUrl, undefined, model);
+    assert.match(release.notes, /no Coding Index field/i, model);
+    for (const [field, value] of Object.entries(fields)) assert.deepEqual(release[field], value, `${model}: ${field}`);
+  }
+
+  const superModel = RELEASES.find((item) => item.model === "Nemotron 3.5 Super VL");
+  const bolt = RELEASES.find((item) => item.model === "Nemotron 3.5 Bolt 74B-A9B");
+  assert.match(superModel.notes, /NVFP4.*quantized deployment package/i);
+  assert.match(bolt.notes, /24GB IQ2, GGUF, and LiLiCorr artifacts.*packaging/i);
+});
+
 test("OpenAI GPT-6 Sol and Luna are included as September 22 coding-agent releases", () => {
   for (const model of ["GPT-6 Sol", "GPT-6 Luna"]) {
     const rows = RELEASES.filter((release) => release.model === model);
@@ -250,7 +304,7 @@ test("xAI releases cover base Grok generations and distinct coding lines", () =>
 });
 
 test("dataset does not include preview, mini, nano, spark, air, plus, lite, or speciale config rows as standalone releases", () => {
-  const canonicalNamesContainingTierWords = new Set(["Grok Code Fast 1", "Muse Spark 1.3"]);
+  const canonicalNamesContainingTierWords = new Set(["Grok Code Fast 1", "Muse Spark 1.3", "Muse Spark Open"]);
 
   for (const release of RELEASES) {
     if (canonicalNamesContainingTierWords.has(release.model)) continue;

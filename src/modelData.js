@@ -3,7 +3,7 @@ const aaModelLeaderboard = "https://artificialanalysis.ai/leaderboards/models";
 
 // AA Intelligence Index snapshots are stored separately from codingIndex.
 // Existing rows use the dated 2026-09-23 snapshot; entries added during the
-// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, 2026-10-10/13, and 2026-10-15 refreshes use the exact current AA
+// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, 2026-10-10/13, 2026-10-15, and 2026-10-16 refreshes use the exact current AA
 // model-page configuration where available. No Intelligence Index value is ever
 // copied into codingIndex.
 const aaIntelligenceScores = {
@@ -49,7 +49,10 @@ const aaIntelligenceScores = {
   "Muse Wonder": [52, "max", "https://artificialanalysis.ai/models/muse-wonder"],
   "Muse Wonder Full": [56, "max", "https://artificialanalysis.ai/models/muse-wonder-full"],
   "Muse Spark 1.3": [48, "max", "https://artificialanalysis.ai/models/muse-spark-1-3"],
+  "Muse Spark Open": [39, "xhigh", "https://artificialanalysis.ai/models/muse-spark-open"],
   "Mercury 2.5": [12, "default", "https://artificialanalysis.ai/models/mercury-2-5"],
+  "Nemotron 3.5 Bolt 74B-A9B": [21, "default", "https://artificialanalysis.ai/models/nemotron-3-5-bolt-74b-a9b"],
+  "Nemotron 3.5 Super VL": [26, "default", "https://artificialanalysis.ai/models/nemotron-3-5-super-vl"],
   o3: [20, "default", "https://artificialanalysis.ai/models/o3"],
   "Trinity-Large-Thinking": [11, "default", "https://artificialanalysis.ai/models/trinity-large-thinking"],
 };
@@ -1698,6 +1701,40 @@ export const RELEASES = [
     sourceUrl: "https://research.meta.ai/blog/muse-wonder",
     aliases: ["muse-wonder-full-1.0"],
     notes: "Meta's official 2026-10-12 Muse Wonder announcement introduces Muse Wonder Full as the distinct higher-capability member of the Muse Wonder series, available to Muse Code subscribers for critical coding and agentic workflows. The official developer model page lists muse-wonder-full-1.0 separately from Muse Wonder; Artificial Analysis exposes a separate exact Muse Wonder Full family page with Intelligence Index 56 (max). No exact Artificial Analysis Coding Index field is exposed, and Meta's coding/agentic benchmark claims are not substitutes, so codingIndex remains null. The separate row preserves the maker's named model identity rather than copying a sibling score.",
+  }),
+  release({
+    model: "Muse Spark Open",
+    provider: "Meta",
+    group: "Chinese+Other",
+    releaseDate: "2026-10-15",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://dev.meta.ai/models/muse-spark-open",
+    aliases: ["muse-spark-open", "meta-models/Muse-Spark-Open-816B-A42B"],
+    notes: "Meta's official developer model page presents Muse Spark Open as its most capable open-weight model and links the official Hugging Face card. The Hugging Face model card dates the release to 2026-10-15 and documents coding agents, end-to-end agentic task completion, tool use, and multimodal capabilities; BF16/NVFP4 files are packaging for the same named line. Artificial Analysis lists the exact Muse Spark Open (xhigh) row with Intelligence Index 39, stored separately; the exact page exposes no Coding Index field. Meta's JobBench, Terminal-Bench, DeepSWE, and other maker benchmark values are not Artificial Analysis Coding Index values, so codingIndex remains null. Direct AA audit retrieved 2026-10-16.",
+  }),
+  release({
+    model: "Nemotron 3.5 Super VL",
+    provider: "NVIDIA",
+    group: "Chinese+Other",
+    releaseDate: "2026-10-15",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16",
+    aliases: ["nemotron-3.5-super-vl", "NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16"],
+    notes: "NVIDIA's official Hugging Face BF16 model card dates Nemotron 3.5 Super VL to 2026-10-15 and describes coding, tool use, reasoning, and multimodal agent workflows. The NVFP4 page is a quantized deployment package and is not tracked separately. Artificial Analysis exposes the exact Nemotron 3.5 Super VL row with Intelligence Index 26 and no effort suffix, stored separately; the exact page exposes no Coding Index field. NVIDIA's SWE-bench, Terminal-Bench, DeepSWE, and other maker benchmark values are not Artificial Analysis Coding Index values, so codingIndex remains null. Direct AA audit retrieved 2026-10-16.",
+  }),
+  release({
+    model: "Nemotron 3.5 Bolt 74B-A9B",
+    provider: "NVIDIA",
+    group: "Chinese+Other",
+    releaseDate: "2026-10-15",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    releaseCategory: "specialized-base",
+    sourceUrl: "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16",
+    aliases: ["nemotron-3-5-bolt-74b-a9b", "NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16"],
+    notes: "NVIDIA's official Hugging Face BF16 model card dates Nemotron 3.5 Bolt 74B-A9B to 2026-10-15 and describes a distinct compressed and post-trained vision-language model for local agentic tasks, tool calling, browsing, terminal use, and coding languages. The 24GB IQ2, GGUF, and LiLiCorr artifacts are deployment packaging and are not separate rows; BF16 is the canonical model line. Artificial Analysis exposes the exact Nemotron 3.5 Bolt 74B-A9B row with Intelligence Index 21 and no effort suffix, stored separately; the exact page exposes no Coding Index field. NVIDIA's Terminal-Bench, SWE-bench, and other maker benchmark values are not Artificial Analysis Coding Index values, so codingIndex remains null. Direct AA audit retrieved 2026-10-16.",
   }),
 ];
 

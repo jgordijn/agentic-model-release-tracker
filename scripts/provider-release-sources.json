@@ -54,14 +54,17 @@
         "https://www.meta.com/ai/",
         "https://research.meta.ai/blog/muse-wonder",
         "https://developer.meta.com/ai/",
-        "https://dev.meta.ai/models/muse-wonder"
+        "https://dev.meta.ai/models/muse-wonder",
+        "https://dev.meta.ai/models/muse-spark-open"
       ],
       "searchQueries": [
         "site:huggingface.co/meta-models Meta Muse Llama model agentic coding after:{since}",
         "site:ai.meta.com Meta model release agentic coding after:{since}",
         "site:research.meta.ai/blog Muse Wonder model release coding agentic after:{since}",
         "site:developer.meta.com/ai Muse Wonder model coding agentic after:{since}",
-        "site:dev.meta.ai/models/muse-wonder Muse Wonder model after:{since}"
+        "site:dev.meta.ai/models/muse-wonder Muse Wonder model after:{since}",
+        "site:dev.meta.ai/models/muse-spark-open Muse Spark Open model coding agentic after:{since}",
+        "site:huggingface.co/meta-models Muse Spark Open model coding agentic after:{since}"
       ],
       "includeSignals": ["Meta", "Muse", "Llama", "model", "agentic", "coding", "tool use", "local"],
       "excludeSignals": ["quantization only", "adapter", "image-only", "audio-only"]
@@ -249,11 +252,14 @@
       "group": "Chinese+Other",
       "primarySources": [
         "https://build.nvidia.com/nvidia",
-        "https://huggingface.co/nvidia"
+        "https://huggingface.co/nvidia",
+        "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16",
+        "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16"
       ],
       "searchQueries": [
         "site:build.nvidia.com/nvidia NVIDIA Nemotron model agentic coding after:{since}",
-        "site:huggingface.co/nvidia Nemotron model agentic coding after:{since}"
+        "site:huggingface.co/nvidia Nemotron model agentic coding after:{since}",
+        "site:huggingface.co/nvidia \"Nemotron 3.5\" model coding agentic after:{since}"
       ],
       "includeSignals": ["NVIDIA", "Nemotron", "model", "agentic", "tool use", "coding", "SWE-Bench"],
       "excludeSignals": ["GPU", "platform only", "customer story"]

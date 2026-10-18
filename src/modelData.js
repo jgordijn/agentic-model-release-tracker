@@ -1736,6 +1736,29 @@ export const RELEASES = [
     aliases: ["nemotron-3-5-bolt-74b-a9b", "NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16"],
     notes: "NVIDIA's official Hugging Face BF16 model card dates Nemotron 3.5 Bolt 74B-A9B to 2026-10-15 and describes a distinct compressed and post-trained vision-language model for local agentic tasks, tool calling, browsing, terminal use, and coding languages. The 24GB IQ2, GGUF, and LiLiCorr artifacts are deployment packaging and are not separate rows; BF16 is the canonical model line. Artificial Analysis exposes the exact Nemotron 3.5 Bolt 74B-A9B row with Intelligence Index 21 and no effort suffix, stored separately; the exact page exposes no Coding Index field. NVIDIA's Terminal-Bench, SWE-bench, and other maker benchmark values are not Artificial Analysis Coding Index values, so codingIndex remains null. Direct AA audit retrieved 2026-10-16.",
   }),
+  release({
+    model: "Hy-Memory 30B-A3B",
+    provider: "Tencent",
+    group: "Chinese+Other",
+    releaseDate: "2026-10-15",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    releaseCategory: "specialized-base",
+    sourceUrl: "https://huggingface.co/tencent/Hy-Memory-30B-A3B",
+    aliases: ["Hy-Memory-30B-A3B", "tencent/Hy-Memory-30B-A3B", "hy-memory"],
+    notes: "Tencent Hunyuan's official model card describes Hy-Memory-30B-A3B as a compact long-term-memory writer model for external memory frameworks, explicitly covering Chat, Working, and Coding scenarios; the official Hy-Memory repository documents the agent memory system and coding scene. The official arXiv paper was submitted 2026-10-15 and the Hugging Face registry createdAt marker is 2026-10-15T09:52:00Z; because no separate dated maker announcement was found, that public-availability evidence controls the releaseDate. The later FP8 upload is deployment packaging, not a second family. Artificial Analysis has no exact Hy-Memory row (the candidate model URL returned 404 and the live leaderboard contained no match), so codingIndex remains null; memory-benchmark scores are not Artificial Analysis Coding Index values.",
+  }),
+  release({
+    model: "Dory 1.0 4B",
+    provider: "NVIDIA",
+    group: "Chinese+Other",
+    releaseDate: "2026-10-16",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://huggingface.co/nvidia/NVIDIA-Nemotron-Labs-Dory1.0-4B-BF16",
+    aliases: ["Dory1.0-4B", "NVIDIA-Nemotron-Labs-Dory1.0-4B-BF16", "nvidia/NVIDIA-Nemotron-Labs-Dory1.0-4B-BF16"],
+    notes: "NVIDIA's official BF16 model card dates Dory1.0-4B to 2026-10-16 and describes a general-purpose looped reasoning model with elastic inference compute and explicit Coding & Agentic evaluations. BF16, MXFP8, NVFP4, and Q5_K_M are formats for the same named 4B family and are not separate rows. The exact Artificial Analysis candidate URL returned 404 and the live leaderboard contained no Dory match; NVIDIA's internal AA v4.3.2 estimate and its SWE-bench, Terminal-Bench, SciCode, and other maker metrics are not an exact Artificial Analysis Coding Index, so codingIndex remains null.",
+  }),
 ];
 
 export const DATA_SOURCES = [

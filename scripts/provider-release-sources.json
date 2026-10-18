@@ -163,12 +163,16 @@
       "primarySources": [
         "https://ui-mate.github.io/",
         "https://huggingface.co/tencent",
-        "https://github.com/Tencent"
+        "https://github.com/Tencent",
+        "https://huggingface.co/tencent/Hy-Memory-30B-A3B",
+        "https://github.com/Tencent-Hunyuan/Hy-Memory"
       ],
       "searchQueries": [
         "site:ui-mate.github.io Tencent UI-Mate model agentic after:{since}",
         "site:huggingface.co/tencent Tencent Hunyuan UI-Mate model coding agentic after:{since}",
-        "site:github.com/Tencent model release coding GUI agent after:{since}"
+        "site:github.com/Tencent model release coding GUI agent after:{since}",
+        "site:huggingface.co/tencent/Hy-Memory-30B-A3B Hy-Memory model memory coding agentic after:{since}",
+        "site:github.com/Tencent-Hunyuan/Hy-Memory Hy-Memory model memory coding agentic after:{since}"
       ],
       "includeSignals": ["Tencent", "Hunyuan", "UI-Mate", "model", "agentic", "coding", "computer use", "GUI"],
       "excludeSignals": ["preview-only", "image-only", "audio-only", "video-only"]
@@ -254,12 +258,14 @@
         "https://build.nvidia.com/nvidia",
         "https://huggingface.co/nvidia",
         "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16",
-        "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16"
+        "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16",
+        "https://huggingface.co/nvidia/NVIDIA-Nemotron-Labs-Dory1.0-4B-BF16"
       ],
       "searchQueries": [
         "site:build.nvidia.com/nvidia NVIDIA Nemotron model agentic coding after:{since}",
         "site:huggingface.co/nvidia Nemotron model agentic coding after:{since}",
-        "site:huggingface.co/nvidia \"Nemotron 3.5\" model coding agentic after:{since}"
+        "site:huggingface.co/nvidia \"Nemotron 3.5\" model coding agentic after:{since}",
+        "site:huggingface.co/nvidia/NVIDIA-Nemotron-Labs-Dory1.0-4B-BF16 Dory model coding agentic after:{since}"
       ],
       "includeSignals": ["NVIDIA", "Nemotron", "model", "agentic", "tool use", "coding", "SWE-Bench"],
       "excludeSignals": ["GPU", "platform only", "customer story"]

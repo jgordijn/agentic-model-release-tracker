@@ -65,12 +65,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("October 16 refresh preserves the 151-row HEAD baseline and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 3, 151, "baseline row count before the October 16 refresh");
-  assert.equal(RELEASES.length, 154);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 154);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-15"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-16"), "no row is later than the research cutoff");
+test("October 18 refresh preserves the 154-row HEAD baseline and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 2, 154, "baseline row count before the October 18 refresh");
+  assert.equal(RELEASES.length, 156);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 156);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-16"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-18"), "no row is later than the research cutoff");
 });
 
 test("Ling 3.1 Flash is included as the September 30 InclusionAI agentic model release", () => {
@@ -221,6 +221,48 @@ test("October 16 refresh adds Muse Spark Open and NVIDIA Nemotron base lines wit
   const bolt = RELEASES.find((item) => item.model === "Nemotron 3.5 Bolt 74B-A9B");
   assert.match(superModel.notes, /NVFP4.*quantized deployment package/i);
   assert.match(bolt.notes, /24GB IQ2, GGUF, and LiLiCorr artifacts.*packaging/i);
+});
+
+test("October 18 refresh adds Tencent Hy-Memory and NVIDIA Dory with scope and score evidence limits", () => {
+  const expected = {
+    "Hy-Memory 30B-A3B": {
+      provider: "Tencent",
+      releaseDate: "2026-10-15",
+      releaseCategory: "specialized-base",
+      sourceUrl: "https://huggingface.co/tencent/Hy-Memory-30B-A3B",
+      aliases: ["Hy-Memory-30B-A3B", "tencent/Hy-Memory-30B-A3B", "hy-memory"],
+    },
+    "Dory 1.0 4B": {
+      provider: "NVIDIA",
+      releaseDate: "2026-10-16",
+      releaseCategory: "base",
+      sourceUrl: "https://huggingface.co/nvidia/NVIDIA-Nemotron-Labs-Dory1.0-4B-BF16",
+      aliases: ["Dory1.0-4B", "NVIDIA-Nemotron-Labs-Dory1.0-4B-BF16", "nvidia/NVIDIA-Nemotron-Labs-Dory1.0-4B-BF16"],
+    },
+  };
+
+  for (const [model, fields] of Object.entries(expected)) {
+    const release = RELEASES.find((item) => item.model === model);
+
+    assert.ok(release, model);
+    assert.equal(release.group, "Chinese+Other", model);
+    assert.equal(release.sourceType, "official", model);
+    assert.deepEqual(release.focus, ["agentic", "programming"], model);
+    assert.equal(release.codingIndex, null, model);
+    assert.equal(release.scoreSourceUrl, undefined, model);
+    assert.equal(release.intelligenceIndex, null, model);
+    for (const [field, value] of Object.entries(fields)) assert.deepEqual(release[field], value, `${model}: ${field}`);
+  }
+
+  const memory = RELEASES.find((item) => item.model === "Hy-Memory 30B-A3B");
+  const dory = RELEASES.find((item) => item.model === "Dory 1.0 4B");
+  assert.match(memory.notes, /Chat, Working, and Coding scenarios/);
+  assert.match(memory.notes, /createdAt marker is 2026-10-15T09:52:00Z/);
+  assert.match(memory.notes, /no exact Hy-Memory row/);
+  assert.match(dory.notes, /Coding & Agentic evaluations/);
+  assert.match(dory.notes, /MXFP8, NVFP4, and Q5_K_M/);
+  assert.match(dory.notes, /candidate URL returned 404/);
+  assert.match(dory.notes, /internal AA v4\.3\.2 estimate/);
 });
 
 test("OpenAI GPT-6 Sol and Luna are included as September 22 coding-agent releases", () => {

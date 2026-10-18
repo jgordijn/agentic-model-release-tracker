@@ -31,13 +31,14 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the October 16 refresh cache key", async () => {
+test("HTML and module imports use the October 18 refresh cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20261016a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20261016a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261016a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20261018a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20261018a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261018a"/);
+  assert.doesNotMatch(`${html}\n${app}`, /20261016a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261015a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261001a/);
   assert.doesNotMatch(`${html}\n${app}`, /20260923a/);
@@ -99,7 +100,14 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
   const nvidia = config.providers.find((entry) => entry.name === "NVIDIA");
   assert.ok(nvidia.primarySources.includes("https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16"));
   assert.ok(nvidia.primarySources.includes("https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16"));
+  assert.ok(nvidia.primarySources.includes("https://huggingface.co/nvidia/NVIDIA-Nemotron-Labs-Dory1.0-4B-BF16"));
   assert.ok(nvidia.searchQueries.some((query) => query.includes("Nemotron 3.5")));
+  assert.ok(nvidia.searchQueries.some((query) => query.includes("Dory1.0-4B")));
+
+  const tencent = config.providers.find((entry) => entry.name === "Tencent");
+  assert.ok(tencent.primarySources.includes("https://huggingface.co/tencent/Hy-Memory-30B-A3B"));
+  assert.ok(tencent.primarySources.includes("https://github.com/Tencent-Hunyuan/Hy-Memory"));
+  assert.ok(tencent.searchQueries.some((query) => query.includes("Hy-Memory")));
 
   const alibaba = config.providers.find((entry) => entry.name === "Alibaba");
   assert.ok(alibaba.primarySources.includes("https://www.qwencloud.com/models"));

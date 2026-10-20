@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 48);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 50);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -65,12 +65,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("October 18 refresh preserves the 154-row HEAD baseline and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 2, 154, "baseline row count before the October 18 refresh");
-  assert.equal(RELEASES.length, 156);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 156);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-16"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-18"), "no row is later than the research cutoff");
+test("October 20 refresh preserves the 156-row HEAD baseline and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 3, 156, "baseline row count before the October 20 refresh");
+  assert.equal(RELEASES.length, 159);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 159);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-19"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-20"), "no row is later than the research cutoff");
 });
 
 test("Ling 3.1 Flash is included as the September 30 InclusionAI agentic model release", () => {
@@ -923,4 +923,53 @@ test("continued September 29-October 1 refresh preserves new provider scope and 
   assert.match(argon?.notes, /Fairwind Program/);
   assert.match(argon?.notes, /Coding n\/a/);
   assert.match(argon?.notes, /high effort configuration is not a separate release row/);
+});
+
+test("October 20 refresh adds the verified DeepSeek, MiniMax, and Inception model lines", () => {
+  const expected = {
+    "DeepSeek V4.1 Flash 1017": {
+      provider: "DeepSeek",
+      releaseDate: "2026-10-17",
+      sourceUrl: "https://api-docs.deepseek.com/news/news261017",
+      aliases: ["DeepSeek-V4.1-Flash-1017", "deepseek-v4.1-flash-1017"],
+      intelligenceIndex: 45,
+      intelligenceIndexConfiguration: "max",
+      intelligenceIndexSourceUrl: "https://artificialanalysis.ai/models/deepseek-v4-1-flash-1017",
+    },
+    "MiniMax M3.1 Flash": {
+      provider: "MiniMax",
+      releaseDate: "2026-10-19",
+      sourceUrl: "https://www.minimax.io/blog/minimax-m31f",
+      aliases: ["MiniMax-M3.1-Flash", "minimax-m3.1-flash"],
+      intelligenceIndex: 43,
+      intelligenceIndexConfiguration: "reasoning",
+      intelligenceIndexSourceUrl: "https://artificialanalysis.ai/models/minimax-m3-1-flash",
+    },
+    "Mercury 3": {
+      provider: "Inception",
+      releaseDate: "2026-10-19",
+      sourceUrl: "https://inceptionlabs.ai/blog/introducing-mercury-3",
+      aliases: ["mercury-3"],
+      intelligenceIndex: null,
+      intelligenceIndexConfiguration: null,
+      intelligenceIndexSourceUrl: null,
+    },
+  };
+
+  for (const [model, fields] of Object.entries(expected)) {
+    const release = RELEASES.find((item) => item.model === model);
+
+    assert.ok(release, model);
+    assert.equal(release.group, "Chinese+Other", model);
+    assert.equal(release.releaseCategory, "base", model);
+    assert.equal(release.sourceType, "official", model);
+    assert.deepEqual(release.focus, ["agentic", "programming"], model);
+    assert.equal(release.codingIndex, null, model);
+    assert.equal(release.scoreSourceUrl, undefined, model);
+    for (const [field, value] of Object.entries(fields)) assert.deepEqual(release[field], value, `${model}: ${field}`);
+  }
+
+  assert.match(RELEASES.find((item) => item.model === "DeepSeek V4.1 Flash 1017").notes, /substantive minor model update.*pure snapshot/i);
+  assert.match(RELEASES.find((item) => item.model === "MiniMax M3.1 Flash").notes, /distinct model line.*no exact Coding Index/i);
+  assert.match(RELEASES.find((item) => item.model === "Mercury 3").notes, /live flagship.*no exact Artificial Analysis Mercury 3 model/i);
 });

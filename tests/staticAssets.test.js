@@ -31,13 +31,13 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the October 18 refresh cache key", async () => {
+test("HTML and module imports use the October 20 refresh cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20261018a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20261018a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261018a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20261020a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20261020a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261020a"/);
   assert.doesNotMatch(`${html}\n${app}`, /20261016a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261015a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261001a/);
@@ -83,6 +83,8 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
   assert.ok(meta.searchQueries.some((query) => query.includes("Muse Spark Open")));
 
   for (const [providerName, requiredSource] of [
+    ["DeepSeek", "https://api-docs.deepseek.com/news/news261017"],
+    ["MiniMax", "https://www.minimax.io/blog/minimax-m31f"],
     ["Inception", "https://inceptionlabs.ai/blog/introducing-mercury-2-5"],
     ["IBM Granite", "https://research.ibm.com/blog/introducing-granite-4-2"],
     ["LongCat", "https://longcat.ai/blog/longcat-2.0"],
@@ -96,6 +98,10 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
     assert.ok(provider.primarySources.includes(requiredSource), `${providerName}: ${requiredSource}`);
     assert.ok(provider.searchQueries.some((query) => query.includes("{since}")), providerName);
   }
+
+  const inception = config.providers.find((entry) => entry.name === "Inception");
+  assert.ok(inception.primarySources.includes("https://inceptionlabs.ai/blog/introducing-mercury-3"));
+  assert.ok(inception.searchQueries.some((query) => query.includes("Inception Mercury model")));
 
   const nvidia = config.providers.find((entry) => entry.name === "NVIDIA");
   assert.ok(nvidia.primarySources.includes("https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16"));

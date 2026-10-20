@@ -182,6 +182,7 @@
       "group": "Chinese+Other",
       "primarySources": [
         "https://api-docs.deepseek.com/news/",
+        "https://api-docs.deepseek.com/news/news261017",
         "https://www.deepseek.com/en/transparency/"
       ],
       "searchQueries": [
@@ -212,7 +213,8 @@
       "group": "Chinese+Other",
       "primarySources": [
         "https://www.minimax.io/news",
-        "https://www.minimax.io/blog"
+        "https://www.minimax.io/blog",
+        "https://www.minimax.io/blog/minimax-m31f"
       ],
       "searchQueries": [
         "site:minimax.io MiniMax M model release coding agentic after:{since}",
@@ -334,6 +336,7 @@
       "primarySources": [
         "https://inceptionlabs.ai/",
         "https://inceptionlabs.ai/blog/introducing-mercury-2-5",
+        "https://inceptionlabs.ai/blog/introducing-mercury-3",
         "https://inceptionlabs.ai/models",
         "https://docs.inceptionlabs.ai/get-started"
       ],

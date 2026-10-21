@@ -1770,7 +1770,7 @@ export const RELEASES = [
     focus: ["agentic", "programming"],
     sourceUrl: "https://api-docs.deepseek.com/news/news261017",
     aliases: ["DeepSeek-V4.1-Flash-1017", "deepseek-v4.1-flash-1017"],
-    notes: "DeepSeek's official 2026-10-17 release makes DeepSeek-V4.1-Flash-1017 live on the website, app, and API and publishes a dedicated open-weight model card. It is treated as a substantive minor model update rather than a pure snapshot or API alias because the maker documents improved reasoning, coding, agentic-task performance, shorter outputs, and a distinct live model/card; the dated suffix is retained as the named release identity. Artificial Analysis lists the exact DeepSeek V4.1 Flash 1017 (max) page with Intelligence Index 45, stored separately. The exact AA Coding Index field was not exposed on the model page or leaderboard, and DeepSeek's DeepSWE, Terminal-Bench, and other maker metrics are not substitutes, so codingIndex remains null.",
+    notes: "DeepSeek's official 2026-10-17 release makes DeepSeek-V4.1-Flash-1017 live on the website, app, and API and publishes a dedicated open-weight model card. It is treated as a substantive minor model update rather than a pure snapshot or API alias because the maker documents improved reasoning, coding, agentic-task performance, shorter outputs, tool use, and a distinct live model/card; the dated suffix is retained as the named release identity. Artificial Analysis (retrieved 2026-10-20) lists the exact DeepSeek V4.1 Flash 1017 (max) page with Intelligence Index 45, stored separately. The exact AA Coding Index field was not exposed on the model page or leaderboard, and DeepSeek's DeepSWE, Terminal-Bench, and other maker metrics are not substitutes, so codingIndex remains null.",
   }),
   release({
     model: "MiniMax M3.1 Flash",
@@ -1781,7 +1781,7 @@ export const RELEASES = [
     focus: ["agentic", "programming"],
     sourceUrl: "https://www.minimax.io/blog/minimax-m31f",
     aliases: ["MiniMax-M3.1-Flash", "minimax-m3.1-flash"],
-    notes: "MiniMax's official 2026-10-19 release rolls out M3.1 Flash as a next-generation Flash model for agentic tasks, coding, computer use, and cybersecurity, available through the MiniMax API, M Plan, and MiniMax Code. It is a distinct model line rather than a mini/nano/lite tier or product-only integration; weights are announced for a later release. Artificial Analysis lists the exact MiniMax-M3.1-Flash page with Intelligence Index 43 for its reasoning configuration, stored separately, but no exact Coding Index field was exposed. MiniMax's DeepSWE, AutomationBench, OSWorld, and other maker scores are not Artificial Analysis Coding Index values, so codingIndex remains null.",
+    notes: "MiniMax's official 2026-10-19 release rolls out M3.1 Flash as a next-generation Flash model for agentic tasks, coding, computer use, and cybersecurity, available through the MiniMax API, M Plan, and MiniMax Code. It is a distinct model line rather than a mini/nano/lite tier or product-only integration; weights are announced for a later release. Artificial Analysis (retrieved 2026-10-20) lists the exact MiniMax-M3.1-Flash page with Intelligence Index 43 for its reasoning configuration, stored separately, but no exact Coding Index field was exposed. MiniMax's DeepSWE, AutomationBench, OSWorld, and other maker scores are not Artificial Analysis Coding Index values, so codingIndex remains null.",
   }),
   release({
     model: "Mercury 3",

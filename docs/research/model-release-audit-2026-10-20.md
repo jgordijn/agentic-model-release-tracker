@@ -49,7 +49,7 @@
 - **Maker source:** [DeepSeek-V4.1-Flash-1017: Wish-Driven Programming Made Real](https://api-docs.deepseek.com/news/news261017).
 - **Supporting official source:** [DeepSeek AI Hugging Face card](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017), whose registry `createdAt` was fetched as `2026-10-17T02:40:38Z`.
 - **Scope evidence:** the maker says the update is live on the website, app, and API and documents improved coding, agentic tasks, faster completion, shorter outputs, tool use, and a dedicated open-weight card. The distinct model/card and substantive update are why this is not collapsed as a pure snapshot or alias.
-- **Artificial Analysis:** exact model page [DeepSeek V4.1 Flash 1017 (max)](https://artificialanalysis.ai/models/deepseek-v4-1-flash-1017) returned Intelligence Index `45`; the direct leaderboard row showed the same `max` identity but no Coding Index field. The historical [Coding Index dataset](https://easy-benchmarks.com/benchmarks/artificial_analysis_coding_index) did not expose a verified exact 1017 Coding row. No maker DeepSWE, Terminal-Bench, or other score was substituted.
+- **Artificial Analysis (retrieved 2026-10-20):** exact model page [DeepSeek V4.1 Flash 1017 (max)](https://artificialanalysis.ai/models/deepseek-v4-1-flash-1017) returned Intelligence Index `45`; the direct leaderboard row showed the same `max` identity but no Coding Index field. The historical [Coding Index dataset](https://easy-benchmarks.com/benchmarks/artificial_analysis_coding_index) did not expose a verified exact 1017 Coding row. No maker DeepSWE, Terminal-Bench, or other score was substituted.
 - **Stored values:** `codingIndex: null`; `intelligenceIndex: 45`; `intelligenceIndexConfiguration: "max"`; no `scoreSourceUrl`.
 
 ### MiniMax M3.1 Flash
@@ -57,7 +57,7 @@
 - **Canonical display name:** `MiniMax M3.1 Flash`; aliases checked: `MiniMax-M3.1-Flash` and `minimax-m3.1-flash`.
 - **Maker source:** [MiniMax M3.1 Flash: Redefining Agent Performance and Cost](https://www.minimax.io/blog/minimax-m31f), listed by the official blog as `2026-10-19` and stating “Today, we officially roll out MiniMax M3.1 Flash.”
 - **Scope evidence:** the maker explicitly positions the model for agentic tasks, coding, Computer Use, and cybersecurity, with API and coding-product availability. “Flash” is the named model line, not a disallowed mini/nano/lite tier.
-- **Artificial Analysis:** exact model page [MiniMax-M3.1-Flash](https://artificialanalysis.ai/models/minimax-m3-1-flash) returned Intelligence Index `43` for the reasoning version and no exact Coding Index field. The page's Intelligence score is stored separately; MiniMax DeepSWE, AutomationBench, OSWorld, and other maker values are not substitutes.
+- **Artificial Analysis (retrieved 2026-10-20):** exact model page [MiniMax-M3.1-Flash](https://artificialanalysis.ai/models/minimax-m3-1-flash) returned Intelligence Index `43` for the reasoning version and no exact Coding Index field. The page's Intelligence score is stored separately; MiniMax DeepSWE, AutomationBench, OSWorld, and other maker values are not substitutes.
 - **Stored values:** `codingIndex: null`; `intelligenceIndex: 43`; `intelligenceIndexConfiguration: "reasoning"`; no `scoreSourceUrl`.
 
 ### Mercury 3

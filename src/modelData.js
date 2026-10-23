@@ -1773,6 +1773,18 @@ export const RELEASES = [
     notes: "DeepSeek's official 2026-10-17 release makes DeepSeek-V4.1-Flash-1017 live on the website, app, and API and publishes a dedicated open-weight model card. It is treated as a substantive minor model update rather than a pure snapshot or API alias because the maker documents improved reasoning, coding, agentic-task performance, shorter outputs, tool use, and a distinct live model/card; the dated suffix is retained as the named release identity. Artificial Analysis (retrieved 2026-10-20) lists the exact DeepSeek V4.1 Flash 1017 (max) page with Intelligence Index 45, stored separately. The exact AA Coding Index field was not exposed on the model page or leaderboard, and DeepSeek's DeepSWE, Terminal-Bench, and other maker metrics are not substitutes, so codingIndex remains null.",
   }),
   release({
+    model: "Ling-3.0-flash-Sante",
+    provider: "InclusionAI",
+    group: "Chinese+Other",
+    releaseDate: "2026-10-19",
+    codingIndex: null,
+    focus: ["agentic"],
+    releaseCategory: "specialized-base",
+    sourceUrl: "https://huggingface.co/inclusionAI/Ling-3.0-flash-Sante",
+    aliases: ["Ling-3.0-flash-Sante", "ling-3-0-flash-sante", "inclusionAI/Ling-3.0-flash-Sante"],
+    notes: "InclusionAI's official model card identifies Ling-3.0-flash-Sante as a distinct healthcare-specialized model built on Ling-3.0-flash for medical reasoning, deep research, tool-assisted workflows, and multi-agent collaboration; it is tracked as a specialized agentic base line rather than a Ling alias or quantization. No day-level maker announcement was found. The official Hugging Face registry createdAt marker is 2026-10-19T17:30:04Z and is used as the public-availability fallback. Exact Artificial Analysis candidate pages returned 404, and the live AA leaderboard plus Easy Benchmarks Coding Index snapshot had no matching Sante alias, so codingIndex remains null; healthcare benchmark values are not Artificial Analysis Coding Index values.",
+  }),
+  release({
     model: "MiniMax M3.1 Flash",
     provider: "MiniMax",
     group: "Chinese+Other",

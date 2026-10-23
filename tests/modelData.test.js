@@ -65,12 +65,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("October 20 refresh preserves the 156-row HEAD baseline and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 3, 156, "baseline row count before the October 20 refresh");
-  assert.equal(RELEASES.length, 159);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 159);
+test("October 23 refresh preserves the 159-row HEAD baseline and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 1, 159, "baseline row count before the October 23 refresh");
+  assert.equal(RELEASES.length, 160);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 160);
   assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-19"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-20"), "no row is later than the research cutoff");
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-23"), "no row is later than the research cutoff");
 });
 
 test("Ling 3.1 Flash is included as the September 30 InclusionAI agentic model release", () => {
@@ -972,4 +972,25 @@ test("October 20 refresh adds the verified DeepSeek, MiniMax, and Inception mode
   assert.match(RELEASES.find((item) => item.model === "DeepSeek V4.1 Flash 1017").notes, /substantive minor model update.*pure snapshot/i);
   assert.match(RELEASES.find((item) => item.model === "MiniMax M3.1 Flash").notes, /distinct model line.*no exact Coding Index/i);
   assert.match(RELEASES.find((item) => item.model === "Mercury 3").notes, /live flagship.*no exact Artificial Analysis Mercury 3 model/i);
+});
+
+test("October 23 refresh adds Ling Sante as an official specialized agentic base line with unknown Coding Index", () => {
+  const sante = RELEASES.find((release) => release.model === "Ling-3.0-flash-Sante");
+
+  assert.ok(sante);
+  assert.equal(sante.provider, "InclusionAI");
+  assert.equal(sante.group, "Chinese+Other");
+  assert.equal(sante.releaseDate, "2026-10-19");
+  assert.equal(sante.releaseCategory, "specialized-base");
+  assert.equal(sante.sourceType, "official");
+  assert.deepEqual(sante.focus, ["agentic"]);
+  assert.equal(sante.sourceUrl, "https://huggingface.co/inclusionAI/Ling-3.0-flash-Sante");
+  assert.deepEqual(sante.aliases, ["Ling-3.0-flash-Sante", "ling-3-0-flash-sante", "inclusionAI/Ling-3.0-flash-Sante"]);
+  assert.equal(sante.codingIndex, null);
+  assert.equal(sante.scoreSourceUrl, undefined);
+  assert.equal(sante.intelligenceIndex, null);
+  assert.match(sante.notes, /healthcare-specialized model.*tool-assisted workflows.*multi-agent collaboration/i);
+  assert.match(sante.notes, /createdAt marker is 2026-10-19T17:30:04Z/);
+  assert.match(sante.notes, /candidate pages returned 404/i);
+  assert.match(sante.notes, /codingIndex remains null/i);
 });

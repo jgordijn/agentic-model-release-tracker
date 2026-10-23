@@ -31,13 +31,14 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the October 21 refresh cache key", async () => {
+test("HTML and module imports use the October 23 refresh cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20261021a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20261021a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261021a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20261023a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20261023a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261023a"/);
+  assert.doesNotMatch(`${html}\n${app}`, /20261021a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261016a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261015a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261001a/);
@@ -91,6 +92,7 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
     ["Thinking Machines", "https://huggingface.co/blog/thinkingmachines-inkling"],
     ["Arcee AI", "https://huggingface.co/arcee-ai"],
     ["Celeris", "https://celeris.ai/celeris-1-magnus"],
+    ["InclusionAI", "https://huggingface.co/inclusionAI/Ling-3.0-flash-Sante"],
   ]) {
     const provider = config.providers.find((entry) => entry.name === providerName);
 
@@ -188,10 +190,12 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
   const inclusion = config.providers.find((entry) => entry.name === "InclusionAI");
   assert.equal(inclusion.group, "Chinese+Other");
   assert.ok(inclusion.primarySources.includes("https://huggingface.co/inclusionAI/Ling-3.0-flash-VL"));
+  assert.ok(inclusion.primarySources.includes("https://huggingface.co/inclusionAI/Ling-3.0-flash-Sante"));
   assert.ok(inclusion.primarySources.includes("https://www.inclusion-ai.org/LLaDA-UI/"));
   assert.ok(inclusion.primarySources.includes("https://x.com/AntLingAGI"));
   assert.ok(inclusion.searchQueries.every((query) => query.includes("{since}")));
   assert.ok(inclusion.searchQueries.some((query) => query.includes("LLaDA-UI")));
+  assert.ok(inclusion.searchQueries.some((query) => query.includes("Ling-3.0-flash-Sante")));
   for (const signal of ["InclusionAI", "Ling", "Ring", "model", "agentic", "coding", "multimodal", "tool use"]) {
     assert.ok(inclusion.includeSignals.includes(signal), signal);
   }

@@ -65,12 +65,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("October 23 refresh preserves the 159-row HEAD baseline and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 1, 159, "baseline row count before the October 23 refresh");
-  assert.equal(RELEASES.length, 160);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 160);
+test("October 24 refresh preserves the 160-row HEAD baseline and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 1, 160, "baseline row count before the October 24 refresh");
+  assert.equal(RELEASES.length, 161);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 161);
   assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-19"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-23"), "no row is later than the research cutoff");
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-24"), "no row is later than the research cutoff");
 });
 
 test("Ling 3.1 Flash is included as the September 30 InclusionAI agentic model release", () => {
@@ -993,4 +993,38 @@ test("October 23 refresh adds Ling Sante as an official specialized agentic base
   assert.match(sante.notes, /createdAt marker is 2026-10-19T17:30:04Z/);
   assert.match(sante.notes, /candidate pages returned 404/i);
   assert.match(sante.notes, /codingIndex remains null/i);
+});
+
+test("October 24 correction adds Jais 3 after the prior IFM access-limited omission", () => {
+  const jais = RELEASES.find((release) => release.model === "Jais 3");
+
+  assert.ok(jais);
+  assert.equal(jais.provider, "IFM");
+  assert.equal(jais.group, "Chinese+Other");
+  assert.equal(jais.releaseDate, "2026-10-15");
+  assert.equal(jais.releaseCategory, "specialized-base");
+  assert.equal(jais.sourceType, "official");
+  assert.deepEqual(jais.focus, ["agentic", "programming"]);
+  assert.equal(jais.sourceUrl, "https://ifm.ai/jais3/press-release/");
+  assert.deepEqual(jais.aliases, ["Jais-3", "IFM/Jais-3-375B-A23B", "inception42/Jais-3-375B-A23B"]);
+  assert.equal(jais.codingIndex, null);
+  assert.equal(jais.scoreSourceUrl, undefined);
+  assert.equal(jais.intelligenceIndex, null);
+  assert.match(jais.notes, /2026-10-15 press release/);
+  assert.match(jais.notes, /Arabic-specialized foundation-model family.*tool use.*agentic workflows.*coding/i);
+  assert.match(jais.notes, /six size variants.*collapsed into one family row/i);
+  assert.match(jais.notes, /candidate model URL returned 404/i);
+  assert.match(jais.notes, /earlier no-add decision.*superseded/i);
+
+  const models = new Set(RELEASES.map((release) => release.model));
+  for (const excluded of [
+    "Jais 3 0.9B",
+    "Jais 3 3.7B",
+    "Jais 3 7B",
+    "Jais 3 32B",
+    "Jais 3 36B-A4B",
+    "Jais 3 375B-A23B",
+    "Jais Speech",
+    "Jais-ASR",
+  ]) assert.equal(models.has(excluded), false, excluded);
 });

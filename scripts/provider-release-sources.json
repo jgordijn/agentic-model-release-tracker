@@ -278,11 +278,19 @@
       "primarySources": [
         "https://ifm.ai/k2/",
         "https://ifm.ai/k2/press-release/",
-        "https://docs.ifm.ai/"
+        "https://docs.ifm.ai/",
+        "https://ifm.ai/jais/",
+        "https://ifm.ai/jais3/press-release/",
+        "https://ifm.ai/blog/jais3/",
+        "https://docs.ifm.ai/#/jais-3",
+        "https://huggingface.co/collections/IFM/jais-3"
       ],
       "searchQueries": [
         "site:ifm.ai/k2 IFM K2 Horizon model release coding agentic after:{since}",
-        "site:docs.ifm.ai K2 Horizon model tool calling reasoning after:{since}"
+        "site:docs.ifm.ai K2 Horizon model tool calling reasoning after:{since}",
+        "site:ifm.ai/jais3 Jais 3 model release coding agentic after:{since}",
+        "site:docs.ifm.ai Jais 3 model agentic coding after:{since}",
+        "site:huggingface.co/collections/IFM/jais-3 Jais 3 model agentic coding after:{since}"
       ],
       "includeSignals": ["IFM", "K2 Horizon", "model", "foundation", "coding", "agentic", "tool use", "reasoning"],
       "excludeSignals": ["dataset-only", "benchmark-only", "quantization", "adapter"]

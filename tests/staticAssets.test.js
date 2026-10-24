@@ -31,13 +31,14 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the October 23 refresh cache key", async () => {
+test("HTML and module imports use the October 24 refresh cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20261023a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20261023a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261023a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20261024a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20261024a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261024a"/);
+  assert.doesNotMatch(`${html}\n${app}`, /20261023a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261021a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261016a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261015a/);
@@ -142,8 +143,18 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
     "https://ifm.ai/k2/",
     "https://ifm.ai/k2/press-release/",
     "https://docs.ifm.ai/",
+    "https://ifm.ai/jais/",
+    "https://ifm.ai/jais3/press-release/",
+    "https://ifm.ai/blog/jais3/",
+    "https://docs.ifm.ai/#/jais-3",
+    "https://huggingface.co/collections/IFM/jais-3",
   ]);
   assert.ok(ifm.searchQueries.every((query) => query.includes("{since}")));
+  assert.ok(ifm.primarySources.includes("https://ifm.ai/jais/"));
+  assert.ok(ifm.primarySources.includes("https://ifm.ai/jais3/press-release/"));
+  assert.ok(ifm.primarySources.includes("https://docs.ifm.ai/#/jais-3"));
+  assert.ok(ifm.primarySources.includes("https://huggingface.co/collections/IFM/jais-3"));
+  assert.ok(ifm.searchQueries.some((query) => query.includes("Jais 3")));
   for (const signal of ["IFM", "K2 Horizon", "model", "foundation", "coding", "agentic", "tool use", "reasoning"]) {
     assert.ok(ifm.includeSignals.includes(signal), signal);
   }

@@ -1751,6 +1751,18 @@ export const RELEASES = [
     notes: "Tencent Hunyuan's official model card describes Hy-Memory-30B-A3B as a compact long-term-memory writer model for external memory frameworks, explicitly covering Chat, Working, and Coding scenarios; the official Hy-Memory repository documents the agent memory system and coding scene. The official arXiv paper was submitted 2026-10-15 and the Hugging Face registry createdAt marker is 2026-10-15T09:52:00Z; because no separate dated maker announcement was found, that public-availability evidence controls the releaseDate. The later FP8 upload is deployment packaging, not a second family. Artificial Analysis has no exact Hy-Memory row (the candidate model URL returned 404 and the live leaderboard contained no match), so codingIndex remains null; memory-benchmark scores are not Artificial Analysis Coding Index values.",
   }),
   release({
+    model: "Jais 3",
+    provider: "IFM",
+    group: "Chinese+Other",
+    releaseDate: "2026-10-15",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    releaseCategory: "specialized-base",
+    sourceUrl: "https://ifm.ai/jais3/press-release/",
+    aliases: ["Jais-3", "IFM/Jais-3-375B-A23B", "inception42/Jais-3-375B-A23B"],
+    notes: "Correction to the 2026-10-23 audit's unresolved IFM decision: IFM's official 2026-10-15 press release introduced Jais 3, a distinct Arabic-specialized foundation-model family built on K2 Horizon for tool use, multi-step agentic workflows, coding, and document work. The six size variants (0.9B through 375B-A23B) are collapsed into one family row under the existing IFM policy; weights, checkpoints, and quantizations are not separate releases. The official Jais 3 docs and Hugging Face collection confirm the family and its availability. Artificial Analysis has no exact Jais 3 model page or leaderboard row under the checked aliases (the candidate model URL returned 404); Easy Benchmarks has no populated exact Coding Index row. Jais's agentic, Terminal-Bench, SWE-bench, and Arabic benchmark values are not Artificial Analysis Coding Index values, so codingIndex remains null. The earlier no-add decision was caused by a temporary IFM source access limitation and is explicitly superseded here.",
+  }),
+  release({
     model: "Dory 1.0 4B",
     provider: "NVIDIA",
     group: "Chinese+Other",

@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 50);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 51);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -30,6 +30,7 @@ test("Intelligence Index data is metric-specific, sourced, and null for unmatche
 
   const expected = {
     "GPT-6 Sol": [48, "max"],
+    "Kimi K3.1 Pro": [55, "max"],
     "GPT-6 Luna": [37, "max"],
     "GPT-6 Astra": [53, "max"],
     "Claude Opus 5.5": [58, "max with fallback"],
@@ -65,12 +66,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("October 24 refresh preserves the 160-row HEAD baseline and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 1, 160, "baseline row count before the October 24 refresh");
-  assert.equal(RELEASES.length, 161);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 161);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-19"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-24"), "no row is later than the research cutoff");
+test("October 25 refresh preserves the 161-row HEAD baseline and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 1, 161, "baseline row count before the October 25 refresh");
+  assert.equal(RELEASES.length, 162);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 162);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-24"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-25"), "no row is later than the research cutoff");
 });
 
 test("Ling 3.1 Flash is included as the September 30 InclusionAI agentic model release", () => {
@@ -1027,4 +1028,27 @@ test("October 24 correction adds Jais 3 after the prior IFM access-limited omiss
     "Jais Speech",
     "Jais-ASR",
   ]) assert.equal(models.has(excluded), false, excluded);
+});
+
+test("October 25 refresh adds Kimi K3.1 Pro as the Moonshot agentic coding base release", () => {
+  const kimi = RELEASES.find((release) => release.model === "Kimi K3.1 Pro");
+
+  assert.ok(kimi);
+  assert.equal(kimi.provider, "Moonshot.ai");
+  assert.equal(kimi.group, "Chinese+Other");
+  assert.equal(kimi.releaseDate, "2026-10-24");
+  assert.equal(kimi.releaseCategory, "base");
+  assert.equal(kimi.sourceType, "official");
+  assert.deepEqual(kimi.focus, ["agentic", "programming"]);
+  assert.equal(kimi.sourceUrl, "https://www.kimi.ai/blog/kimi-k3-1-pro");
+  assert.deepEqual(kimi.aliases, ["kimi-k3.1-pro", "kimi-k3.1-pro-highspeed"]);
+  assert.equal(kimi.codingIndex, null);
+  assert.equal(kimi.scoreSourceUrl, undefined);
+  assert.equal(kimi.intelligenceIndex, 55);
+  assert.equal(kimi.intelligenceIndexConfiguration, "max");
+  assert.equal(kimi.intelligenceIndexSourceUrl, "https://artificialanalysis.ai/models/kimi-k3-1-pro");
+  assert.match(kimi.notes, /first K3\.1 model.*coding and agentic-capability improvements/i);
+  assert.match(kimi.notes, /Highspeed.*same model's speed variant.*rather than a separate release row/i);
+  assert.match(kimi.notes, /no exact Coding Index field/i);
+  assert.match(kimi.notes, /Easy Benchmarks.*Model Not Found/i);
 });

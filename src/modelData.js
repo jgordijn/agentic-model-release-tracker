@@ -37,6 +37,7 @@ const aaIntelligenceScores = {
   "K2 Horizon 375B A23B": [31, "default", "https://artificialanalysis.ai/models/k2-horizon-375b-a23b"],
   "Kimi K2.7 Code": [26, "default", "https://artificialanalysis.ai/models/kimi-k2-7-code"],
   "Kimi K3": [44, "max", "https://artificialanalysis.ai/models/kimi-k3"],
+  "Kimi K3.1 Pro": [55, "max", "https://artificialanalysis.ai/models/kimi-k3-1-pro"],
   "Inkling": [25, "xhigh", "https://artificialanalysis.ai/models/inkling"],
   "LongCat 2.0": [19, "default", "https://artificialanalysis.ai/models/longcat-2-0"],
   "Ling-3.0-flash-Fin": [23, "default", "https://artificialanalysis.ai/models/ling-3-0-flash-fin"],
@@ -1817,6 +1818,18 @@ export const RELEASES = [
     sourceUrl: "https://inceptionlabs.ai/blog/introducing-mercury-3",
     aliases: ["mercury-3"],
     notes: "Inception Labs' official 2026-10-19 announcement introduces Mercury 3 as a live flagship diffusion LLM for browser-use agents, real-time search agents, data engineering, and other latency-sensitive agentic applications, available through the Inception API and OpenRouter. Mercury 3 is tracked as a distinct base model line; Mercury Voice and Mercury Decide are separate voice/decision products and are not copied into this row. No exact Artificial Analysis Mercury 3 model or Coding Index row was found under the checked aliases, so codingIndex remains null rather than using the article's benchmark claims.",
+  }),
+  release({
+    model: "Kimi K3.1 Pro",
+    provider: "Moonshot.ai",
+    group: "Chinese+Other",
+    releaseDate: "2026-10-24",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    releaseCategory: "base",
+    sourceUrl: "https://www.kimi.ai/blog/kimi-k3-1-pro",
+    aliases: ["kimi-k3.1-pro", "kimi-k3.1-pro-highspeed"],
+    notes: "Moonshot's official Kimi K3.1 Pro announcement, dated 2026-10-24 on the Kimi research index, introduces the first K3.1 model as an available 3T-class model with a 1M-token context window and substantial coding and agentic-capability improvements. The official Kimi API documentation confirms live availability for programming agents and tool use. Kimi K3.1 Pro Highspeed is the same model's speed variant and is retained only as an alias rather than a separate release row. Artificial Analysis audit retrieved 2026-10-25 exposes the un-suffixed Kimi K3.1 Pro leaderboard/model row with Intelligence Index 55; the official Kimi API docs define max as the default reasoning effort, so the repository records the representative configuration as max. No exact Coding Index field was exposed; the Easy Benchmarks exact model page returned Model Not Found. Terminal-Bench, Kimi Code Bench, and other maker metrics are not Artificial Analysis Coding Index values, so codingIndex remains null.",
   }),
 ];
 

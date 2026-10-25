@@ -198,12 +198,18 @@
       "primarySources": [
         "https://platform.moonshot.ai/blog/posts/changelog",
         "https://www.moonshot.ai/",
-        "https://x.com/Kimi_Moonshot"
+        "https://x.com/Kimi_Moonshot",
+        "https://www.kimi.ai/blog/",
+        "https://www.kimi.ai/blog/kimi-k3-1-pro",
+        "https://platform.kimi.ai/docs/models",
+        "https://platform.kimi.ai/docs/guide/kimi-k3-1-pro-quickstart"
       ],
       "searchQueries": [
         "Moonshot AI Kimi model release coding agentic after:{since}",
         "site:platform.moonshot.ai Kimi model release after:{since}",
-        "site:x.com/Kimi_Moonshot Kimi latest coding model released after:{since}"
+        "site:x.com/Kimi_Moonshot Kimi latest coding model released after:{since}",
+        "site:kimi.ai/blog Kimi K3.1 Pro model coding agentic after:{since}",
+        "site:platform.kimi.ai/docs Kimi K3.1 Pro model coding agentic after:{since}"
       ],
       "includeSignals": ["Kimi", "K2", "Code", "model", "agentic", "coding"],
       "excludeSignals": ["app-only", "doodle"]

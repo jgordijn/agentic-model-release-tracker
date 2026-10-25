@@ -31,13 +31,13 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the October 24 refresh cache key", async () => {
+test("HTML and module imports use the October 25 refresh cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20261024a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20261024a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261024a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20261025a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20261025a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261025a"/);
   assert.doesNotMatch(`${html}\n${app}`, /20261023a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261021a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261016a/);
@@ -63,7 +63,7 @@ test("the dashboard lets users rank by Intelligence Index or historical Coding I
   assert.match(app, /codingMetricNote:/);
 });
 
-test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agnes AI, and InclusionAI primary sources", async () => {
+test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agnes AI, InclusionAI, and Moonshot.ai primary sources", async () => {
   const source = await readFile(new URL("../scripts/provider-release-sources.json", import.meta.url), "utf8");
   const config = JSON.parse(source);
 
@@ -94,6 +94,7 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
     ["Arcee AI", "https://huggingface.co/arcee-ai"],
     ["Celeris", "https://celeris.ai/celeris-1-magnus"],
     ["InclusionAI", "https://huggingface.co/inclusionAI/Ling-3.0-flash-Sante"],
+    ["Moonshot.ai", "https://www.kimi.ai/blog/kimi-k3-1-pro"],
   ]) {
     const provider = config.providers.find((entry) => entry.name === providerName);
 
@@ -105,6 +106,13 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
   const inception = config.providers.find((entry) => entry.name === "Inception");
   assert.ok(inception.primarySources.includes("https://inceptionlabs.ai/blog/introducing-mercury-3"));
   assert.ok(inception.searchQueries.some((query) => query.includes("Inception Mercury model")));
+
+  const moonshot = config.providers.find((entry) => entry.name === "Moonshot.ai");
+  assert.ok(moonshot.primarySources.includes("https://www.kimi.ai/blog/"));
+  assert.ok(moonshot.primarySources.includes("https://www.kimi.ai/blog/kimi-k3-1-pro"));
+  assert.ok(moonshot.primarySources.includes("https://platform.kimi.ai/docs/models"));
+  assert.ok(moonshot.primarySources.includes("https://platform.kimi.ai/docs/guide/kimi-k3-1-pro-quickstart"));
+  assert.ok(moonshot.searchQueries.some((query) => query.includes("Kimi K3.1 Pro")));
 
   const nvidia = config.providers.find((entry) => entry.name === "NVIDIA");
   assert.ok(nvidia.primarySources.includes("https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16"));

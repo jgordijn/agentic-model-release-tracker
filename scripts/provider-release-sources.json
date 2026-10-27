@@ -333,7 +333,9 @@
         "https://www.inclusion-ai.org/LLaDA-UI/",
         "https://github.com/inclusionAI",
         "https://x.com/AntLingAGI",
-        "https://huggingface.co/inclusionAI/Ling-3.0-flash-Sante"
+        "https://huggingface.co/inclusionAI/Ling-3.0-flash-Sante",
+        "https://huggingface.co/inclusionAI/LBS-27B",
+        "https://github.com/inclusionAI/UI-Venus/tree/LBS"
       ],
       "searchQueries": [
         "site:huggingface.co/inclusionAI InclusionAI Ling Ring model agentic coding after:{since}",
@@ -341,9 +343,10 @@
         "site:inclusion-ai.org/LLaDA-UI LLaDA-UI GUI agent model release after:{since}",
         "site:github.com/inclusionAI Ling model release coding agentic after:{since}",
         "site:x.com/AntLingAGI Ling model release agentic coding after:{since}",
-        "site:huggingface.co/inclusionAI/Ling-3.0-flash-Sante Ling Sante model agentic tool use after:{since}"
+        "site:huggingface.co/inclusionAI/Ling-3.0-flash-Sante Ling Sante model agentic tool use after:{since}",
+        "site:github.com/inclusionAI/UI-Venus/tree/LBS LBS model agentic vision GUI grounding after:{since}"
       ],
-      "includeSignals": ["InclusionAI", "Ling", "Ring", "model", "agentic", "coding", "multimodal", "tool use"],
+      "includeSignals": ["InclusionAI", "Ling", "Ring", "model", "agentic", "coding", "multimodal", "tool use", "GUI", "grounding"],
       "excludeSignals": ["quantization", "base checkpoint", "fine-tune", "tiny", "lite", "preview-only", "image-only", "audio-only"]
     },
     {

@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 51);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 52);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -66,12 +66,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("October 25 refresh preserves the 161-row HEAD baseline and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 1, 161, "baseline row count before the October 25 refresh");
-  assert.equal(RELEASES.length, 162);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 162);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-24"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-25"), "no row is later than the research cutoff");
+test("October 27 refresh preserves the 162-row HEAD baseline and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 2, 162, "baseline row count before the October 27 refresh");
+  assert.equal(RELEASES.length, 164);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 164);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-26"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-27"), "no row is later than the research cutoff");
 });
 
 test("Ling 3.1 Flash is included as the September 30 InclusionAI agentic model release", () => {
@@ -1051,4 +1051,49 @@ test("October 25 refresh adds Kimi K3.1 Pro as the Moonshot agentic coding base 
   assert.match(kimi.notes, /Highspeed.*same model's speed variant.*rather than a separate release row/i);
   assert.match(kimi.notes, /no exact Coding Index field/i);
   assert.match(kimi.notes, /Easy Benchmarks.*Model Not Found/i);
+});
+
+test("October 27 refresh adds GPT-6.1 Terra with separate Intelligence Index provenance", () => {
+  const terra = RELEASES.find((release) => release.model === "GPT-6.1 Terra");
+
+  assert.ok(terra);
+  assert.equal(terra.provider, "OpenAI");
+  assert.equal(terra.group, "Frontier labs");
+  assert.equal(terra.releaseDate, "2026-10-26");
+  assert.equal(terra.releaseCategory, "base");
+  assert.equal(terra.sourceType, "official");
+  assert.deepEqual(terra.focus, ["agentic", "programming"]);
+  assert.equal(terra.sourceUrl, "https://openai.com/index/introducing-gpt-6-1-terra/");
+  assert.deepEqual(terra.aliases, ["gpt-6.1-terra"]);
+  assert.equal(terra.codingIndex, null);
+  assert.equal(terra.scoreSourceUrl, undefined);
+  assert.equal(terra.intelligenceIndex, 48);
+  assert.equal(terra.intelligenceIndexConfiguration, "max");
+  assert.equal(terra.intelligenceIndexSourceUrl, "https://artificialanalysis.ai/models/gpt-6-1-terra");
+  assert.match(terra.notes, /2026-10-26 release/);
+  assert.match(terra.notes, /no exact Coding Index field/i);
+  assert.match(terra.notes, /Model Not Found/i);
+});
+
+test("October 27 refresh adds InclusionAI LBS-27B as an agentic specialized-base line with unknown Coding Index", () => {
+  const lbs = RELEASES.find((release) => release.model === "LBS-27B");
+
+  assert.ok(lbs);
+  assert.equal(lbs.provider, "InclusionAI");
+  assert.equal(lbs.group, "Chinese+Other");
+  assert.equal(lbs.releaseDate, "2026-10-26");
+  assert.equal(lbs.releaseCategory, "specialized-base");
+  assert.equal(lbs.sourceType, "official");
+  assert.deepEqual(lbs.focus, ["agentic"]);
+  assert.equal(lbs.sourceUrl, "https://huggingface.co/inclusionAI/LBS-27B");
+  assert.deepEqual(lbs.aliases, ["LBS-27B", "inclusionAI/LBS-27B"]);
+  assert.equal(lbs.codingIndex, null);
+  assert.equal(lbs.scoreSourceUrl, undefined);
+  assert.equal(lbs.intelligenceIndex, null);
+  assert.match(lbs.notes, /agentic vision-language model.*GUI grounding/i);
+  assert.match(lbs.notes, /UI-Venus LBS project/);
+  assert.match(lbs.notes, /training-recipe\/project commit dated 2026-10-20/);
+  assert.match(lbs.notes, /createdAt marker is 2026-10-26T05:36:52Z/);
+  assert.match(lbs.notes, /Artificial Analysis returned 404/i);
+  assert.match(lbs.notes, /codingIndex remains null/i);
 });

@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 52);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 53);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -38,6 +38,7 @@ test("Intelligence Index data is metric-specific, sourced, and null for unmatche
     "MiniCPM5-2B": [12, "default"],
     "Gemini 4 Argon": [53, "high"],
     "Ling 3.1 Flash": [41, "default"],
+    "Ling 3.1 Flash 1019": [29, "default"],
     "Muse Wonder": [52, "max"],
     "Muse Wonder Full": [56, "max"],
     "Muse Spark Open": [39, "xhigh"],
@@ -66,12 +67,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("October 27 refresh preserves the 162-row HEAD baseline and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 2, 162, "baseline row count before the October 27 refresh");
-  assert.equal(RELEASES.length, 164);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 164);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-26"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-27"), "no row is later than the research cutoff");
+test("October 28 refresh preserves the 164-row HEAD baseline and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 1, 164, "baseline row count before the October 28 refresh");
+  assert.equal(RELEASES.length, 165);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 165);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-27"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-28"), "no row is later than the research cutoff");
 });
 
 test("Ling 3.1 Flash is included as the September 30 InclusionAI agentic model release", () => {
@@ -1096,4 +1097,31 @@ test("October 27 refresh adds InclusionAI LBS-27B as an agentic specialized-base
   assert.match(lbs.notes, /createdAt marker is 2026-10-26T05:36:52Z/);
   assert.match(lbs.notes, /Artificial Analysis returned 404/i);
   assert.match(lbs.notes, /codingIndex remains null/i);
+});
+
+test("October 28 refresh adds Ling 3.1 Flash 1019 as a substantive InclusionAI agentic model update", () => {
+  const ling = RELEASES.find((release) => release.model === "Ling 3.1 Flash 1019");
+
+  assert.ok(ling);
+  assert.equal(ling.provider, "InclusionAI");
+  assert.equal(ling.group, "Chinese+Other");
+  assert.equal(ling.releaseDate, "2026-10-27");
+  assert.equal(ling.releaseCategory, "base");
+  assert.equal(ling.sourceType, "official");
+  assert.deepEqual(ling.focus, ["agentic", "programming"]);
+  assert.equal(ling.sourceUrl, "https://x.com/AntLingAGI/status/2115062200687878157");
+  assert.deepEqual(ling.aliases, ["Ling-3.1-flash-1019", "ling-3-1-flash-1019", "inclusionAI/Ling-3.1-flash-1019"]);
+  assert.equal(ling.codingIndex, null);
+  assert.equal(ling.scoreSourceUrl, undefined);
+  assert.equal(ling.intelligenceIndex, 29);
+  assert.equal(ling.intelligenceIndexConfiguration, "default");
+  assert.equal(ling.intelligenceIndexSourceUrl, "https://artificialanalysis.ai/models/ling-3-1-flash-1019");
+  assert.match(ling.notes, /upgraded version.*post-training improvements.*agentic/i);
+  assert.match(ling.notes, /not a pure snapshot/i);
+  assert.match(ling.notes, /2026-10-22.*introduces/i);
+  assert.match(ling.notes, /2026-10-27.*now open source/i);
+  assert.match(ling.notes, /createdAt marker is 2026-10-27T05:46:51Z/);
+  assert.match(ling.notes, /catalog releaseDate 2026-10-22/);
+  assert.match(ling.notes, /no Coding Index field/i);
+  assert.match(ling.notes, /Model Not Found/i);
 });

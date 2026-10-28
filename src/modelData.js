@@ -44,6 +44,7 @@ const aaIntelligenceScores = {
   "Ling-3.0-flash-Fin": [23, "default", "https://artificialanalysis.ai/models/ling-3-0-flash-fin"],
   "Ling-3.0-flash-VL": [25, "default", "https://artificialanalysis.ai/models/ling-3-0-flash-vl"],
   "Ling 3.1 Flash": [41, "default", "https://artificialanalysis.ai/models/ling-3-1-flash"],
+  "Ling 3.1 Flash 1019": [29, "default", "https://artificialanalysis.ai/models/ling-3-1-flash-1019"],
   "MiMo-V2.5-Pro": [26, "default", "https://artificialanalysis.ai/models/mimo-v2-5-pro"],
   "MiMo-V2.6-Pro": [46, "default", "https://artificialanalysis.ai/models/mimo-v2-6-pro"],
   "MiniCPM5-2B": [12, "default", "https://artificialanalysis.ai/models/minicpm5-2b"],
@@ -1854,6 +1855,17 @@ export const RELEASES = [
     sourceUrl: "https://huggingface.co/inclusionAI/LBS-27B",
     aliases: ["LBS-27B", "inclusionAI/LBS-27B"],
     notes: "InclusionAI's official Hugging Face model card describes LBS-27B as an agentic vision-language model based on Qwen3.8-27B for GUI grounding, adaptive zoom-in, and transferable visual observation; the linked official UI-Venus LBS project documents the model's agentic GUI evaluation. It is tracked as a distinct specialized-base agentic line, consistent with the dashboard's existing GUI-agent rows, rather than as a quantization or API alias. No day-level maker announcement was found. The linked UI-Venus LBS branch contains an initial training-recipe/project commit dated 2026-10-20, while the official Hugging Face API createdAt marker is 2026-10-26T05:36:52Z and controls this dashboard's public checkpoint availability date. Its GUI-agent scope is distinguished from modality-only generation models. Artificial Analysis returned 404 for the exact candidate page and Easy Benchmarks returned Model Not Found, so codingIndex remains null; ScreenSpot-Pro, OS-World-G, PerceptionBench, and other model-card metrics are not Artificial Analysis Coding Index values.",
+  }),
+  release({
+    model: "Ling 3.1 Flash 1019",
+    provider: "InclusionAI",
+    group: "Chinese+Other",
+    releaseDate: "2026-10-27",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://x.com/AntLingAGI/status/2115062200687878157",
+    aliases: ["Ling-3.1-flash-1019", "ling-3-1-flash-1019", "inclusionAI/Ling-3.1-flash-1019"],
+    notes: "InclusionAI's official Ant Ling post dated 2026-10-22 introduces Ling-3.1-flash-1019 and says API access and open weights are coming soon; the official 2026-10-27 follow-up says it is now open source and links the public Hugging Face card. The earlier announcement is https://x.com/AntLingAGI/status/2113226531522891851 and the public-weights announcement is https://x.com/AntLingAGI/status/2115062200687878157. The card describes it as an upgraded version of Ling-3.1-flash with further post-training improvements in reasoning, tool calling, software engineering, and real-world agentic workflows. It is a distinct named model/card with substantive capability changes, not a pure snapshot, quantization, or API alias. The dashboard uses 2026-10-27 for public model/checkpoint availability; the official HF API createdAt marker is 2026-10-27T05:46:51Z. Artificial Analysis lists the exact Ling 3.1 Flash 1019 page with catalog releaseDate 2026-10-22 and current Intelligence Index 29 (default reasoning page), but the exact page exposes no Coding Index field; its catalog date is not used as the public-availability date. The model card's older Intelligence Index v4.3.2 claim and maker AA-Briefcase, AutomationBench-AA, SciCode, Terminal-Bench, and SWE-bench values are not substitutes for the exact Artificial Analysis Coding Index, so codingIndex remains null. Easy Benchmarks returned Model Not Found for the exact model page. Direct AA audit retrieved 2026-10-28.",
   }),
 ];
 

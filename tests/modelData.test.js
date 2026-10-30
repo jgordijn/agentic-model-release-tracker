@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 53);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 54);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -42,6 +42,7 @@ test("Intelligence Index data is metric-specific, sourced, and null for unmatche
     "Muse Wonder": [52, "max"],
     "Muse Wonder Full": [56, "max"],
     "Muse Spark Open": [39, "xhigh"],
+    "Mistral Large 4": [26, "high"],
     "Nemotron 3.5 Super VL": [26, "default"],
     "Nemotron 3.5 Bolt 74B-A9B": [21, "default"],
   };
@@ -67,12 +68,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("October 28 refresh preserves the 164-row HEAD baseline and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 1, 164, "baseline row count before the October 28 refresh");
-  assert.equal(RELEASES.length, 165);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 165);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-27"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-28"), "no row is later than the research cutoff");
+test("October 30 refresh preserves the 165-row HEAD baseline and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 1, 165, "baseline row count before the October 30 refresh");
+  assert.equal(RELEASES.length, 166);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 166);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-29"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-30"), "no row is later than the research cutoff");
 });
 
 test("Ling 3.1 Flash is included as the September 30 InclusionAI agentic model release", () => {
@@ -1124,4 +1125,29 @@ test("October 28 refresh adds Ling 3.1 Flash 1019 as a substantive InclusionAI a
   assert.match(ling.notes, /catalog releaseDate 2026-10-22/);
   assert.match(ling.notes, /no Coding Index field/i);
   assert.match(ling.notes, /Model Not Found/i);
+});
+
+test("October 30 refresh adds Mistral Large 4 after the open-weight release", () => {
+  const mistral = RELEASES.find((release) => release.model === "Mistral Large 4");
+
+  assert.ok(mistral);
+  assert.equal(mistral.provider, "Mistral");
+  assert.equal(mistral.group, "Chinese+Other");
+  assert.equal(mistral.releaseDate, "2026-10-29");
+  assert.equal(mistral.releaseCategory, "base");
+  assert.equal(mistral.sourceType, "official");
+  assert.deepEqual(mistral.focus, ["agentic", "programming"]);
+  assert.equal(mistral.sourceUrl, "https://mistral.ai/news/mistral-large-4-oss/");
+  assert.deepEqual(mistral.aliases, ["mistral-large-4", "mistral-large-4-0", "mistralai/Mistral-Large-4-1T-A52B", "Le Chonk"]);
+  assert.equal(mistral.codingIndex, null);
+  assert.equal(mistral.scoreSourceUrl, undefined);
+  assert.equal(mistral.intelligenceIndex, 26);
+  assert.equal(mistral.intelligenceIndexConfiguration, "high");
+  assert.equal(mistral.intelligenceIndexSourceUrl, "https://artificialanalysis.ai/models/mistral-large-4");
+  assert.match(mistral.notes, /2026-10-29 release.*open weights/i);
+  assert.match(mistral.notes, /2026-10-06 public-preview/i);
+  assert.match(mistral.notes, /substantive base-model release/i);
+  assert.match(mistral.notes, /Intelligence Index 26.*stored separately/i);
+  assert.match(mistral.notes, /Coding Agent Index.*not substituted/i);
+  assert.match(mistral.notes, /no exact dashboard Coding Index field/i);
 });

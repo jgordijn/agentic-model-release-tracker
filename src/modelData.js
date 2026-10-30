@@ -49,6 +49,7 @@ const aaIntelligenceScores = {
   "MiMo-V2.6-Pro": [46, "default", "https://artificialanalysis.ai/models/mimo-v2-6-pro"],
   "MiniCPM5-2B": [12, "default", "https://artificialanalysis.ai/models/minicpm5-2b"],
   "MiniMax M3.1 Flash": [43, "reasoning", "https://artificialanalysis.ai/models/minimax-m3-1-flash"],
+  "Mistral Large 4": [26, "high", "https://artificialanalysis.ai/models/mistral-large-4"],
   "Mistral Large 3": [9, "default", "https://artificialanalysis.ai/models/mistral-large-3"],
   "Mistral Medium 3.5": [14, "default", "https://artificialanalysis.ai/models/mistral-medium-3-5"],
   "Muse Wonder": [52, "max", "https://artificialanalysis.ai/models/muse-wonder"],
@@ -1866,6 +1867,17 @@ export const RELEASES = [
     sourceUrl: "https://x.com/AntLingAGI/status/2115062200687878157",
     aliases: ["Ling-3.1-flash-1019", "ling-3-1-flash-1019", "inclusionAI/Ling-3.1-flash-1019"],
     notes: "InclusionAI's official Ant Ling post dated 2026-10-22 introduces Ling-3.1-flash-1019 and says API access and open weights are coming soon; the official 2026-10-27 follow-up says it is now open source and links the public Hugging Face card. The earlier announcement is https://x.com/AntLingAGI/status/2113226531522891851 and the public-weights announcement is https://x.com/AntLingAGI/status/2115062200687878157. The card describes it as an upgraded version of Ling-3.1-flash with further post-training improvements in reasoning, tool calling, software engineering, and real-world agentic workflows. It is a distinct named model/card with substantive capability changes, not a pure snapshot, quantization, or API alias. The dashboard uses 2026-10-27 for public model/checkpoint availability; the official HF API createdAt marker is 2026-10-27T05:46:51Z. Artificial Analysis lists the exact Ling 3.1 Flash 1019 page with catalog releaseDate 2026-10-22 and current Intelligence Index 29 (default reasoning page), but the exact page exposes no Coding Index field; its catalog date is not used as the public-availability date. The model card's older Intelligence Index v4.3.2 claim and maker AA-Briefcase, AutomationBench-AA, SciCode, Terminal-Bench, and SWE-bench values are not substitutes for the exact Artificial Analysis Coding Index, so codingIndex remains null. Easy Benchmarks returned Model Not Found for the exact model page. Direct AA audit retrieved 2026-10-28.",
+  }),
+  release({
+    model: "Mistral Large 4",
+    provider: "Mistral",
+    group: "Chinese+Other",
+    releaseDate: "2026-10-29",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://mistral.ai/news/mistral-large-4-oss/",
+    aliases: ["mistral-large-4", "mistral-large-4-0", "mistralai/Mistral-Large-4-1T-A52B", "Le Chonk"],
+    notes: "Mistral's official 2026-10-29 release announces the open weights of Mistral Large 4 (Le Chonk), a 1T-parameter multimodal model with explicit coding, agentic-coding, reasoning, and cybersecurity use. The official docs identify the earlier 2026-10-06 public-preview entry; the October 29 post describes three weeks of additional reinforcement learning and an improved released model with weights available through Hugging Face, so this is a substantive base-model release rather than a preview-only configuration, serving variant, or quantization. The exact Artificial Analysis model page https://artificialanalysis.ai/models/mistral-large-4 and model leaderboard were fetched for the high/medium configurations. The exact page reports Artificial Analysis Intelligence Index 26 for the high configuration, stored separately; no exact dashboard Coding Index field was verifiable. Artificial Analysis Coding Agent Index, FrontierCode, Terminal-Bench, and maker-reported values are not substituted, so codingIndex remains null. Direct AA audit retrieved 2026-10-30.",
   }),
 ];
 

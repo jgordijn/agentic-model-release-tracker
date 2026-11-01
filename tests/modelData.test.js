@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 54);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 55);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -37,6 +37,7 @@ test("Intelligence Index data is metric-specific, sourced, and null for unmatche
     "Grok 4.7": [46, "xhigh"],
     "MiniCPM5-2B": [12, "default"],
     "Gemini 4 Argon": [53, "high"],
+    "Gemini 4 Carbon": [59, "high"],
     "Ling 3.1 Flash": [41, "default"],
     "Ling 3.1 Flash 1019": [29, "default"],
     "Muse Wonder": [52, "max"],
@@ -68,12 +69,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("October 30 refresh preserves the 165-row HEAD baseline and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 1, 165, "baseline row count before the October 30 refresh");
-  assert.equal(RELEASES.length, 166);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 166);
+test("November 1 refresh preserves the 166-row HEAD baseline, adds the Carbon correction, and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 1, 166, "baseline row count before the November 1 refresh");
+  assert.equal(RELEASES.length, 167);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 167);
   assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-29"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-10-30"), "no row is later than the research cutoff");
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-01"), "no row is later than the research cutoff");
 });
 
 test("Ling 3.1 Flash is included as the September 30 InclusionAI agentic model release", () => {
@@ -1125,6 +1126,29 @@ test("October 28 refresh adds Ling 3.1 Flash 1019 as a substantive InclusionAI a
   assert.match(ling.notes, /catalog releaseDate 2026-10-22/);
   assert.match(ling.notes, /no Coding Index field/i);
   assert.match(ling.notes, /Model Not Found/i);
+});
+
+test("October 28 correction adds Gemini 4 Carbon with separate Intelligence Index provenance", () => {
+  const carbon = RELEASES.find((release) => release.model === "Gemini 4 Carbon");
+
+  assert.ok(carbon);
+  assert.equal(carbon.provider, "Google");
+  assert.equal(carbon.group, "Frontier labs");
+  assert.equal(carbon.releaseDate, "2026-10-28");
+  assert.equal(carbon.releaseCategory, "base");
+  assert.equal(carbon.sourceType, "official");
+  assert.deepEqual(carbon.focus, ["agentic", "programming"]);
+  assert.equal(carbon.sourceUrl, "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/");
+  assert.deepEqual(carbon.aliases, ["gemini-4-carbon"]);
+  assert.equal(carbon.codingIndex, null);
+  assert.equal(carbon.scoreSourceUrl, undefined);
+  assert.equal(carbon.intelligenceIndex, 59);
+  assert.equal(carbon.intelligenceIndexConfiguration, "high");
+  assert.equal(carbon.intelligenceIndexSourceUrl, "https://artificialanalysis.ai/models/gemini-4-carbon");
+  assert.match(carbon.notes, /2026-10-28 announcement.*coding.*long-horizon agentic/i);
+  assert.match(carbon.notes, /Fairwind Program/);
+  assert.match(carbon.notes, /no exact historical Coding Index field/i);
+  assert.match(carbon.notes, /prior no-add decision.*superseded/i);
 });
 
 test("October 30 refresh adds Mistral Large 4 after the open-weight release", () => {

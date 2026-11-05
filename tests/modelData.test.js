@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 55);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 56);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -46,6 +46,7 @@ test("Intelligence Index data is metric-specific, sourced, and null for unmatche
     "Mistral Large 4": [26, "high"],
     "Nemotron 3.5 Super VL": [26, "default"],
     "Nemotron 3.5 Bolt 74B-A9B": [21, "default"],
+    "Tencent Hy4": [35, "default"],
   };
   for (const [model, [score, configuration]] of Object.entries(expected)) {
     const release = RELEASES.find((item) => item.model === model);
@@ -69,12 +70,51 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("November 1 refresh preserves the 166-row HEAD baseline, adds the Carbon correction, and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 1, 166, "baseline row count before the November 1 refresh");
-  assert.equal(RELEASES.length, 167);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 167);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-10-29"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-01"), "no row is later than the research cutoff");
+test("November 5 refresh preserves the 167-row HEAD baseline, adds LongCat 2.5 and Tencent Hy4, and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 2, 167, "baseline row count before the November 5 refresh");
+  assert.equal(RELEASES.length, 169);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 169);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-03"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-05"), "no row is later than the research cutoff");
+});
+
+test("November 5 rows preserve exact scope, maker provenance, and metric-specific unknowns", () => {
+  const longcat = RELEASES.find((release) => release.model === "LongCat 2.5");
+  assert.ok(longcat);
+  assert.equal(longcat.provider, "LongCat");
+  assert.equal(longcat.group, "Chinese+Other");
+  assert.equal(longcat.releaseDate, "2026-11-01");
+  assert.equal(longcat.releaseCategory, "base");
+  assert.equal(longcat.sourceType, "official");
+  assert.deepEqual(longcat.focus, ["agentic", "programming"]);
+  assert.equal(longcat.sourceUrl, "https://longcat.ai/blog/longcat-2.5");
+  assert.deepEqual(longcat.aliases, ["LongCat-2.5", "longcat-2.5"]);
+  assert.equal(longcat.codingIndex, null);
+  assert.equal(longcat.intelligenceIndex, null);
+  assert.equal(longcat.scoreSourceUrl, undefined);
+  assert.match(longcat.notes, /2026-11-01/);
+  assert.match(longcat.notes, /full-project builds.*tool use/i);
+  assert.match(longcat.notes, /returned 404/i);
+
+  const hy4 = RELEASES.find((release) => release.model === "Tencent Hy4");
+  assert.ok(hy4);
+  assert.equal(hy4.provider, "Tencent");
+  assert.equal(hy4.group, "Chinese+Other");
+  assert.equal(hy4.releaseDate, "2026-11-03");
+  assert.equal(hy4.releaseCategory, "base");
+  assert.equal(hy4.sourceType, "official");
+  assert.deepEqual(hy4.focus, ["agentic", "programming"]);
+  assert.equal(hy4.sourceUrl, "https://cloud.tencent.com/document/product/1823/130051");
+  assert.deepEqual(hy4.aliases, ["Hy4", "hy4", "Tencent Hy4"]);
+  assert.equal(hy4.codingIndex, null);
+  assert.equal(hy4.scoreSourceUrl, undefined);
+  assert.equal(hy4.intelligenceIndex, 35);
+  assert.equal(hy4.intelligenceIndexConfiguration, "default");
+  assert.equal(hy4.intelligenceIndexSourceUrl, "https://artificialanalysis.ai/models/tencent-hy4");
+  assert.equal(RELEASES.some((release) => release.model === "Hy4 preview"), false);
+  assert.equal(hy4.aliases.includes("hy4-preview"), false);
+  assert.match(hy4.notes, /Hy4 preview.*2026-08-28/i);
+  assert.match(hy4.notes, /no exact Coding Index field/i);
 });
 
 test("Ling 3.1 Flash is included as the September 30 InclusionAI agentic model release", () => {

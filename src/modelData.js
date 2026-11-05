@@ -61,6 +61,7 @@ const aaIntelligenceScores = {
   "Nemotron 3.5 Bolt 74B-A9B": [21, "default", "https://artificialanalysis.ai/models/nemotron-3-5-bolt-74b-a9b"],
   "Nemotron 3.5 Super VL": [26, "default", "https://artificialanalysis.ai/models/nemotron-3-5-super-vl"],
   o3: [20, "default", "https://artificialanalysis.ai/models/o3"],
+  "Tencent Hy4": [35, "default", "https://artificialanalysis.ai/models/tencent-hy4"],
   "Trinity-Large-Thinking": [11, "default", "https://artificialanalysis.ai/models/trinity-large-thinking"],
 };
 
@@ -1890,6 +1891,28 @@ export const RELEASES = [
     sourceUrl: "https://mistral.ai/news/mistral-large-4-oss/",
     aliases: ["mistral-large-4", "mistral-large-4-0", "mistralai/Mistral-Large-4-1T-A52B", "Le Chonk"],
     notes: "Mistral's official 2026-10-29 release announces the open weights of Mistral Large 4 (Le Chonk), a 1T-parameter multimodal model with explicit coding, agentic-coding, reasoning, and cybersecurity use. The official docs identify the earlier 2026-10-06 public-preview entry; the October 29 post describes three weeks of additional reinforcement learning and an improved released model with weights available through Hugging Face, so this is a substantive base-model release rather than a preview-only configuration, serving variant, or quantization. The exact Artificial Analysis model page https://artificialanalysis.ai/models/mistral-large-4 and model leaderboard were fetched for the high/medium configurations. The exact page reports Artificial Analysis Intelligence Index 26 for the high configuration, stored separately; no exact dashboard Coding Index field was verifiable. Artificial Analysis Coding Agent Index, FrontierCode, Terminal-Bench, and maker-reported values are not substituted, so codingIndex remains null. Direct AA audit retrieved 2026-10-30.",
+  }),
+  release({
+    model: "LongCat 2.5",
+    provider: "LongCat",
+    group: "Chinese+Other",
+    releaseDate: "2026-11-01",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://longcat.ai/blog/longcat-2.5",
+    aliases: ["LongCat-2.5", "longcat-2.5"],
+    notes: "Meituan LongCat's official homepage lists the LongCat-2.5 article as published 2026-11-01 and describes a 1.6T-parameter native multimodal model for complex engineering, visual programming, long-context training, and long-horizon reinforcement learning. The official article page was directly fetched with HTTP 200 and the title 'Introducing LongCat-2.5'; the homepage additionally documents full-project builds, multi-step reasoning, and tool use. This is a distinct base-model release, not a preview-only configuration, harness, quantization, serving alias, or modality-only model. The exact Artificial Analysis candidate URL https://artificialanalysis.ai/models/longcat-2-5 returned 404, the fetched leaderboard contained no LongCat-2.5 row, and Easy Benchmarks returned Model Not Found, so no exact Coding Index or Intelligence Index value is stored. LongCat's coding and agentic claims are not substitutes for the requested Artificial Analysis Coding Index. Direct source/benchmark audit retrieved 2026-11-05.",
+  }),
+  release({
+    model: "Tencent Hy4",
+    provider: "Tencent",
+    group: "Chinese+Other",
+    releaseDate: "2026-11-03",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://cloud.tencent.com/document/product/1823/130051",
+    aliases: ["Hy4", "hy4", "Tencent Hy4"],
+    notes: "Tencent Cloud's official TokenHub model list, updated 2026-11-04 12:13:30, lists Hy4 with model ID hy4 separately from Hy4 preview and documents deep thinking, structured output, function calling, image understanding, a 1M context window, and 960k/64k input/output limits. These capabilities establish a current general-purpose agentic/programming model line; the official product page separately dates Hy4 preview to 2026-08-28, so the preview is not treated as this release. The maker did not expose a dated launch announcement in the checked surfaces; 2026-11-03 is retained as the explicit Artificial Analysis catalog release-date fallback, while the official docs independently verify availability by 2026-11-04. The exact Artificial Analysis page https://artificialanalysis.ai/models/tencent-hy4 identifies Tencent Hy4 as a proprietary November 2026 model and reports Intelligence Index 35 (default), stored separately; it exposes no exact Coding Index field. Tencent's coding, agentic, Intelligence Index, and other benchmark values are not substituted, so codingIndex remains null. Direct source/benchmark audit retrieved 2026-11-05.",
   }),
 ];
 

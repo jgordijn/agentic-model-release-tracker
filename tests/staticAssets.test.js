@@ -31,13 +31,13 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the November 1 refresh cache key", async () => {
+test("HTML and module imports use the November 5 refresh cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20261101a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20261101a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261101a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20261105a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20261105a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261105a"/);
   assert.doesNotMatch(`${html}\n${app}`, /20261023a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261021a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261025a/);
@@ -125,7 +125,15 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
   const tencent = config.providers.find((entry) => entry.name === "Tencent");
   assert.ok(tencent.primarySources.includes("https://huggingface.co/tencent/Hy-Memory-30B-A3B"));
   assert.ok(tencent.primarySources.includes("https://github.com/Tencent-Hunyuan/Hy-Memory"));
+  assert.ok(tencent.primarySources.includes("https://cloud.tencent.com/product/hunyuan"));
+  assert.ok(tencent.primarySources.includes("https://cloud.tencent.com/document/product/1823/130051"));
   assert.ok(tencent.searchQueries.some((query) => query.includes("Hy-Memory")));
+  assert.ok(tencent.searchQueries.some((query) => query.includes("Tencent Hy4")));
+
+  const longcat = config.providers.find((entry) => entry.name === "LongCat");
+  assert.ok(longcat);
+  assert.ok(longcat.primarySources.includes("https://longcat.ai/blog/longcat-2.5"));
+  assert.ok(longcat.searchQueries.some((query) => query.includes("LongCat-2.5")));
 
   const alibaba = config.providers.find((entry) => entry.name === "Alibaba");
   assert.ok(alibaba.primarySources.includes("https://www.qwencloud.com/models"));

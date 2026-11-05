@@ -165,14 +165,18 @@
         "https://huggingface.co/tencent",
         "https://github.com/Tencent",
         "https://huggingface.co/tencent/Hy-Memory-30B-A3B",
-        "https://github.com/Tencent-Hunyuan/Hy-Memory"
+        "https://github.com/Tencent-Hunyuan/Hy-Memory",
+        "https://cloud.tencent.com/product/hunyuan",
+        "https://cloud.tencent.com/document/product/1823/130051"
       ],
       "searchQueries": [
         "site:ui-mate.github.io Tencent UI-Mate model agentic after:{since}",
         "site:huggingface.co/tencent Tencent Hunyuan UI-Mate model coding agentic after:{since}",
         "site:github.com/Tencent model release coding GUI agent after:{since}",
         "site:huggingface.co/tencent/Hy-Memory-30B-A3B Hy-Memory model memory coding agentic after:{since}",
-        "site:github.com/Tencent-Hunyuan/Hy-Memory Hy-Memory model memory coding agentic after:{since}"
+        "site:github.com/Tencent-Hunyuan/Hy-Memory Hy-Memory model memory coding agentic after:{since}",
+        "site:cloud.tencent.com/product/hunyuan Tencent Hy4 model coding agentic after:{since}",
+        "site:cloud.tencent.com/document/product/1823/130051 Tencent Hy4 model coding agentic after:{since}"
       ],
       "includeSignals": ["Tencent", "Hunyuan", "UI-Mate", "model", "agentic", "coding", "computer use", "GUI"],
       "excludeSignals": ["preview-only", "image-only", "audio-only", "video-only"]
@@ -387,11 +391,13 @@
       "primarySources": [
         "https://longcat.ai/",
         "https://longcat.ai/blog/longcat-2.0",
+        "https://longcat.ai/blog/longcat-2.5",
         "https://huggingface.co/meituan-longcat",
         "https://github.com/meituan-longcat"
       ],
       "searchQueries": [
         "site:longcat.ai LongCat model coding agentic after:{since}",
+        "site:longcat.ai/blog LongCat-2.5 model coding agentic after:{since}",
         "site:huggingface.co/meituan-longcat LongCat model coding agentic after:{since}",
         "site:github.com/meituan-longcat LongCat model release coding agentic after:{since}"
       ],

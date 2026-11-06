@@ -3,7 +3,7 @@ const aaModelLeaderboard = "https://artificialanalysis.ai/leaderboards/models";
 
 // AA Intelligence Index snapshots are stored separately from codingIndex.
 // Existing rows use the dated 2026-09-23 snapshot; entries added during the
-// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, 2026-10-10/13, 2026-10-15, and 2026-10-16 refreshes use the exact current AA
+// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, 2026-10-10/13, 2026-10-15, 2026-10-16, and 2026-11-06 refreshes use the exact current AA
 // model-page configuration where available. No Intelligence Index value is ever
 // copied into codingIndex.
 const aaIntelligenceScores = {
@@ -41,6 +41,7 @@ const aaIntelligenceScores = {
   "Kimi K3": [44, "max", "https://artificialanalysis.ai/models/kimi-k3"],
   "Kimi K3.1 Pro": [55, "max", "https://artificialanalysis.ai/models/kimi-k3-1-pro"],
   "Inkling": [25, "xhigh", "https://artificialanalysis.ai/models/inkling"],
+  "Inkling 2 Small": [31, "default", "https://artificialanalysis.ai/models/inkling-2-small"],
   "LongCat 2.0": [19, "default", "https://artificialanalysis.ai/models/longcat-2-0"],
   "Ling-3.0-flash-Fin": [23, "default", "https://artificialanalysis.ai/models/ling-3-0-flash-fin"],
   "Ling-3.0-flash-VL": [25, "default", "https://artificialanalysis.ai/models/ling-3-0-flash-vl"],
@@ -1913,6 +1914,17 @@ export const RELEASES = [
     sourceUrl: "https://cloud.tencent.com/document/product/1823/130051",
     aliases: ["Hy4", "hy4", "Tencent Hy4"],
     notes: "Tencent Cloud's official TokenHub model list, updated 2026-11-04 12:13:30, lists Hy4 with model ID hy4 separately from Hy4 preview and documents deep thinking, structured output, function calling, image understanding, a 1M context window, and 960k/64k input/output limits. These capabilities establish a current general-purpose agentic/programming model line; the official product page separately dates Hy4 preview to 2026-08-28, so the preview is not treated as this release. The maker did not expose a dated launch announcement in the checked surfaces; 2026-11-03 is retained as the explicit Artificial Analysis catalog release-date fallback, while the official docs independently verify availability by 2026-11-04. The exact Artificial Analysis page https://artificialanalysis.ai/models/tencent-hy4 identifies Tencent Hy4 as a proprietary November 2026 model and reports Intelligence Index 35 (default), stored separately; it exposes no exact Coding Index field. Tencent's coding, agentic, Intelligence Index, and other benchmark values are not substituted, so codingIndex remains null. Direct source/benchmark audit retrieved 2026-11-05.",
+  }),
+  release({
+    model: "Inkling 2 Small",
+    provider: "Thinking Machines",
+    group: "Chinese+Other",
+    releaseDate: "2026-11-05",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://thinkingmachines.ai/news/inkling-2-small/",
+    aliases: ["inkling-2-small", "inkling-small-1102-rc17"],
+    notes: "Thinking Machines' official announcement is dated 2026-11-05 and introduces Inkling 2 Small as the second model generation: a 594B-total/17B-active mixture-of-experts model with image input, variable effort, agentic coding, long-horizon work, tool use, and Tinker availability. It is a distinct base model line, not a preview-only configuration, product feature, quantization, or API alias; the initial closed-weight Tinker availability does not make it preview-only. The maker reports Intelligence Index 31 and other coding/agentic benchmark values, but those are not Artificial Analysis Coding Index values. The exact Artificial Analysis model page https://artificialanalysis.ai/models/inkling-2-small and live leaderboard identify Inkling 2 Small with releaseDate 2026-11-05 and Artificial Analysis Intelligence Index 31 with no effort suffix, stored separately as the default configuration; no exact Coding Index field is exposed. The AA release alias inkling-small-1102-rc17 and public model slug inkling-2-small are aliases, not separate rows. Easy Benchmarks returned Model Not Found for the exact candidate path, so codingIndex remains null. Direct source/benchmark audit retrieved 2026-11-06.",
   }),
 ];
 

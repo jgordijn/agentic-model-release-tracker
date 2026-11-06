@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 56);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 57);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -70,12 +70,35 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("November 5 refresh preserves the 167-row HEAD baseline, adds LongCat 2.5 and Tencent Hy4, and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 2, 167, "baseline row count before the November 5 refresh");
-  assert.equal(RELEASES.length, 169);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 169);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-03"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-05"), "no row is later than the research cutoff");
+test("November 6 refresh preserves the 169-row HEAD baseline, adds Inkling 2 Small, and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 1, 169, "HEAD baseline row count before the November 6 refresh");
+  assert.equal(RELEASES.length, 170);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 170);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-05"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-06"), "no row is later than the research cutoff");
+});
+
+test("November 6 refresh adds Inkling 2 Small with maker provenance and metric-specific unknowns", () => {
+  const inkling = RELEASES.find((release) => release.model === "Inkling 2 Small");
+
+  assert.ok(inkling);
+  assert.equal(inkling.provider, "Thinking Machines");
+  assert.equal(inkling.group, "Chinese+Other");
+  assert.equal(inkling.releaseDate, "2026-11-05");
+  assert.equal(inkling.releaseCategory, "base");
+  assert.equal(inkling.sourceType, "official");
+  assert.deepEqual(inkling.focus, ["agentic", "programming"]);
+  assert.equal(inkling.sourceUrl, "https://thinkingmachines.ai/news/inkling-2-small/");
+  assert.deepEqual(inkling.aliases, ["inkling-2-small", "inkling-small-1102-rc17"]);
+  assert.equal(inkling.codingIndex, null);
+  assert.equal(inkling.scoreSourceUrl, undefined);
+  assert.equal(inkling.intelligenceIndex, 31);
+  assert.equal(inkling.intelligenceIndexConfiguration, "default");
+  assert.equal(inkling.intelligenceIndexSourceUrl, "https://artificialanalysis.ai/models/inkling-2-small");
+  assert.match(inkling.notes, /second model generation.*594B-total\/17B-active.*agentic coding/i);
+  assert.match(inkling.notes, /no exact Coding Index field/i);
+  assert.match(inkling.notes, /Easy Benchmarks returned Model Not Found/i);
+  assert.match(inkling.notes, /2026-11-06/);
 });
 
 test("November 5 rows preserve exact scope, maker provenance, and metric-specific unknowns", () => {

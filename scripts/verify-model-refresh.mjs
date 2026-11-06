@@ -16,13 +16,18 @@ const expect = (condition, message) => {
   if (!condition) errors.push(message);
 };
 const httpUrl = (value) => typeof value === "string" && /^https?:\/\/[^\s]+$/.test(value);
+const validIsoDate = (value) => {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const [year, month, day] = value.split("-").map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
+};
 
-assert.match(cutoff, /^\d{4}-\d{2}-\d{2}$/);
+assert.equal(validIsoDate(cutoff), true, `invalid cutoff date: ${cutoff}`);
 const models = RELEASES.map((release) => release.model);
 expect(new Set(models).size === models.length, "model names are not unique");
 for (const release of RELEASES) {
-  expect(/^\d{4}-\d{2}-\d{2}$/.test(release.releaseDate), `${release.model}: invalid date shape`);
-  expect(!Number.isNaN(Date.parse(release.releaseDate)), `${release.model}: invalid date value`);
+  expect(validIsoDate(release.releaseDate), `${release.model}: invalid date value`);
   expect(release.releaseDate <= cutoff, `${release.model}: release after cutoff`);
   expect(httpUrl(release.sourceUrl), `${release.model}: invalid sourceUrl`);
   expect(["base", "specialized-base"].includes(release.releaseCategory), `${release.model}: invalid category`);
@@ -65,7 +70,7 @@ for (const entry of [...config.providers, ...(config.missingLabs ?? [])]) {
   for (const url of entry.primarySources) urls.add(url);
 }
 const urlList = [...urls].filter(httpUrl).sort();
-const MAX_URLS = 319;
+const MAX_URLS = 321;
 expect(urlList.length <= MAX_URLS, `URL smoke budget exceeded: ${urlList.length} > ${MAX_URLS}`);
 
 const smokeResults = [];

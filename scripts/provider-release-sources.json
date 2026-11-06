@@ -409,11 +409,13 @@
       "group": "Chinese+Other",
       "primarySources": [
         "https://thinkingmachines.ai/",
+        "https://thinkingmachines.ai/news/inkling-2-small/",
         "https://huggingface.co/blog/thinkingmachines-inkling",
         "https://huggingface.co/thinkingmachines",
         "https://github.com/thinking-machines-lab"
       ],
       "searchQueries": [
+        "site:thinkingmachines.ai/news/inkling-2-small Inkling 2 Small model release coding agentic after:{since}",
         "site:huggingface.co/blog/thinkingmachines-inkling Inkling model coding agentic after:{since}",
         "site:huggingface.co/thinkingmachines Inkling model tool use coding after:{since}",
         "site:thinkingmachines.ai model release coding agentic after:{since}"

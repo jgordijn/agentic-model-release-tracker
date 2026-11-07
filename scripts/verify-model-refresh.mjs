@@ -70,7 +70,7 @@ for (const entry of [...config.providers, ...(config.missingLabs ?? [])]) {
   for (const url of entry.primarySources) urls.add(url);
 }
 const urlList = [...urls].filter(httpUrl).sort();
-const MAX_URLS = 321;
+const MAX_URLS = 322;
 expect(urlList.length <= MAX_URLS, `URL smoke budget exceeded: ${urlList.length} > ${MAX_URLS}`);
 
 const smokeResults = [];

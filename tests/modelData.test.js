@@ -70,12 +70,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("November 6 refresh preserves the 169-row HEAD baseline, adds Inkling 2 Small, and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 1, 169, "HEAD baseline row count before the November 6 refresh");
-  assert.equal(RELEASES.length, 170);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 170);
+test("November 7 refresh preserves the 170-row HEAD baseline, adds GPT-6 Cyber, and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 1, 170, "HEAD baseline row count before the November 7 refresh");
+  assert.equal(RELEASES.length, 171);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 171);
   assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-05"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-06"), "no row is later than the research cutoff");
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-07"), "no row is later than the research cutoff");
 });
 
 test("November 6 refresh adds Inkling 2 Small with maker provenance and metric-specific unknowns", () => {
@@ -1237,4 +1237,28 @@ test("October 30 refresh adds Mistral Large 4 after the open-weight release", ()
   assert.match(mistral.notes, /Intelligence Index 26.*stored separately/i);
   assert.match(mistral.notes, /Coding Agent Index.*not substituted/i);
   assert.match(mistral.notes, /no exact dashboard Coding Index field/i);
+});
+
+test("November 7 refresh adds GPT-6 Cyber as a specialized OpenAI line with an unknown exact Coding Index", () => {
+  const cyber = RELEASES.find((release) => release.model === "GPT-6 Cyber");
+
+  assert.ok(cyber);
+  assert.equal(cyber.provider, "OpenAI");
+  assert.equal(cyber.group, "Frontier labs");
+  assert.equal(cyber.releaseDate, "2026-11-05");
+  assert.equal(cyber.releaseCategory, "specialized-base");
+  assert.equal(cyber.sourceType, "official");
+  assert.deepEqual(cyber.focus, ["agentic", "programming"]);
+  assert.equal(cyber.sourceUrl, "https://openai.com/index/introducing-gpt-6-cyber/");
+  assert.deepEqual(cyber.aliases, ["gpt-6-cyber"]);
+  assert.equal(cyber.codingIndex, null);
+  assert.equal(cyber.scoreSourceUrl, undefined);
+  assert.equal(cyber.intelligenceIndex, null);
+  assert.equal(cyber.intelligenceIndexConfiguration, null);
+  assert.equal(cyber.intelligenceIndexSourceUrl, null);
+  assert.match(cyber.notes, /vulnerability discovery.*exploit validation.*code review.*patch development/i);
+  assert.match(cyber.notes, /specialized agentic\/programming base line/i);
+  assert.match(cyber.notes, /exact Artificial Analysis candidate page returned 404/i);
+  assert.match(cyber.notes, /no GPT-6 Cyber row/i);
+  assert.match(cyber.notes, /codingIndex remains null/i);
 });

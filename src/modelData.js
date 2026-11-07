@@ -1926,6 +1926,18 @@ export const RELEASES = [
     aliases: ["inkling-2-small", "inkling-small-1102-rc17"],
     notes: "Thinking Machines' official announcement is dated 2026-11-05 and introduces Inkling 2 Small as the second model generation: a 594B-total/17B-active mixture-of-experts model with image input, variable effort, agentic coding, long-horizon work, tool use, and Tinker availability. It is a distinct base model line, not a preview-only configuration, product feature, quantization, or API alias; the initial closed-weight Tinker availability does not make it preview-only. The maker reports Intelligence Index 31 and other coding/agentic benchmark values, but those are not Artificial Analysis Coding Index values. The exact Artificial Analysis model page https://artificialanalysis.ai/models/inkling-2-small and live leaderboard identify Inkling 2 Small with releaseDate 2026-11-05 and Artificial Analysis Intelligence Index 31 with no effort suffix, stored separately as the default configuration; no exact Coding Index field is exposed. The AA release alias inkling-small-1102-rc17 and public model slug inkling-2-small are aliases, not separate rows. Easy Benchmarks returned Model Not Found for the exact candidate path, so codingIndex remains null. Direct source/benchmark audit retrieved 2026-11-06.",
   }),
+  release({
+    model: "GPT-6 Cyber",
+    provider: "OpenAI",
+    group: "Frontier labs",
+    releaseDate: "2026-11-05",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    releaseCategory: "specialized-base",
+    sourceUrl: "https://openai.com/index/introducing-gpt-6-cyber/",
+    aliases: ["gpt-6-cyber"],
+    notes: "OpenAI's official 2026-11-05 announcement introduces GPT-6 Cyber as a distinct cybersecurity model for vulnerability discovery, exploit validation within authorized scope, code review, patch development, and long-running security research. It is tracked as a specialized agentic/programming base line rather than the GPT-6 Astra family, a Daybreak product feature, or a provider integration. OpenAI's ExploitGym, RemoteExploitBench, and other cyber benchmark values are not Artificial Analysis Coding Index values. The exact Artificial Analysis candidate page returned 404, the live AA leaderboard contained no GPT-6 Cyber row, and the Easy Benchmarks Coding Index snapshot contained no exact model row retrieved 2026-11-07; codingIndex remains null rather than using a sibling, Intelligence Index, or maker score.",
+  }),
 ];
 
 export const DATA_SOURCES = [

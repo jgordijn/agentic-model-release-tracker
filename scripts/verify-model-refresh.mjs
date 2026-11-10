@@ -70,7 +70,7 @@ for (const entry of [...config.providers, ...(config.missingLabs ?? [])]) {
   for (const url of entry.primarySources) urls.add(url);
 }
 const urlList = [...urls].filter(httpUrl).sort();
-const MAX_URLS = 322;
+const MAX_URLS = 340;
 expect(urlList.length <= MAX_URLS, `URL smoke budget exceeded: ${urlList.length} > ${MAX_URLS}`);
 
 const smokeResults = [];
@@ -101,6 +101,12 @@ if (runHttp) {
   }
   await Promise.all(Array.from({ length: 8 }, () => worker()));
   for (const required of [
+    "https://www.anthropic.com/claude-fable-and-mythos-5-2",
+    "https://research.meta.ai/blog/muse-ember",
+    "https://www.agnes-ai.com/zh-Hans/docs/agnes-25-pro-theta",
+    "https://artificialanalysis.ai/models/claude-fable-5-2",
+    "https://artificialanalysis.ai/models/muse-ember",
+    "https://artificialanalysis.ai/models/agnes-2-5-pro-theta",
     "https://www.anthropic.com/claude-haiku-5-5",
     "https://artificialanalysis.ai/models/claude-haiku-5-5",
     "https://artificialanalysis.ai/leaderboards/models",

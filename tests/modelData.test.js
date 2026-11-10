@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 57);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 60);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -47,6 +47,9 @@ test("Intelligence Index data is metric-specific, sourced, and null for unmatche
     "Nemotron 3.5 Super VL": [26, "default"],
     "Nemotron 3.5 Bolt 74B-A9B": [21, "default"],
     "Tencent Hy4": [35, "default"],
+    "Agnes 2.5 Pro Theta": [24, "default"],
+    "Claude Fable 5.2": [65, "max"],
+    "Muse Ember": [36, "max"],
   };
   for (const [model, [score, configuration]] of Object.entries(expected)) {
     const release = RELEASES.find((item) => item.model === model);
@@ -70,12 +73,62 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("November 7 refresh preserves the 170-row HEAD baseline, adds GPT-6 Cyber, and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 1, 170, "HEAD baseline row count before the November 7 refresh");
-  assert.equal(RELEASES.length, 171);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 171);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-05"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-07"), "no row is later than the research cutoff");
+test("November 10 refresh preserves the 171-row HEAD baseline, adds three model lines, and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 3, 171, "HEAD baseline row count before the November 10 refresh");
+  assert.equal(RELEASES.length, 174);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 174);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-09"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-10"), "no row is later than the research cutoff");
+});
+
+test("November 9 releases preserve maker provenance and separate Intelligence/Coding metrics", () => {
+  const expected = {
+    "Agnes 2.5 Pro Theta": {
+      provider: "Agnes AI",
+      releaseCategory: "base",
+      sourceUrl: "https://www.agnes-ai.com/zh-Hans/docs/agnes-25-pro-theta",
+      aliases: ["agnes-2.5-pro-theta"],
+      intelligenceIndex: 24,
+      intelligenceIndexConfiguration: "default",
+      intelligenceIndexSourceUrl: "https://artificialanalysis.ai/models/agnes-2-5-pro-theta",
+    },
+    "Claude Fable 5.2": {
+      provider: "Anthropic",
+      releaseCategory: "base",
+      sourceUrl: "https://www.anthropic.com/claude-fable-and-mythos-5-2",
+      aliases: ["claude-fable-5-2", "claude-mythos-5-2"],
+      intelligenceIndex: 65,
+      intelligenceIndexConfiguration: "max",
+      intelligenceIndexSourceUrl: "https://artificialanalysis.ai/models/claude-fable-5-2",
+    },
+    "Muse Ember": {
+      provider: "Meta",
+      releaseCategory: "base",
+      sourceUrl: "https://research.meta.ai/blog/muse-ember",
+      aliases: ["muse-ember-1.0"],
+      intelligenceIndex: 36,
+      intelligenceIndexConfiguration: "max",
+      intelligenceIndexSourceUrl: "https://artificialanalysis.ai/models/muse-ember",
+    },
+  };
+
+  for (const [model, fields] of Object.entries(expected)) {
+    const release = RELEASES.find((item) => item.model === model);
+
+    assert.ok(release, model);
+    assert.equal(release.releaseDate, "2026-11-09", model);
+    assert.equal(release.group, model === "Claude Fable 5.2" ? "Frontier labs" : "Chinese+Other", model);
+    assert.equal(release.sourceType, "official", model);
+    assert.deepEqual(release.focus, ["agentic", "programming"], model);
+    assert.equal(release.codingIndex, null, model);
+    assert.equal(release.scoreSourceUrl, undefined, model);
+    assert.match(release.notes, /no exact Coding Index field|no exact Coding Index/i, model);
+    for (const [field, value] of Object.entries(fields)) assert.deepEqual(release[field], value, `${model}: ${field}`);
+  }
+
+  assert.match(RELEASES.find((release) => release.model === "Claude Fable 5.2").notes, /same underlying model.*rather than duplicated/i);
+  assert.match(RELEASES.find((release) => release.model === "Agnes 2.5 Pro Theta").notes, /dateModified.*2026-11-09/i);
+  assert.match(RELEASES.find((release) => release.model === "Muse Ember").notes, /Coding Agent Index-AA.*not the requested/i);
 });
 
 test("November 6 refresh adds Inkling 2 Small with maker provenance and metric-specific unknowns", () => {
@@ -886,7 +939,7 @@ test("September 4 2026 InclusionAI release preserves backfilled agentic scope an
 
 test("Agnes AI is covered as a configured provider rather than an explicit missing lab", () => {
   assert.equal(IMPORTANT_MISSING_LABS.includes("Agnes AI"), false);
-  assert.equal(RELEASES.filter((release) => release.provider === "Agnes AI").length, 2);
+  assert.equal(RELEASES.filter((release) => release.provider === "Agnes AI").length, 3);
   assert.ok(RELEASES.some((release) => release.model === "Agnes 3.0 Qwen"));
 });
 

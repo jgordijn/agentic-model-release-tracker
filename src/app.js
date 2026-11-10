@@ -1,4 +1,4 @@
-import { DATA_SOURCES, IMPORTANT_MISSING_LABS, RELEASES } from "./modelData.js?v=20261107a";
+import { DATA_SOURCES, IMPORTANT_MISSING_LABS, RELEASES } from "./modelData.js?v=20261110a";
 import {
   applyFilters,
   buildChartSeries,
@@ -10,7 +10,7 @@ import {
   paginateRows,
   sortReleases,
   summarizeReleases,
-} from "./dashboardLogic.js?v=20261107a";
+} from "./dashboardLogic.js?v=20261110a";
 
 const TODAY = RELEASES.reduce(
   (latest, release) => (release.releaseDate > latest ? release.releaseDate : latest),

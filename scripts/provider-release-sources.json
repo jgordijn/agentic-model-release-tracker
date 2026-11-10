@@ -21,10 +21,12 @@
       "group": "Frontier labs",
       "primarySources": [
         "https://www.anthropic.com/news",
+        "https://www.anthropic.com/claude-fable-and-mythos-5-2",
         "https://docs.anthropic.com/en/docs/about-claude/models"
       ],
       "searchQueries": [
         "site:anthropic.com/news Anthropic Claude model release coding agentic after:{since}",
+        "site:anthropic.com/claude-fable-and-mythos-5-2 Claude Fable 5.2 model after:{since}",
         "site:docs.anthropic.com Claude models release after:{since}"
       ],
       "includeSignals": ["Claude", "model", "coding", "agentic", "computer use", "software engineering"],
@@ -53,17 +55,21 @@
         "https://ai.meta.com/blog/",
         "https://www.meta.com/ai/",
         "https://research.meta.ai/blog/muse-wonder",
+        "https://research.meta.ai/blog/muse-ember",
         "https://developer.meta.com/ai/",
         "https://dev.meta.ai/models/muse-wonder",
-        "https://dev.meta.ai/models/muse-spark-open"
+        "https://dev.meta.ai/models/muse-spark-open",
+        "https://dev.meta.ai/models/muse-ember"
       ],
       "searchQueries": [
         "site:huggingface.co/meta-models Meta Muse Llama model agentic coding after:{since}",
         "site:ai.meta.com Meta model release agentic coding after:{since}",
         "site:research.meta.ai/blog Muse Wonder model release coding agentic after:{since}",
+        "site:research.meta.ai/blog/muse-ember Muse Ember model release coding agentic after:{since}",
         "site:developer.meta.com/ai Muse Wonder model coding agentic after:{since}",
         "site:dev.meta.ai/models/muse-wonder Muse Wonder model after:{since}",
         "site:dev.meta.ai/models/muse-spark-open Muse Spark Open model coding agentic after:{since}",
+        "site:dev.meta.ai/models/muse-ember Muse Ember model coding agentic after:{since}",
         "site:huggingface.co/meta-models Muse Spark Open model coding agentic after:{since}"
       ],
       "includeSignals": ["Meta", "Muse", "Llama", "model", "agentic", "coding", "tool use", "local"],
@@ -311,6 +317,7 @@
       "primarySources": [
         "https://agnes-ai.com/",
         "https://www.agnes-ai.com/zh-Hans/docs/agnes-30-flash",
+        "https://www.agnes-ai.com/zh-Hans/docs/agnes-25-pro-theta",
         "https://platform.agnes-ai.com",
         "https://github.com/AgnesAI-Labs",
         "https://github.com/AgnesAI-Labs/Agnes-3.0-Qwen",
@@ -319,6 +326,7 @@
       ],
       "searchQueries": [
         "site:agnes-ai.com Agnes model release coding agentic after:{since}",
+        "site:agnes-ai.com Agnes 2.5 Pro Theta model coding agentic after:{since}",
         "site:platform.agnes-ai.com Agnes model agentic coding tool calling after:{since}",
         "site:github.com/AgnesAI-Labs Agnes model coding agent tool use after:{since}",
         "site:github.com/AgnesAI-Labs/Agnes-3.0-Qwen Agnes model release coding agentic after:{since}",

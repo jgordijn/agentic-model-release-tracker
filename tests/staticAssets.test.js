@@ -31,13 +31,14 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the November 7 refresh cache key", async () => {
+test("HTML and module imports use the November 10 refresh cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20261107a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20261107a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261107a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20261110a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20261110a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261110a"/);
+  assert.doesNotMatch(`${html}\n${app}`, /20261107a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261106a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261105a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261023a/);
@@ -81,11 +82,18 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
   const meta = config.providers.find((entry) => entry.name === "Meta");
   assert.ok(meta.primarySources.includes("https://www.meta.com/ai/"));
   assert.ok(meta.primarySources.includes("https://research.meta.ai/blog/muse-wonder"));
+  assert.ok(meta.primarySources.includes("https://research.meta.ai/blog/muse-ember"));
   assert.ok(meta.primarySources.includes("https://developer.meta.com/ai/"));
   assert.ok(meta.primarySources.includes("https://dev.meta.ai/models/muse-wonder"));
   assert.ok(meta.primarySources.includes("https://dev.meta.ai/models/muse-spark-open"));
+  assert.ok(meta.primarySources.includes("https://dev.meta.ai/models/muse-ember"));
   assert.ok(meta.searchQueries.some((query) => query.includes("Muse Wonder")));
   assert.ok(meta.searchQueries.some((query) => query.includes("Muse Spark Open")));
+  assert.ok(meta.searchQueries.some((query) => query.includes("Muse Ember")));
+
+  const anthropic = config.providers.find((entry) => entry.name === "Anthropic");
+  assert.ok(anthropic.primarySources.includes("https://www.anthropic.com/claude-fable-and-mythos-5-2"));
+  assert.ok(anthropic.searchQueries.some((query) => query.includes("Claude Fable 5.2")));
 
   for (const [providerName, requiredSource] of [
     ["DeepSeek", "https://api-docs.deepseek.com/news/news261017"],
@@ -205,6 +213,7 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
   assert.deepEqual(agnes.primarySources, [
     "https://agnes-ai.com/",
     "https://www.agnes-ai.com/zh-Hans/docs/agnes-30-flash",
+    "https://www.agnes-ai.com/zh-Hans/docs/agnes-25-pro-theta",
     "https://platform.agnes-ai.com",
     "https://github.com/AgnesAI-Labs",
     "https://github.com/AgnesAI-Labs/Agnes-3.0-Qwen",
@@ -213,6 +222,7 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
   ]);
   assert.ok(agnes.searchQueries.every((query) => query.includes("{since}")));
   assert.ok(agnes.searchQueries.some((query) => query.includes("Agnes-3.0-Qwen")));
+  assert.ok(agnes.searchQueries.some((query) => query.includes("Agnes 2.5 Pro Theta")));
   assert.ok(agnes.searchQueries.some((query) => query.includes("huggingface.co/Agnes-AI")));
   for (const signal of ["Agnes AI", "Agnes", "model", "agent", "coding", "agentic", "tool calling", "foundation"]) {
     assert.ok(agnes.includeSignals.includes(signal), signal);

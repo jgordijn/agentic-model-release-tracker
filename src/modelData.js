@@ -3,13 +3,15 @@ const aaModelLeaderboard = "https://artificialanalysis.ai/leaderboards/models";
 
 // AA Intelligence Index snapshots are stored separately from codingIndex.
 // Existing rows use the dated 2026-09-23 snapshot; entries added during the
-// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, 2026-10-10/13, 2026-10-15, 2026-10-16, and 2026-11-06 refreshes use the exact current AA
+// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, 2026-10-10/13, 2026-10-15, 2026-10-16, 2026-11-06, and 2026-11-10 refreshes use the exact current AA
 // model-page configuration where available. No Intelligence Index value is ever
 // copied into codingIndex.
 const aaIntelligenceScores = {
+  "Agnes 2.5 Pro Theta": [24, "default", "https://artificialanalysis.ai/models/agnes-2-5-pro-theta"],
   "Agnes 3.0 Flash": [36, "default", "https://artificialanalysis.ai/models/agnes-3-0-flash"],
   "Apodex 1.1": [30, "default", "https://artificialanalysis.ai/models/apodex-1-1"],
   "Claude Fable 5.1": [53, "max with fallback", "https://artificialanalysis.ai/models/claude-fable-5-1"],
+  "Claude Fable 5.2": [65, "max", "https://artificialanalysis.ai/models/claude-fable-5-2"],
   "Claude Haiku 5.5": [43, "max", "https://artificialanalysis.ai/models/claude-haiku-5-5"],
   "Claude Opus 5": [51, "max", "https://artificialanalysis.ai/models/claude-opus-5"],
   "Claude Opus 5.5": [58, "max with fallback", "https://artificialanalysis.ai/models/claude-opus-5-5"],
@@ -56,6 +58,7 @@ const aaIntelligenceScores = {
   "Mistral Medium 3.5": [14, "default", "https://artificialanalysis.ai/models/mistral-medium-3-5"],
   "Muse Wonder": [52, "max", "https://artificialanalysis.ai/models/muse-wonder"],
   "Muse Wonder Full": [56, "max", "https://artificialanalysis.ai/models/muse-wonder-full"],
+  "Muse Ember": [36, "max", "https://artificialanalysis.ai/models/muse-ember"],
   "Muse Spark 1.3": [48, "max", "https://artificialanalysis.ai/models/muse-spark-1-3"],
   "Muse Spark Open": [39, "xhigh", "https://artificialanalysis.ai/models/muse-spark-open"],
   "Mercury 2.5": [12, "default", "https://artificialanalysis.ai/models/mercury-2-5"],
@@ -1937,6 +1940,39 @@ export const RELEASES = [
     sourceUrl: "https://openai.com/index/introducing-gpt-6-cyber/",
     aliases: ["gpt-6-cyber"],
     notes: "OpenAI's official 2026-11-05 announcement introduces GPT-6 Cyber as a distinct cybersecurity model for vulnerability discovery, exploit validation within authorized scope, code review, patch development, and long-running security research. It is tracked as a specialized agentic/programming base line rather than the GPT-6 Astra family, a Daybreak product feature, or a provider integration. OpenAI's ExploitGym, RemoteExploitBench, and other cyber benchmark values are not Artificial Analysis Coding Index values. The exact Artificial Analysis candidate page returned 404, the live AA leaderboard contained no GPT-6 Cyber row, and the Easy Benchmarks Coding Index snapshot contained no exact model row retrieved 2026-11-07; codingIndex remains null rather than using a sibling, Intelligence Index, or maker score.",
+  }),
+  release({
+    model: "Agnes 2.5 Pro Theta",
+    provider: "Agnes AI",
+    group: "Chinese+Other",
+    releaseDate: "2026-11-09",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://www.agnes-ai.com/zh-Hans/docs/agnes-25-pro-theta",
+    aliases: ["agnes-2.5-pro-theta"],
+    notes: "Agnes AI's official documentation identifies Agnes 2.5 Pro Theta as a distinct text reasoning model with tool calling, coding-task examples, and agent workflow support. The page's JSON-LD dateModified marker is 2026-11-09T08:02:15Z and is used as the earliest maker documentation/availability marker because no separate launch announcement was found; the Artificial Analysis catalog's 2026-11-07 releaseDate is retained only as a discovery/benchmark timestamp and does not override maker evidence. The exact Artificial Analysis page reports Intelligence Index 24 (default), stored separately; it exposes no exact Coding Index field, and the model's other coding/agentic claims are not substitutes, so codingIndex remains null.",
+  }),
+  release({
+    model: "Claude Fable 5.2",
+    provider: "Anthropic",
+    group: "Frontier labs",
+    releaseDate: "2026-11-09",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://www.anthropic.com/claude-fable-and-mythos-5-2",
+    aliases: ["claude-fable-5-2", "claude-mythos-5-2"],
+    notes: "Anthropic's official 2026-11-09 announcement introduces Claude Fable 5.2 and Claude Mythos 5.2 for demanding coding, reasoning, and technical work. Anthropic states that Fable and Mythos are the same underlying model, so the safeguarded Mythos access variant is collapsed into this single Fable base-model row rather than duplicated. The exact Artificial Analysis model page reports Intelligence Index 65 for the max configuration, stored separately; FrontierCode, Terminal-Bench, and Anthropic's other benchmark results are not Artificial Analysis Coding Index values, and no exact Coding Index field was exposed, so codingIndex remains null.",
+  }),
+  release({
+    model: "Muse Ember",
+    provider: "Meta",
+    group: "Chinese+Other",
+    releaseDate: "2026-11-09",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://research.meta.ai/blog/muse-ember",
+    aliases: ["muse-ember-1.0"],
+    notes: "Meta's official 2026-11-09 release introduces Muse Ember as a distinct efficient foundation model for repeatable coding subtasks, tool calls, routing, extraction, and other agentic workflows, available through the Meta Model API. It is a model line rather than a product feature or provider integration. The exact Artificial Analysis model page reports Intelligence Index 36 for the max configuration, stored separately; Meta's Coding Agent Index-AA and Terminal-Bench results are not the requested Artificial Analysis Coding Index, and no exact Coding Index field was exposed, so codingIndex remains null.",
   }),
 ];
 

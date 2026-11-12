@@ -188,6 +188,25 @@
       "excludeSignals": ["preview-only", "image-only", "audio-only", "video-only"]
     },
     {
+      "name": "China Mobile",
+      "group": "Chinese+Other",
+      "primarySources": [
+        "https://www.10086.cn/aboutus/news/",
+        "https://www.10086.cn/aboutus/news/groupnews/index_detail_56169.html",
+        "https://jiutian.10086.cn/",
+        "https://jiutian.10086.cn/portal/common-helpcenter#/document/1181?platformCode=DMX_TYZX",
+        "https://www.modelscope.cn/models/ChinaMobile/JT-4.1-Flash-236B-A21B"
+      ],
+      "searchQueries": [
+        "site:10086.cn/aboutus/news China Mobile Jiutian model coding agentic after:{since}",
+        "site:jiutian.10086.cn JT-4.1 Flash 236B A21B after:{since}",
+        "site:modelscope.cn/models/ChinaMobile JT-4.1 Flash 236B A21B after:{since}",
+        "\"JT-4.1 Flash 236B A21B\" China Mobile model after:{since}"
+      ],
+      "includeSignals": ["China Mobile", "Jiutian", "JT", "model", "coding", "agentic", "reasoning", "tool use"],
+      "excludeSignals": ["preview-only", "quantization", "snapshot", "alias", "platform only", "integration"]
+    },
+    {
       "name": "DeepSeek",
       "group": "Chinese+Other",
       "primarySources": [

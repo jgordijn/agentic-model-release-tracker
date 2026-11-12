@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 60);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 61);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -50,6 +50,7 @@ test("Intelligence Index data is metric-specific, sourced, and null for unmatche
     "Agnes 2.5 Pro Theta": [24, "default"],
     "Claude Fable 5.2": [65, "max"],
     "Muse Ember": [36, "max"],
+    "JT-4.1 Flash 236B A21B": [19, "default"],
   };
   for (const [model, [score, configuration]] of Object.entries(expected)) {
     const release = RELEASES.find((item) => item.model === model);
@@ -73,12 +74,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("November 10 refresh preserves the 171-row HEAD baseline, adds three model lines, and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 3, 171, "HEAD baseline row count before the November 10 refresh");
-  assert.equal(RELEASES.length, 174);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 174);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-09"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-10"), "no row is later than the research cutoff");
+test("November 12 refresh preserves the 174-row HEAD baseline, adds one model line, and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 1, 174, "HEAD baseline row count before the November 12 refresh");
+  assert.equal(RELEASES.length, 175);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 175);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-11"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-12"), "no row is later than the research cutoff");
 });
 
 test("November 9 releases preserve maker provenance and separate Intelligence/Coding metrics", () => {
@@ -129,6 +130,29 @@ test("November 9 releases preserve maker provenance and separate Intelligence/Co
   assert.match(RELEASES.find((release) => release.model === "Claude Fable 5.2").notes, /same underlying model.*rather than duplicated/i);
   assert.match(RELEASES.find((release) => release.model === "Agnes 2.5 Pro Theta").notes, /dateModified.*2026-11-09/i);
   assert.match(RELEASES.find((release) => release.model === "Muse Ember").notes, /Coding Agent Index-AA.*not the requested/i);
+});
+
+test("November 11 China Mobile release preserves registry provenance and mirror score limits", () => {
+  const jt = RELEASES.find((release) => release.model === "JT-4.1 Flash 236B A21B");
+
+  assert.ok(jt);
+  assert.equal(jt.provider, "China Mobile");
+  assert.equal(jt.group, "Chinese+Other");
+  assert.equal(jt.releaseDate, "2026-11-11");
+  assert.equal(jt.releaseCategory, "base");
+  assert.equal(jt.sourceType, "official");
+  assert.deepEqual(jt.focus, ["agentic", "programming"]);
+  assert.equal(jt.sourceUrl, "https://www.modelscope.cn/models/ChinaMobile/JT-4.1-Flash-236B-A21B");
+  assert.deepEqual(jt.aliases, ["JT-4.1-Flash-236B-A21B", "jt-4-1-flash-236b-a21b", "ChinaMobile/JT-4.1-Flash-236B-A21B"]);
+  assert.equal(jt.codingIndex, null);
+  assert.equal(jt.scoreSourceUrl, undefined);
+  assert.equal(jt.intelligenceIndex, 19);
+  assert.equal(jt.intelligenceIndexConfiguration, "default");
+  assert.equal(jt.intelligenceIndexSourceUrl, "https://artificialanalysis.ai/models/jt-4-1-flash-236b-a21b");
+  assert.match(jt.notes, /ModelScope registry.*ChinaMobile/i);
+  assert.match(jt.notes, /Artificial Analysis catalog release-date fallback/i);
+  assert.match(jt.notes, /Easy Benchmarks.*Coding Index 52\.4.*Release Jul 9, 2026/i);
+  assert.match(jt.notes, /older snapshot\/alias.*codingIndex remains null/i);
 });
 
 test("November 6 refresh adds Inkling 2 Small with maker provenance and metric-specific unknowns", () => {

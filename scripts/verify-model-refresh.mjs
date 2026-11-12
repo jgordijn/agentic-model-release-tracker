@@ -47,7 +47,7 @@ for (const release of RELEASES) {
 const configuredNames = config.providers.map((entry) => entry.name);
 const missingNames = (config.missingLabs ?? []).map((entry) => entry.name);
 expect(new Set([...configuredNames, ...missingNames]).size === configuredNames.length + missingNames.length, "provider names are duplicated");
-expect(configuredNames.length === 26, `expected 26 configured providers, got ${configuredNames.length}`);
+expect(configuredNames.length === 27, `expected 27 configured providers, got ${configuredNames.length}`);
 expect(missingNames.length === 4, `expected 4 missing labs, got ${missingNames.length}`);
 expect(JSON.stringify(missingNames) === JSON.stringify(IMPORTANT_MISSING_LABS), "missing lab list differs from dataset");
 for (const entry of [...config.providers, ...(config.missingLabs ?? [])]) {
@@ -104,6 +104,7 @@ if (runHttp) {
     "https://www.anthropic.com/claude-fable-and-mythos-5-2",
     "https://research.meta.ai/blog/muse-ember",
     "https://www.agnes-ai.com/zh-Hans/docs/agnes-25-pro-theta",
+    "https://artificialanalysis.ai/models/jt-4-1-flash-236b-a21b",
     "https://artificialanalysis.ai/models/claude-fable-5-2",
     "https://artificialanalysis.ai/models/muse-ember",
     "https://artificialanalysis.ai/models/agnes-2-5-pro-theta",

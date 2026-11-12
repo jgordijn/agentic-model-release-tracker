@@ -31,13 +31,14 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the November 10 refresh cache key", async () => {
+test("HTML and module imports use the November 12 refresh cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20261110a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20261110a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261110a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20261112a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20261112a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261112a"/);
+  assert.doesNotMatch(`${html}\n${app}`, /20261110a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261107a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261106a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261105a/);
@@ -67,11 +68,11 @@ test("the dashboard lets users rank by Intelligence Index or historical Coding I
   assert.match(app, /codingMetricNote:/);
 });
 
-test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agnes AI, InclusionAI, and Moonshot.ai primary sources", async () => {
+test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agnes AI, InclusionAI, Moonshot.ai, and China Mobile primary sources", async () => {
   const source = await readFile(new URL("../scripts/provider-release-sources.json", import.meta.url), "utf8");
   const config = JSON.parse(source);
 
-  for (const providerName of ["Meta", "Tencent", "Apodex", "IFM", "OpenBMB", "Agnes AI", "InclusionAI"]) {
+  for (const providerName of ["Meta", "Tencent", "Apodex", "IFM", "OpenBMB", "Agnes AI", "InclusionAI", "China Mobile"]) {
     const provider = config.providers.find((entry) => entry.name === providerName);
 
     assert.ok(provider, providerName);
@@ -139,6 +140,21 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
   assert.ok(tencent.primarySources.includes("https://cloud.tencent.com/document/product/1823/130051"));
   assert.ok(tencent.searchQueries.some((query) => query.includes("Hy-Memory")));
   assert.ok(tencent.searchQueries.some((query) => query.includes("Tencent Hy4")));
+
+  const chinaMobile = config.providers.find((entry) => entry.name === "China Mobile");
+  assert.equal(chinaMobile.group, "Chinese+Other");
+  assert.ok(chinaMobile.primarySources.includes("https://www.10086.cn/aboutus/news/groupnews/index_detail_56169.html"));
+  assert.ok(chinaMobile.primarySources.includes("https://jiutian.10086.cn/"));
+  assert.ok(chinaMobile.primarySources.includes("https://jiutian.10086.cn/portal/common-helpcenter#/document/1181?platformCode=DMX_TYZX"));
+  assert.ok(chinaMobile.primarySources.includes("https://www.modelscope.cn/models/ChinaMobile/JT-4.1-Flash-236B-A21B"));
+  assert.ok(chinaMobile.searchQueries.some((query) => query.includes("JT-4.1 Flash 236B A21B")));
+  assert.ok(chinaMobile.searchQueries.some((query) => query.includes("modelscope.cn/models/ChinaMobile")));
+  for (const signal of ["China Mobile", "Jiutian", "JT", "model", "coding", "agentic", "reasoning", "tool use"]) {
+    assert.ok(chinaMobile.includeSignals.includes(signal), signal);
+  }
+  for (const signal of ["preview-only", "quantization", "snapshot", "alias", "platform only", "integration"]) {
+    assert.ok(chinaMobile.excludeSignals.includes(signal), signal);
+  }
 
   const longcat = config.providers.find((entry) => entry.name === "LongCat");
   assert.ok(longcat);
@@ -277,7 +293,7 @@ test("provider checklist config covers every explicit missing lab", async () => 
 
   const output = execFileSync(process.execPath, [checkerPath.pathname, "--markdown"], { encoding: "utf8" });
   const names = [...config.providers, ...missingLabs].map((entry) => entry.name);
-  assert.equal(config.providers.length, 26);
+  assert.equal(config.providers.length, 27);
   assert.equal(missingLabs.length, 4);
   for (const name of names) assert.ok(output.includes(`## ${name}\n`), `checker output includes ${name}`);
   assert.equal((output.match(/^## (?!Explicitly missing labs$).+/gm) ?? []).length, names.length, "checker emits every provider exactly once");

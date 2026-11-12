@@ -17,6 +17,7 @@ const aaIntelligenceScores = {
   "Claude Opus 5.5": [58, "max with fallback", "https://artificialanalysis.ai/models/claude-opus-5-5"],
   "Claude Sonnet 5": [38, "max", "https://artificialanalysis.ai/models/claude-sonnet-5"],
   "Claude Sonnet 5.5": [56, "max with fallback", "https://artificialanalysis.ai/models/claude-sonnet-5-5"],
+  "JT-4.1 Flash 236B A21B": [19, "default", "https://artificialanalysis.ai/models/jt-4-1-flash-236b-a21b"],
   "DeepSeek V4.1 Flash": [39, "max", "https://artificialanalysis.ai/models/deepseek-v4-1-flash"],
   "DeepSeek V4.1 Flash 1017": [45, "max", "https://artificialanalysis.ai/models/deepseek-v4-1-flash-1017"],
   "Devstral 2": [9, "default", "https://artificialanalysis.ai/models/devstral-2"],
@@ -1973,6 +1974,17 @@ export const RELEASES = [
     sourceUrl: "https://research.meta.ai/blog/muse-ember",
     aliases: ["muse-ember-1.0"],
     notes: "Meta's official 2026-11-09 release introduces Muse Ember as a distinct efficient foundation model for repeatable coding subtasks, tool calls, routing, extraction, and other agentic workflows, available through the Meta Model API. It is a model line rather than a product feature or provider integration. The exact Artificial Analysis model page reports Intelligence Index 36 for the max configuration, stored separately; Meta's Coding Agent Index-AA and Terminal-Bench results are not the requested Artificial Analysis Coding Index, and no exact Coding Index field was exposed, so codingIndex remains null.",
+  }),
+  release({
+    model: "JT-4.1 Flash 236B A21B",
+    provider: "China Mobile",
+    group: "Chinese+Other",
+    releaseDate: "2026-11-11",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://www.modelscope.cn/models/ChinaMobile/JT-4.1-Flash-236B-A21B",
+    aliases: ["JT-4.1-Flash-236B-A21B", "jt-4-1-flash-236b-a21b", "ChinaMobile/JT-4.1-Flash-236B-A21B"],
+    notes: "China Mobile's official ModelScope registry page identifies JT-4.1-Flash-236B-A21B under the ChinaMobile organization and resolves directly; the maker's official 2026-11-08 news article also confirms the Jiutian secure/trusted foundation-model and MaaS platform. The registry page exposes no maker publication date or readable model card, so 2026-11-11 is retained as the Artificial Analysis catalog release-date fallback, not as a maker-announcement date. Artificial Analysis's exact model page reports Intelligence Index 19 for its default/reasoning row and no exact Coding Index field. Easy Benchmarks' exact page, retrieved 2026-11-12, reports Coding Index 52.4 but labels the snapshot Release Jul 9, 2026; Artificial Analysis marks that July 9 0709 release deprecated and links this newer November release. Because the mirror score is tied to the older snapshot/alias and cannot be shown to match the November model configuration, codingIndex remains null rather than copying 52.4 forward. The 236B/A21B notation describes the model's total and active parameters, not a separately tracked size tier."
   }),
 ];
 

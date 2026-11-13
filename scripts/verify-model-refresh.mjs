@@ -105,6 +105,8 @@ if (runHttp) {
     "https://research.meta.ai/blog/muse-ember",
     "https://www.agnes-ai.com/zh-Hans/docs/agnes-25-pro-theta",
     "https://artificialanalysis.ai/models/jt-4-1-flash-236b-a21b",
+    "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/",
+    "https://artificialanalysis.ai/models/gemini-4-hydrogen-high",
     "https://artificialanalysis.ai/models/claude-fable-5-2",
     "https://artificialanalysis.ai/models/muse-ember",
     "https://artificialanalysis.ai/models/agnes-2-5-pro-theta",

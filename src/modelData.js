@@ -3,7 +3,7 @@ const aaModelLeaderboard = "https://artificialanalysis.ai/leaderboards/models";
 
 // AA Intelligence Index snapshots are stored separately from codingIndex.
 // Existing rows use the dated 2026-09-23 snapshot; entries added during the
-// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, 2026-10-10/13, 2026-10-15, 2026-10-16, 2026-11-06, and 2026-11-10 refreshes use the exact current AA
+// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, 2026-10-10/13, 2026-10-15, 2026-10-16, 2026-11-06, 2026-11-10, and 2026-11-13 refreshes use the exact current AA
 // model-page configuration where available. No Intelligence Index value is ever
 // copied into codingIndex.
 const aaIntelligenceScores = {
@@ -31,6 +31,7 @@ const aaIntelligenceScores = {
   "GPT-6.1 Terra": [48, "max", "https://artificialanalysis.ai/models/gpt-6-1-terra"],
   "Gemini 4 Argon": [53, "high", "https://artificialanalysis.ai/models/gemini-4-argon"],
   "Gemini 4 Carbon": [59, "high", "https://artificialanalysis.ai/models/gemini-4-carbon"],
+  "Gemini 4 Hydrogen": [51, "high", "https://artificialanalysis.ai/models/gemini-4-hydrogen-high"],
   "GPT-6 Luna": [37, "max", "https://artificialanalysis.ai/models/gpt-6-luna"],
   "GPT-6 Sol": [48, "max", "https://artificialanalysis.ai/models/gpt-6-sol"],
   "Gemini 3.8 Flash": [41, "high", "https://artificialanalysis.ai/models/gemini-3-8-flash"],
@@ -1985,6 +1986,17 @@ export const RELEASES = [
     sourceUrl: "https://www.modelscope.cn/models/ChinaMobile/JT-4.1-Flash-236B-A21B",
     aliases: ["JT-4.1-Flash-236B-A21B", "jt-4-1-flash-236b-a21b", "ChinaMobile/JT-4.1-Flash-236B-A21B"],
     notes: "China Mobile's official ModelScope registry page identifies JT-4.1-Flash-236B-A21B under the ChinaMobile organization and resolves directly; the maker's official 2026-11-08 news article also confirms the Jiutian secure/trusted foundation-model and MaaS platform. The registry page exposes no maker publication date or readable model card, so 2026-11-11 is retained as the Artificial Analysis catalog release-date fallback, not as a maker-announcement date. Artificial Analysis's exact model page reports Intelligence Index 19 for its default/reasoning row and no exact Coding Index field. Easy Benchmarks' exact page, retrieved 2026-11-12, reports Coding Index 52.4 but labels the snapshot Release Jul 9, 2026; Artificial Analysis marks that July 9 0709 release deprecated and links this newer November release. Because the mirror score is tied to the older snapshot/alias and cannot be shown to match the November model configuration, codingIndex remains null rather than copying 52.4 forward. The 236B/A21B notation describes the model's total and active parameters, not a separately tracked size tier."
+  }),
+  release({
+    model: "Gemini 4 Hydrogen",
+    provider: "Google",
+    group: "Frontier labs",
+    releaseDate: "2026-11-12",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/",
+    aliases: ["gemini-4-hydrogen"],
+    notes: "Google's official 2026-11-12 announcement introduces Gemini 4 Hydrogen as a generally available model for everyday coding, repository debugging, and agentic workflows; the official developer post and Gemini API model catalog confirm the exact gemini-4-hydrogen endpoint. It is a distinct base model line rather than a product feature, preview-only configuration, speed alias, or modality-only model. The live Artificial Analysis leaderboard exposes separate Hydrogen effort rows: high displays Intelligence Index 51 and xhigh displays 54; following the repository's existing Gemini 4 convention, the representative Intelligence Index configuration is high and is stored separately at https://artificialanalysis.ai/models/gemini-4-hydrogen-high. The exact Artificial Analysis high model page exposes Intelligence Index content but no exact Coding Index field, and Easy Benchmarks returns Model Not Found for the exact model, so codingIndex remains null rather than using the maker's Terminal-Bench, Agent Arena, or Intelligence Index values."
   }),
 ];
 

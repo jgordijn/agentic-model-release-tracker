@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 61);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 62);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -38,6 +38,7 @@ test("Intelligence Index data is metric-specific, sourced, and null for unmatche
     "MiniCPM5-2B": [12, "default"],
     "Gemini 4 Argon": [53, "high"],
     "Gemini 4 Carbon": [59, "high"],
+    "Gemini 4 Hydrogen": [51, "high"],
     "Ling 3.1 Flash": [41, "default"],
     "Ling 3.1 Flash 1019": [29, "default"],
     "Muse Wonder": [52, "max"],
@@ -74,12 +75,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("November 12 refresh preserves the 174-row HEAD baseline, adds one model line, and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 1, 174, "HEAD baseline row count before the November 12 refresh");
-  assert.equal(RELEASES.length, 175);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 175);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-11"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-12"), "no row is later than the research cutoff");
+test("November 13 refresh preserves the 175-row HEAD baseline, adds one model line, and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 1, 175, "HEAD baseline row count before the November 13 refresh");
+  assert.equal(RELEASES.length, 176);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 176);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-12"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-13"), "no row is later than the research cutoff");
 });
 
 test("November 9 releases preserve maker provenance and separate Intelligence/Coding metrics", () => {
@@ -153,6 +154,29 @@ test("November 11 China Mobile release preserves registry provenance and mirror 
   assert.match(jt.notes, /Artificial Analysis catalog release-date fallback/i);
   assert.match(jt.notes, /Easy Benchmarks.*Coding Index 52\.4.*Release Jul 9, 2026/i);
   assert.match(jt.notes, /older snapshot\/alias.*codingIndex remains null/i);
+});
+
+test("November 12 Gemini Hydrogen release preserves Google provenance and exact metric separation", () => {
+  const hydrogen = RELEASES.find((release) => release.model === "Gemini 4 Hydrogen");
+
+  assert.ok(hydrogen);
+  assert.equal(hydrogen.provider, "Google");
+  assert.equal(hydrogen.group, "Frontier labs");
+  assert.equal(hydrogen.releaseDate, "2026-11-12");
+  assert.equal(hydrogen.releaseCategory, "base");
+  assert.equal(hydrogen.sourceType, "official");
+  assert.deepEqual(hydrogen.focus, ["agentic", "programming"]);
+  assert.equal(hydrogen.sourceUrl, "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/");
+  assert.deepEqual(hydrogen.aliases, ["gemini-4-hydrogen"]);
+  assert.equal(hydrogen.codingIndex, null);
+  assert.equal(hydrogen.scoreSourceUrl, undefined);
+  assert.equal(hydrogen.intelligenceIndex, 51);
+  assert.equal(hydrogen.intelligenceIndexConfiguration, "high");
+  assert.equal(hydrogen.intelligenceIndexSourceUrl, "https://artificialanalysis.ai/models/gemini-4-hydrogen-high");
+  assert.match(hydrogen.notes, /everyday coding.*agentic workflows/i);
+  assert.match(hydrogen.notes, /high displays Intelligence Index 51.*xhigh displays 54/i);
+  assert.match(hydrogen.notes, /no exact Coding Index field/i);
+  assert.match(hydrogen.notes, /Easy Benchmarks returns Model Not Found/i);
 });
 
 test("November 6 refresh adds Inkling 2 Small with maker provenance and metric-specific unknowns", () => {

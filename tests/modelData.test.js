@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 62);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 63);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -39,6 +39,7 @@ test("Intelligence Index data is metric-specific, sourced, and null for unmatche
     "Gemini 4 Argon": [53, "high"],
     "Gemini 4 Carbon": [59, "high"],
     "Gemini 4 Hydrogen": [51, "high"],
+    "Qwen4 Max": [43, "default"],
     "Ling 3.1 Flash": [41, "default"],
     "Ling 3.1 Flash 1019": [29, "default"],
     "Muse Wonder": [52, "max"],
@@ -75,12 +76,12 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("November 13 refresh preserves the 175-row HEAD baseline, adds one model line, and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 1, 175, "HEAD baseline row count before the November 13 refresh");
-  assert.equal(RELEASES.length, 176);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 176);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-12"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-13"), "no row is later than the research cutoff");
+test("November 16 refresh preserves the 176-row HEAD baseline, adds one model line, and stays within cutoff", () => {
+  assert.equal(RELEASES.length - 1, 176, "HEAD baseline row count before the November 16 refresh");
+  assert.equal(RELEASES.length, 177);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 177);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-16"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-16"), "no row is later than the research cutoff");
 });
 
 test("November 9 releases preserve maker provenance and separate Intelligence/Coding metrics", () => {
@@ -177,6 +178,30 @@ test("November 12 Gemini Hydrogen release preserves Google provenance and exact 
   assert.match(hydrogen.notes, /high displays Intelligence Index 51.*xhigh displays 54/i);
   assert.match(hydrogen.notes, /no exact Coding Index field/i);
   assert.match(hydrogen.notes, /Easy Benchmarks returns Model Not Found/i);
+});
+
+test("November 16 Qwen4 Max release preserves maker provenance and exact metric separation", () => {
+  const qwen = RELEASES.find((release) => release.model === "Qwen4 Max");
+
+  assert.ok(qwen);
+  assert.equal(qwen.provider, "Alibaba");
+  assert.equal(qwen.group, "Chinese+Other");
+  assert.equal(qwen.releaseDate, "2026-11-16");
+  assert.equal(qwen.releaseCategory, "base");
+  assert.equal(qwen.sourceType, "official");
+  assert.deepEqual(qwen.focus, ["agentic", "programming"]);
+  assert.equal(qwen.sourceUrl, "https://qwen.ai/blog?id=qwen4-max");
+  assert.deepEqual(qwen.aliases, ["qwen4-max"]);
+  assert.equal(qwen.aliases.includes("qwen4-max-preview"), false);
+  assert.equal(qwen.codingIndex, null);
+  assert.equal(qwen.scoreSourceUrl, undefined);
+  assert.equal(qwen.intelligenceIndex, 43);
+  assert.equal(qwen.intelligenceIndexConfiguration, "default");
+  assert.equal(qwen.intelligenceIndexSourceUrl, "https://artificialanalysis.ai/models/qwen4-max");
+  assert.match(qwen.notes, /new Qwen4 base model.*coding.*agentic workflows/i);
+  assert.match(qwen.notes, /qwen4-max-preview.*excluded preview-only candidate.*not a second dashboard row/i);
+  assert.match(qwen.notes, /no exact Artificial Analysis Coding Index field/i);
+  assert.match(qwen.notes, /Easy Benchmarks returns Model Not Found/i);
 });
 
 test("November 6 refresh adds Inkling 2 Small with maker provenance and metric-specific unknowns", () => {

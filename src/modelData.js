@@ -3,7 +3,7 @@ const aaModelLeaderboard = "https://artificialanalysis.ai/leaderboards/models";
 
 // AA Intelligence Index snapshots are stored separately from codingIndex.
 // Existing rows use the dated 2026-09-23 snapshot; entries added during the
-// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, 2026-10-10/13, 2026-10-15, 2026-10-16, 2026-11-06, 2026-11-10, and 2026-11-13 refreshes use the exact current AA
+// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, 2026-10-10/13, 2026-10-15, 2026-10-16, 2026-11-06, 2026-11-10, 2026-11-13, and 2026-11-16 refreshes use the exact current AA
 // model-page configuration where available. No Intelligence Index value is ever
 // copied into codingIndex.
 const aaIntelligenceScores = {
@@ -67,6 +67,7 @@ const aaIntelligenceScores = {
   "Nemotron 3.5 Bolt 74B-A9B": [21, "default", "https://artificialanalysis.ai/models/nemotron-3-5-bolt-74b-a9b"],
   "Nemotron 3.5 Super VL": [26, "default", "https://artificialanalysis.ai/models/nemotron-3-5-super-vl"],
   o3: [20, "default", "https://artificialanalysis.ai/models/o3"],
+  "Qwen4 Max": [43, "default", "https://artificialanalysis.ai/models/qwen4-max"],
   "Tencent Hy4": [35, "default", "https://artificialanalysis.ai/models/tencent-hy4"],
   "Trinity-Large-Thinking": [11, "default", "https://artificialanalysis.ai/models/trinity-large-thinking"],
 };
@@ -1997,6 +1998,17 @@ export const RELEASES = [
     sourceUrl: "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/",
     aliases: ["gemini-4-hydrogen"],
     notes: "Google's official 2026-11-12 announcement introduces Gemini 4 Hydrogen as a generally available model for everyday coding, repository debugging, and agentic workflows; the official developer post and Gemini API model catalog confirm the exact gemini-4-hydrogen endpoint. It is a distinct base model line rather than a product feature, preview-only configuration, speed alias, or modality-only model. The live Artificial Analysis leaderboard exposes separate Hydrogen effort rows: high displays Intelligence Index 51 and xhigh displays 54; following the repository's existing Gemini 4 convention, the representative Intelligence Index configuration is high and is stored separately at https://artificialanalysis.ai/models/gemini-4-hydrogen-high. The exact Artificial Analysis high model page exposes Intelligence Index content but no exact Coding Index field, and Easy Benchmarks returns Model Not Found for the exact model, so codingIndex remains null rather than using the maker's Terminal-Bench, Agent Arena, or Intelligence Index values."
+  }),
+  release({
+    model: "Qwen4 Max",
+    provider: "Alibaba",
+    group: "Chinese+Other",
+    releaseDate: "2026-11-16",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://qwen.ai/blog?id=qwen4-max",
+    aliases: ["qwen4-max"],
+    notes: "Qwen's official 2026-11-16 announcement introduces Qwen4-Max as a new Qwen4 base model with a 2.4T-parameter backbone, native vision, a 1M-token context window, stronger coding, long-horizon task execution, tool use, and agentic workflows. The exact Qwen Cloud model page confirms the qwen4-max endpoint and production API availability. The separate qwen4-max-preview channel announced for the earlier Token Plan preview was researched as an excluded preview-only candidate and is not a second dashboard row; preview-only configuration and retirement semantics are not treated as canonical aliases. Artificial Analysis's exact Qwen4 Max model page, retrieved 2026-11-16, reports Intelligence Index 43 with no effort/configuration suffix, stored separately at https://artificialanalysis.ai/models/qwen4-max. The page exposes no exact Artificial Analysis Coding Index field, and Easy Benchmarks returns Model Not Found for the exact model page, so codingIndex remains null rather than using Qwen's Code/AgentArena, Terminal-Bench, Intelligence Index, or other non-Coding metrics."
   }),
 ];
 

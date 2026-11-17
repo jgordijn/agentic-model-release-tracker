@@ -2000,6 +2000,22 @@ export const RELEASES = [
     notes: "Google's official 2026-11-12 announcement introduces Gemini 4 Hydrogen as a generally available model for everyday coding, repository debugging, and agentic workflows; the official developer post and Gemini API model catalog confirm the exact gemini-4-hydrogen endpoint. It is a distinct base model line rather than a product feature, preview-only configuration, speed alias, or modality-only model. The live Artificial Analysis leaderboard exposes separate Hydrogen effort rows: high displays Intelligence Index 51 and xhigh displays 54; following the repository's existing Gemini 4 convention, the representative Intelligence Index configuration is high and is stored separately at https://artificialanalysis.ai/models/gemini-4-hydrogen-high. The exact Artificial Analysis high model page exposes Intelligence Index content but no exact Coding Index field, and Easy Benchmarks returns Model Not Found for the exact model, so codingIndex remains null rather than using the maker's Terminal-Bench, Agent Arena, or Intelligence Index values."
   }),
   release({
+    model: "Nemotron-Labs Sigma",
+    provider: "NVIDIA",
+    group: "Chinese+Other",
+    releaseDate: "2026-11-12",
+    codingIndex: null,
+    focus: ["programming"],
+    sourceUrl: "https://huggingface.co/nvidia/Nemotron-Labs-Sigma-3B",
+    aliases: [
+      "Nemotron-Labs-Sigma-3B",
+      "Nemotron-Labs-Sigma-8B",
+      "nvidia/Nemotron-Labs-Sigma-3B",
+      "nvidia/Nemotron-Labs-Sigma-8B",
+    ],
+    notes: "Correction to the 2026-11-16 audit's NVIDIA no-add decision: NVIDIA's official Hugging Face model cards date the Nemotron-Labs-Sigma 3B and 8B pretrained continuous-diffusion language models to 2026-11-12 and document code-generation evaluation, including MBPP, MBPP+, and HumanEval. The two base sizes are collapsed into one family row; instruct, distilled, and self-speculative variants are fine-tuned, distillation, or serving variants rather than separate base releases. The exact Artificial Analysis model URLs returned 404, the fetched Artificial Analysis leaderboard contained no Sigma row, and the exact Easy Benchmarks pages returned Model Not Found, so no exact Artificial Analysis Coding Index or Intelligence Index value is stored. This historical correction supersedes the prior no-add decision while retaining the original 2026-11-16 audit snapshot."
+  }),
+  release({
     model: "Qwen4 Max",
     provider: "Alibaba",
     group: "Chinese+Other",

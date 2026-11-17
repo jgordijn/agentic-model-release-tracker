@@ -76,12 +76,47 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("November 16 refresh preserves the 176-row HEAD baseline, adds one model line, and stays within cutoff", () => {
-  assert.equal(RELEASES.length - 1, 176, "HEAD baseline row count before the November 16 refresh");
-  assert.equal(RELEASES.length, 177);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 177);
+test("November 17 refresh preserves the November 16 baseline and adds the historical NVIDIA correction", () => {
+  const preCorrection = RELEASES.filter((release) => release.model !== "Nemotron-Labs Sigma");
+
+  assert.equal(preCorrection.length, 177, "November 16 baseline row count before the historical correction");
+  assert.equal(new Set(preCorrection.map((release) => release.model)).size, 177);
+  assert.equal(Math.max(...preCorrection.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-16"));
+  assert.equal(RELEASES.length, 178);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 178);
   assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-16"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-16"), "no row is later than the research cutoff");
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-17"), "no row is later than the research cutoff");
+});
+
+test("November 17 historical NVIDIA correction preserves Sigma family scope and score unknowns", () => {
+  const sigma = RELEASES.find((release) => release.model === "Nemotron-Labs Sigma");
+
+  assert.ok(sigma);
+  assert.equal(sigma.provider, "NVIDIA");
+  assert.equal(sigma.group, "Chinese+Other");
+  assert.equal(sigma.releaseDate, "2026-11-12");
+  assert.equal(sigma.releaseCategory, "base");
+  assert.equal(sigma.sourceType, "official");
+  assert.deepEqual(sigma.focus, ["programming"]);
+  assert.equal(sigma.sourceUrl, "https://huggingface.co/nvidia/Nemotron-Labs-Sigma-3B");
+  assert.deepEqual(sigma.aliases, [
+    "Nemotron-Labs-Sigma-3B",
+    "Nemotron-Labs-Sigma-8B",
+    "nvidia/Nemotron-Labs-Sigma-3B",
+    "nvidia/Nemotron-Labs-Sigma-8B",
+  ]);
+  assert.equal(sigma.codingIndex, null);
+  assert.equal(sigma.scoreSourceUrl, undefined);
+  assert.equal(sigma.intelligenceIndex, null);
+  assert.equal(sigma.intelligenceIndexConfiguration, null);
+  assert.equal(sigma.intelligenceIndexSourceUrl, null);
+  assert.match(sigma.notes, /2026-11-12/i);
+  assert.match(sigma.notes, /pretrained continuous-diffusion language models.*code-generation evaluation/i);
+  assert.match(sigma.notes, /3B and 8B.*collapsed into one family row/i);
+  assert.match(sigma.notes, /instruct, distilled, and self-speculative variants/i);
+  assert.match(sigma.notes, /exact Artificial Analysis model URLs returned 404/i);
+  assert.match(sigma.notes, /Easy Benchmarks pages returned Model Not Found/i);
+  assert.match(sigma.notes, /historical correction supersedes the prior no-add decision/i);
 });
 
 test("November 9 releases preserve maker provenance and separate Intelligence/Coding metrics", () => {

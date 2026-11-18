@@ -70,7 +70,7 @@ for (const entry of [...config.providers, ...(config.missingLabs ?? [])]) {
   for (const url of entry.primarySources) urls.add(url);
 }
 const urlList = [...urls].filter(httpUrl).sort();
-const MAX_URLS = 340;
+const MAX_URLS = 360;
 expect(urlList.length <= MAX_URLS, `URL smoke budget exceeded: ${urlList.length} > ${MAX_URLS}`);
 
 const smokeResults = [];
@@ -108,6 +108,9 @@ if (runHttp) {
     "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/",
     "https://artificialanalysis.ai/models/gemini-4-hydrogen-high",
     "https://artificialanalysis.ai/models/claude-fable-5-2",
+    "https://artificialanalysis.ai/models/gpt-6-2-astra",
+    "https://artificialanalysis.ai/models/gpt-6-2-sol",
+    "https://huggingface.co/tencent/Hy4-flash",
     "https://artificialanalysis.ai/models/muse-ember",
     "https://artificialanalysis.ai/models/agnes-2-5-pro-theta",
     "https://www.anthropic.com/claude-haiku-5-5",

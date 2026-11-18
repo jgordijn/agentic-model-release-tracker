@@ -3,7 +3,7 @@ const aaModelLeaderboard = "https://artificialanalysis.ai/leaderboards/models";
 
 // AA Intelligence Index snapshots are stored separately from codingIndex.
 // Existing rows use the dated 2026-09-23 snapshot; entries added during the
-// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, 2026-10-10/13, 2026-10-15, 2026-10-16, 2026-11-06, 2026-11-10, 2026-11-13, and 2026-11-16 refreshes use the exact current AA
+// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, 2026-10-10/13, 2026-10-15, 2026-10-16, 2026-11-06, 2026-11-10, 2026-11-13, 2026-11-16, and 2026-11-18 refreshes use the exact current AA
 // model-page configuration where available. No Intelligence Index value is ever
 // copied into codingIndex.
 const aaIntelligenceScores = {
@@ -29,6 +29,8 @@ const aaIntelligenceScores = {
   "GPT-6 Astra": [53, "max", "https://artificialanalysis.ai/models/gpt-6-astra"],
   "GPT-6.1 Sol": [52, "max", "https://artificialanalysis.ai/models/gpt-6-1-sol"],
   "GPT-6.1 Terra": [48, "max", "https://artificialanalysis.ai/models/gpt-6-1-terra"],
+  "GPT-6.2 Astra": [62, "max", "https://artificialanalysis.ai/models/gpt-6-2-astra"],
+  "GPT-6.2 Sol": [57, "max", "https://artificialanalysis.ai/models/gpt-6-2-sol"],
   "Gemini 4 Argon": [53, "high", "https://artificialanalysis.ai/models/gemini-4-argon"],
   "Gemini 4 Carbon": [59, "high", "https://artificialanalysis.ai/models/gemini-4-carbon"],
   "Gemini 4 Hydrogen": [51, "high", "https://artificialanalysis.ai/models/gemini-4-hydrogen-high"],
@@ -2025,6 +2027,52 @@ export const RELEASES = [
     sourceUrl: "https://qwen.ai/blog?id=qwen4-max",
     aliases: ["qwen4-max"],
     notes: "Qwen's official 2026-11-16 announcement introduces Qwen4-Max as a new Qwen4 base model with a 2.4T-parameter backbone, native vision, a 1M-token context window, stronger coding, long-horizon task execution, tool use, and agentic workflows. The exact Qwen Cloud model page confirms the qwen4-max endpoint and production API availability. The separate qwen4-max-preview channel announced for the earlier Token Plan preview was researched as an excluded preview-only candidate and is not a second dashboard row; preview-only configuration and retirement semantics are not treated as canonical aliases. Artificial Analysis's exact Qwen4 Max model page, retrieved 2026-11-16, reports Intelligence Index 43 with no effort/configuration suffix, stored separately at https://artificialanalysis.ai/models/qwen4-max. The page exposes no exact Artificial Analysis Coding Index field, and Easy Benchmarks returns Model Not Found for the exact model page, so codingIndex remains null rather than using Qwen's Code/AgentArena, Terminal-Bench, Intelligence Index, or other non-Coding metrics."
+  }),
+  release({
+    model: "GPT-6.2 Astra",
+    provider: "OpenAI",
+    group: "Frontier labs",
+    releaseDate: "2026-11-17",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://openai.com/index/introducing-gpt-6-2-astra-sol/",
+    aliases: ["gpt-6.2-astra"],
+    notes: "OpenAI's official November 17, 2026 announcement introduces GPT-6.2 Astra as a new frontier base model for complex professional work, cleaner code, and long-running agentic workflows; the OpenAI API catalog confirms the gpt-6.2-astra model ID and availability. It is a distinct base line, not the Astra for Law configuration, a product feature, or an API alias. Artificial Analysis's exact model page, retrieved 2026-11-18, reports Intelligence Index 62 for the representative max configuration, stored separately at https://artificialanalysis.ai/models/gpt-6-2-astra. The page exposes no exact Artificial Analysis Coding Index field; OpenAI's FrontierCode, Terminal-Bench, Agents' Last Exam, and other maker/third-party metrics are not substitutes, and the Easy Benchmarks exact page returned Model Not Found, so codingIndex remains null.",
+  }),
+  release({
+    model: "GPT-6.2 Sol",
+    provider: "OpenAI",
+    group: "Frontier labs",
+    releaseDate: "2026-11-17",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://openai.com/index/introducing-gpt-6-2-astra-sol/",
+    aliases: ["gpt-6.2-sol"],
+    notes: "OpenAI's official November 17, 2026 announcement introduces GPT-6.2 Sol as a new efficient base model for everyday work, coding, and multistep agentic workflows; the OpenAI API catalog confirms the gpt-6.2-sol model ID and availability. It is a distinct base line, not the Ultrafast configuration or an API alias. Artificial Analysis's exact model page, retrieved 2026-11-18, reports Intelligence Index 57 for the representative max configuration, stored separately at https://artificialanalysis.ai/models/gpt-6-2-sol. The page exposes no exact Artificial Analysis Coding Index field; OpenAI's FrontierCode and other maker/third-party metrics are not substitutes, and the Easy Benchmarks exact page returned Model Not Found, so codingIndex remains null.",
+  }),
+  release({
+    model: "Tencent Hy4 Flash",
+    provider: "Tencent",
+    group: "Chinese+Other",
+    releaseDate: "2026-11-17",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://huggingface.co/tencent/Hy4-flash",
+    aliases: [
+      "Hy4 flash",
+      "hy4-flash",
+      "tencent/Hy4-flash",
+      "Tencent-Hunyuan/Hy4-flash",
+      "Hy4 flash-FP8",
+      "hy4-flash-FP8",
+      "tencent/Hy4-flash-FP8",
+      "Tencent-Hunyuan/Hy4-flash-FP8",
+      "Hy4 flash-base",
+      "hy4-flash-base",
+      "tencent/Hy4-flash-base",
+      "Tencent-Hunyuan/Hy4-flash-base",
+    ],
+    notes: "Tencent Hy's official model card releases Hy4 flash, Hy4 flash-FP8, and the pretrained Hy4 flash-base as one open-weight family; the card's createdAt marker is 2026-11-17T03:44:46Z and Tencent Cloud's official TokenHub model list, updated 2026-11-17 15:33:00, lists hy4-flash separately from Hy4 with deep thinking, function calling, image understanding, and a 1M context window. Hy4 flash introduces distinct hybrid-attention, LatentMoE, and Engram architecture changes compared with Hy4, so it is a new base model line rather than a snapshot or alias. The FP8, instruct, and pretrained-base artifacts are collapsed into this family row; hy4-preview remains an excluded preview line. The live Artificial Analysis leaderboard contained no Hy4 flash row, the checked candidate URL https://artificialanalysis.ai/models/tencent-hy4-flash returned 404, and Easy Benchmarks returned Model Not Found for https://easy-benchmarks.com/models/hy4-flash. No exact Artificial Analysis Coding Index or Intelligence Index value was verifiable, so codingIndex remains null.",
   }),
 ];
 

@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 63);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 65);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -76,16 +76,80 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("November 17 refresh preserves the November 16 baseline and adds the historical NVIDIA correction", () => {
-  const preCorrection = RELEASES.filter((release) => release.model !== "Nemotron-Labs Sigma");
+test("November 18 refresh preserves the November 17 baseline and adds three verified model rows", () => {
+  const newModels = new Set(["GPT-6.2 Astra", "GPT-6.2 Sol", "Tencent Hy4 Flash"]);
+  const baseline = RELEASES.filter((release) => !newModels.has(release.model));
 
-  assert.equal(preCorrection.length, 177, "November 16 baseline row count before the historical correction");
-  assert.equal(new Set(preCorrection.map((release) => release.model)).size, 177);
-  assert.equal(Math.max(...preCorrection.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-16"));
-  assert.equal(RELEASES.length, 178);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 178);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-16"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-17"), "no row is later than the research cutoff");
+  assert.equal(baseline.length, 178, "November 17 baseline row count before the current refresh");
+  assert.equal(new Set(baseline.map((release) => release.model)).size, 178);
+  assert.equal(Math.max(...baseline.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-16"));
+  assert.equal(RELEASES.length, 181);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 181);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-17"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-18"), "no row is later than the research cutoff");
+});
+
+test("November 18 rows preserve maker provenance and exact metric separation", () => {
+  const expected = {
+    "GPT-6.2 Astra": {
+      provider: "OpenAI",
+      group: "Frontier labs",
+      sourceUrl: "https://openai.com/index/introducing-gpt-6-2-astra-sol/",
+      aliases: ["gpt-6.2-astra"],
+      intelligenceIndex: 62,
+      intelligenceIndexConfiguration: "max",
+      intelligenceIndexSourceUrl: "https://artificialanalysis.ai/models/gpt-6-2-astra",
+    },
+    "GPT-6.2 Sol": {
+      provider: "OpenAI",
+      group: "Frontier labs",
+      sourceUrl: "https://openai.com/index/introducing-gpt-6-2-astra-sol/",
+      aliases: ["gpt-6.2-sol"],
+      intelligenceIndex: 57,
+      intelligenceIndexConfiguration: "max",
+      intelligenceIndexSourceUrl: "https://artificialanalysis.ai/models/gpt-6-2-sol",
+    },
+    "Tencent Hy4 Flash": {
+      provider: "Tencent",
+      group: "Chinese+Other",
+      sourceUrl: "https://huggingface.co/tencent/Hy4-flash",
+      aliases: [
+        "Hy4 flash",
+        "hy4-flash",
+        "tencent/Hy4-flash",
+        "Tencent-Hunyuan/Hy4-flash",
+        "Hy4 flash-FP8",
+        "hy4-flash-FP8",
+        "tencent/Hy4-flash-FP8",
+        "Tencent-Hunyuan/Hy4-flash-FP8",
+        "Hy4 flash-base",
+        "hy4-flash-base",
+        "tencent/Hy4-flash-base",
+        "Tencent-Hunyuan/Hy4-flash-base",
+      ],
+      intelligenceIndex: null,
+      intelligenceIndexConfiguration: null,
+      intelligenceIndexSourceUrl: null,
+    },
+  };
+
+  for (const [model, fields] of Object.entries(expected)) {
+    const release = RELEASES.find((item) => item.model === model);
+
+    assert.ok(release, model);
+    assert.equal(release.releaseDate, "2026-11-17", model);
+    assert.equal(release.releaseCategory, "base", model);
+    assert.equal(release.sourceType, "official", model);
+    assert.deepEqual(release.focus, ["agentic", "programming"], model);
+    assert.equal(release.codingIndex, null, model);
+    assert.equal(release.scoreSourceUrl, undefined, model);
+    for (const [field, value] of Object.entries(fields)) assert.deepEqual(release[field], value, `${model}: ${field}`);
+  }
+
+  assert.match(RELEASES.find((release) => release.model === "GPT-6.2 Astra").notes, /distinct base line.*Astra for Law/i);
+  assert.match(RELEASES.find((release) => release.model === "GPT-6.2 Sol").notes, /distinct base line.*Ultrafast/i);
+  assert.match(RELEASES.find((release) => release.model === "Tencent Hy4 Flash").notes, /distinct hybrid-attention.*LatentMoE.*Engram/i);
+  assert.match(RELEASES.find((release) => release.model === "Tencent Hy4 Flash").notes, /Easy Benchmarks returned Model Not Found/i);
 });
 
 test("November 17 historical NVIDIA correction preserves Sigma family scope and score unknowns", () => {

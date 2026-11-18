@@ -172,6 +172,9 @@
         "https://github.com/Tencent",
         "https://huggingface.co/tencent/Hy-Memory-30B-A3B",
         "https://github.com/Tencent-Hunyuan/Hy-Memory",
+        "https://huggingface.co/tencent/Hy4-flash",
+        "https://github.com/Tencent-Hunyuan/Hy4-flash",
+        "https://modelscope.cn/models/Tencent-Hunyuan/Hy4-flash",
         "https://cloud.tencent.com/product/hunyuan",
         "https://cloud.tencent.com/document/product/1823/130051"
       ],
@@ -181,6 +184,8 @@
         "site:github.com/Tencent model release coding GUI agent after:{since}",
         "site:huggingface.co/tencent/Hy-Memory-30B-A3B Hy-Memory model memory coding agentic after:{since}",
         "site:github.com/Tencent-Hunyuan/Hy-Memory Hy-Memory model memory coding agentic after:{since}",
+        "site:huggingface.co/tencent/Hy4-flash Hy4 flash model coding agentic after:{since}",
+        "site:github.com/Tencent-Hunyuan/Hy4-flash Hy4 flash model coding agentic after:{since}",
         "site:cloud.tencent.com/product/hunyuan Tencent Hy4 model coding agentic after:{since}",
         "site:cloud.tencent.com/document/product/1823/130051 Tencent Hy4 model coding agentic after:{since}"
       ],

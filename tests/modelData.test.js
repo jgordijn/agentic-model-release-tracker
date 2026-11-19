@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { IMPORTANT_MISSING_LABS, RELEASES } from "../src/modelData.js";
+import { AA_INTELLIGENCE_SCORES, IMPORTANT_MISSING_LABS, RELEASES } from "../src/modelData.js";
 
 test("release dataset starts in 2022 and spans every year through 2026", () => {
   const years = [...new Set(RELEASES.map((release) => release.releaseDate.slice(0, 4)))].sort();
@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 65);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 66);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -39,6 +39,7 @@ test("Intelligence Index data is metric-specific, sourced, and null for unmatche
     "Gemini 4 Argon": [53, "high"],
     "Gemini 4 Carbon": [59, "high"],
     "Gemini 4 Hydrogen": [51, "high"],
+    "Gemini 4 Neon": [60, "high"],
     "Qwen4 Max": [43, "default"],
     "Ling 3.1 Flash": [41, "default"],
     "Ling 3.1 Flash 1019": [29, "default"],
@@ -70,27 +71,47 @@ test("source URLs do not contain accidental whitespace", () => {
   }
 });
 
+test("every Intelligence Index mapping resolves to exactly one release row", () => {
+  const mappedModels = Object.keys(AA_INTELLIGENCE_SCORES);
+  const scoredModels = RELEASES.filter((release) => release.intelligenceIndex !== null).map((release) => release.model);
+
+  assert.equal(new Set(mappedModels).size, mappedModels.length);
+  assert.deepEqual([...mappedModels].sort(), [...scoredModels].sort());
+  for (const model of mappedModels) {
+    assert.equal(RELEASES.filter((release) => release.model === model).length, 1, model);
+  }
+});
+
 test("release model names are unique", () => {
   const models = RELEASES.map((release) => release.model);
 
   assert.equal(new Set(models).size, models.length);
 });
 
-test("November 18 refresh preserves the November 17 baseline and adds three verified model rows", () => {
-  const newModels = new Set(["GPT-6.2 Astra", "GPT-6.2 Sol", "Tencent Hy4 Flash"]);
+test("November 19 refresh preserves the November 18 baseline and adds one verified model row", () => {
+  const newModels = new Set(["Gemini 4 Neon"]);
   const baseline = RELEASES.filter((release) => !newModels.has(release.model));
 
-  assert.equal(baseline.length, 178, "November 17 baseline row count before the current refresh");
-  assert.equal(new Set(baseline.map((release) => release.model)).size, 178);
-  assert.equal(Math.max(...baseline.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-16"));
-  assert.equal(RELEASES.length, 181);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 181);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-17"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-18"), "no row is later than the research cutoff");
+  assert.equal(baseline.length, 181, "November 18 baseline row count before the current refresh");
+  assert.equal(new Set(baseline.map((release) => release.model)).size, 181);
+  assert.equal(Math.max(...baseline.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-17"));
+  assert.equal(RELEASES.length, 182);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 182);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-18"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-19"), "no row is later than the research cutoff");
 });
 
-test("November 18 rows preserve maker provenance and exact metric separation", () => {
+test("November 19 row preserves maker provenance and exact metric separation", () => {
   const expected = {
+    "Gemini 4 Neon": {
+      provider: "Google",
+      group: "Frontier labs",
+      sourceUrl: "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/",
+      aliases: ["gemini-4-neon"],
+      intelligenceIndex: 60,
+      intelligenceIndexConfiguration: "high",
+      intelligenceIndexSourceUrl: "https://artificialanalysis.ai/models/gemini-4-neon",
+    },
     "GPT-6.2 Astra": {
       provider: "OpenAI",
       group: "Frontier labs",
@@ -137,7 +158,7 @@ test("November 18 rows preserve maker provenance and exact metric separation", (
     const release = RELEASES.find((item) => item.model === model);
 
     assert.ok(release, model);
-    assert.equal(release.releaseDate, "2026-11-17", model);
+    assert.equal(release.releaseDate, model === "Gemini 4 Neon" ? "2026-11-18" : "2026-11-17", model);
     assert.equal(release.releaseCategory, "base", model);
     assert.equal(release.sourceType, "official", model);
     assert.deepEqual(release.focus, ["agentic", "programming"], model);
@@ -146,10 +167,15 @@ test("November 18 rows preserve maker provenance and exact metric separation", (
     for (const [field, value] of Object.entries(fields)) assert.deepEqual(release[field], value, `${model}: ${field}`);
   }
 
+  const neon = RELEASES.find((release) => release.model === "Gemini 4 Neon");
   assert.match(RELEASES.find((release) => release.model === "GPT-6.2 Astra").notes, /distinct base line.*Astra for Law/i);
   assert.match(RELEASES.find((release) => release.model === "GPT-6.2 Sol").notes, /distinct base line.*Ultrafast/i);
   assert.match(RELEASES.find((release) => release.model === "Tencent Hy4 Flash").notes, /distinct hybrid-attention.*LatentMoE.*Engram/i);
   assert.match(RELEASES.find((release) => release.model === "Tencent Hy4 Flash").notes, /Easy Benchmarks returned Model Not Found/i);
+  assert.match(neon.notes, /distinct Gemini 4 base line/i);
+  assert.match(neon.notes, /Intelligence Index 61 at xhigh and 60 at high/i);
+  assert.match(neon.notes, /Coding Agent Index 58\.6.*not the requested/i);
+  assert.match(neon.notes, /Easy Benchmarks returned Model Not Found/i);
 });
 
 test("November 17 historical NVIDIA correction preserves Sigma family scope and score unknowns", () => {

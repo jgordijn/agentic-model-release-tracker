@@ -46,6 +46,8 @@ for (const release of RELEASES) {
 
 const configuredNames = config.providers.map((entry) => entry.name);
 const missingNames = (config.missingLabs ?? []).map((entry) => entry.name);
+const releaseProviders = [...new Set(RELEASES.map((release) => release.provider))];
+for (const provider of releaseProviders) expect(configuredNames.includes(provider), `release provider is not configured: ${provider}`);
 expect(new Set([...configuredNames, ...missingNames]).size === configuredNames.length + missingNames.length, "provider names are duplicated");
 expect(configuredNames.length === 27, `expected 27 configured providers, got ${configuredNames.length}`);
 expect(missingNames.length === 4, `expected 4 missing labs, got ${missingNames.length}`);
@@ -107,6 +109,8 @@ if (runHttp) {
     "https://artificialanalysis.ai/models/jt-4-1-flash-236b-a21b",
     "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/",
     "https://artificialanalysis.ai/models/gemini-4-hydrogen-high",
+    "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/",
+    "https://artificialanalysis.ai/models/gemini-4-neon",
     "https://artificialanalysis.ai/models/claude-fable-5-2",
     "https://artificialanalysis.ai/models/gpt-6-2-astra",
     "https://artificialanalysis.ai/models/gpt-6-2-sol",

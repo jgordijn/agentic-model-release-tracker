@@ -31,13 +31,14 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the November 18 refresh cache key", async () => {
+test("HTML and module imports use the November 19 refresh cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20261118a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20261118a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261118a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20261119a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20261119a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261119a"/);
+  assert.doesNotMatch(`${html}\n${app}`, /20261118a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261117a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261116a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261113a/);
@@ -99,6 +100,10 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
   const anthropic = config.providers.find((entry) => entry.name === "Anthropic");
   assert.ok(anthropic.primarySources.includes("https://www.anthropic.com/claude-fable-and-mythos-5-2"));
   assert.ok(anthropic.searchQueries.some((query) => query.includes("Claude Fable 5.2")));
+
+  const google = config.providers.find((entry) => entry.name === "Google");
+  assert.ok(google.primarySources.includes("https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/"));
+  assert.ok(google.searchQueries.some((query) => query.includes("Gemini 4 Neon") && query.includes("{since}")));
 
   for (const [providerName, requiredSource] of [
     ["DeepSeek", "https://api-docs.deepseek.com/news/news261017"],

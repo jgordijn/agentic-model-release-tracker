@@ -3,10 +3,10 @@ const aaModelLeaderboard = "https://artificialanalysis.ai/leaderboards/models";
 
 // AA Intelligence Index snapshots are stored separately from codingIndex.
 // Existing rows use the dated 2026-09-23 snapshot; entries added during the
-// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, 2026-10-10/13, 2026-10-15, 2026-10-16, 2026-11-06, 2026-11-10, 2026-11-13, 2026-11-16, and 2026-11-18 refreshes use the exact current AA
+// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, 2026-10-10/13, 2026-10-15, 2026-10-16, 2026-11-06, 2026-11-10, 2026-11-13, 2026-11-16, 2026-11-18, and 2026-11-19 refreshes use the exact current AA
 // model-page configuration where available. No Intelligence Index value is ever
 // copied into codingIndex.
-const aaIntelligenceScores = {
+export const AA_INTELLIGENCE_SCORES = {
   "Agnes 2.5 Pro Theta": [24, "default", "https://artificialanalysis.ai/models/agnes-2-5-pro-theta"],
   "Agnes 3.0 Flash": [36, "default", "https://artificialanalysis.ai/models/agnes-3-0-flash"],
   "Apodex 1.1": [30, "default", "https://artificialanalysis.ai/models/apodex-1-1"],
@@ -34,6 +34,7 @@ const aaIntelligenceScores = {
   "Gemini 4 Argon": [53, "high", "https://artificialanalysis.ai/models/gemini-4-argon"],
   "Gemini 4 Carbon": [59, "high", "https://artificialanalysis.ai/models/gemini-4-carbon"],
   "Gemini 4 Hydrogen": [51, "high", "https://artificialanalysis.ai/models/gemini-4-hydrogen-high"],
+  "Gemini 4 Neon": [60, "high", "https://artificialanalysis.ai/models/gemini-4-neon"],
   "GPT-6 Luna": [37, "max", "https://artificialanalysis.ai/models/gpt-6-luna"],
   "GPT-6 Sol": [48, "max", "https://artificialanalysis.ai/models/gpt-6-sol"],
   "Gemini 3.8 Flash": [41, "high", "https://artificialanalysis.ai/models/gemini-3-8-flash"],
@@ -75,7 +76,7 @@ const aaIntelligenceScores = {
 };
 
 function release(row) {
-  const intelligenceScore = aaIntelligenceScores[row.model];
+  const intelligenceScore = AA_INTELLIGENCE_SCORES[row.model];
   return {
     releaseCategory: "base",
     sourceType: "official",
@@ -2073,6 +2074,17 @@ export const RELEASES = [
       "Tencent-Hunyuan/Hy4-flash-base",
     ],
     notes: "Tencent Hy's official model card releases Hy4 flash, Hy4 flash-FP8, and the pretrained Hy4 flash-base as one open-weight family; the card's createdAt marker is 2026-11-17T03:44:46Z and Tencent Cloud's official TokenHub model list, updated 2026-11-17 15:33:00, lists hy4-flash separately from Hy4 with deep thinking, function calling, image understanding, and a 1M context window. Hy4 flash introduces distinct hybrid-attention, LatentMoE, and Engram architecture changes compared with Hy4, so it is a new base model line rather than a snapshot or alias. The FP8, instruct, and pretrained-base artifacts are collapsed into this family row; hy4-preview remains an excluded preview line. The live Artificial Analysis leaderboard contained no Hy4 flash row, the checked candidate URL https://artificialanalysis.ai/models/tencent-hy4-flash returned 404, and Easy Benchmarks returned Model Not Found for https://easy-benchmarks.com/models/hy4-flash. No exact Artificial Analysis Coding Index or Intelligence Index value was verifiable, so codingIndex remains null.",
+  }),
+  release({
+    model: "Gemini 4 Neon",
+    provider: "Google",
+    group: "Frontier labs",
+    releaseDate: "2026-11-18",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    sourceUrl: "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/",
+    aliases: ["gemini-4-neon"],
+    notes: "Google's official November 18, 2026 announcement introduces Gemini 4 Neon for complex software engineering, knowledge work, science workflows, and long-running tool-heavy agentic tasks; the official Gemini API catalog and model page confirm the stable gemini-4-neon endpoint with code execution, computer use, function calling, and a 1M-token context window. It is a distinct Gemini 4 base line rather than a product feature, preview-only configuration, speed alias, or modality-only release. Artificial Analysis's exact Gemini 4 Neon page, retrieved 2026-11-19, reports Intelligence Index 61 at xhigh and 60 at high; following the repository's existing Gemini 4 representative-configuration convention, the dataset stores 60 for high at https://artificialanalysis.ai/models/gemini-4-neon. The exact Artificial Analysis page exposes no historical Coding Index field; Google's Coding Agent Index 58.6, FrontierCode, Terminal-Bench, and other maker/third-party metrics are not the requested Artificial Analysis Coding Index. Easy Benchmarks returned Model Not Found for the exact model page, so codingIndex remains null.",
   }),
 ];
 

@@ -37,11 +37,13 @@
       "group": "Frontier labs",
       "primarySources": [
         "https://blog.google/innovation-and-ai/models-and-research/gemini-models/",
+        "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/",
         "https://blog.google/innovation-and-ai/technology/developers-tools/",
         "https://ai.google.dev/gemini-api/docs/models"
       ],
       "searchQueries": [
         "site:blog.google Google Gemini Gemma model release coding agentic after:{since}",
+        "site:blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/ Gemini 4 Neon model coding agentic after:{since}",
         "site:ai.google.dev/gemini-api/docs/models Gemini model after:{since}"
       ],
       "includeSignals": ["Gemini", "Gemma", "model", "coding", "agentic", "developer"],

@@ -2086,6 +2086,18 @@ export const RELEASES = [
     aliases: ["gemini-4-neon"],
     notes: "Google's official November 18, 2026 announcement introduces Gemini 4 Neon for complex software engineering, knowledge work, science workflows, and long-running tool-heavy agentic tasks; the official Gemini API catalog and model page confirm the stable gemini-4-neon endpoint with code execution, computer use, function calling, and a 1M-token context window. It is a distinct Gemini 4 base line rather than a product feature, preview-only configuration, speed alias, or modality-only release. Artificial Analysis's exact Gemini 4 Neon page, retrieved 2026-11-19, reports Intelligence Index 61 at xhigh and 60 at high; following the repository's existing Gemini 4 representative-configuration convention, the dataset stores 60 for high at https://artificialanalysis.ai/models/gemini-4-neon. The exact Artificial Analysis page exposes no historical Coding Index field; Google's Coding Agent Index 58.6, FrontierCode, Terminal-Bench, and other maker/third-party metrics are not the requested Artificial Analysis Coding Index. Easy Benchmarks returned Model Not Found for the exact model page, so codingIndex remains null.",
   }),
+  release({
+    model: "TML-d24-varloop-research",
+    provider: "Thinking Machines",
+    group: "Chinese+Other",
+    releaseDate: "2026-11-20",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    releaseCategory: "specialized-base",
+    sourceUrl: "https://huggingface.co/thinkingmachines/TML-d24-varloop-research",
+    aliases: ["thinkingmachines/TML-d24-varloop-research", "TML-d24-varloop-research"],
+    notes: "Thinking Machines' official Hugging Face model card dates TML-d24-varloop-research to November 20, 2026 and describes it as an open-weight multimodal research model with a variable-loop architecture whose inference-time pass count differs from Inkling 2 Mini. It shares only the first training stages with Inkling 2 Mini, then receives distinct variable-loop midtraining and post-training; the card reports separate agentic-coding, tool-use, and long-horizon evaluations. It is therefore tracked as a distinct specialized-base line rather than a Mini tier, quantization, pure snapshot, or alias. The related Inkling 2 Mini was checked separately and remains excluded under the repository's explicit mini-tier rule. The exact Artificial Analysis page https://artificialanalysis.ai/models/tml-d24-varloop-research returned 404, and no exact Artificial Analysis Coding Index row/configuration was exposed; the card's DeepSWE, SWEBench, and other evaluations are not the requested Coding Index, so codingIndex remains null. Direct source/benchmark audit retrieved 2026-11-21."
+  }),
 ];
 
 export const DATA_SOURCES = [

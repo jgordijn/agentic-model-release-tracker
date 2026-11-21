@@ -446,12 +446,14 @@
         "https://thinkingmachines.ai/news/inkling-2-small/",
         "https://huggingface.co/blog/thinkingmachines-inkling",
         "https://huggingface.co/thinkingmachines",
+        "https://huggingface.co/thinkingmachines/TML-d24-varloop-research",
         "https://github.com/thinking-machines-lab"
       ],
       "searchQueries": [
         "site:thinkingmachines.ai/news/inkling-2-small Inkling 2 Small model release coding agentic after:{since}",
         "site:huggingface.co/blog/thinkingmachines-inkling Inkling model coding agentic after:{since}",
         "site:huggingface.co/thinkingmachines Inkling model tool use coding after:{since}",
+        "site:huggingface.co/thinkingmachines/TML-d24-varloop-research TML-d24-varloop-research model release coding agentic after:{since}",
         "site:thinkingmachines.ai model release coding agentic after:{since}"
       ],
       "includeSignals": ["Thinking Machines", "Inkling", "model", "coding", "agentic", "tool use", "multimodal"],

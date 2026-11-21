@@ -115,6 +115,7 @@ if (runHttp) {
     "https://artificialanalysis.ai/models/gpt-6-2-astra",
     "https://artificialanalysis.ai/models/gpt-6-2-sol",
     "https://huggingface.co/tencent/Hy4-flash",
+    "https://huggingface.co/thinkingmachines/TML-d24-varloop-research",
     "https://artificialanalysis.ai/models/muse-ember",
     "https://artificialanalysis.ai/models/agnes-2-5-pro-theta",
     "https://www.anthropic.com/claude-haiku-5-5",

@@ -31,13 +31,14 @@ test("app date defaults are derived from release data", async () => {
   assert.doesNotMatch(app, /const TODAY = "\d{4}-\d{2}-\d{2}"/);
 });
 
-test("HTML and module imports use the November 19 refresh cache key", async () => {
+test("HTML and module imports use the November 21 refresh cache key", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/app.js", import.meta.url), "utf8");
 
-  assert.match(html, /src="\.\/src\/app\.js\?v=20261119a"/);
-  assert.match(app, /"\.\/modelData\.js\?v=20261119a"/);
-  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261119a"/);
+  assert.match(html, /src="\.\/src\/app\.js\?v=20261121a"/);
+  assert.match(app, /"\.\/modelData\.js\?v=20261121a"/);
+  assert.match(app, /"\.\/dashboardLogic\.js\?v=20261121a"/);
+  assert.doesNotMatch(`${html}\n${app}`, /20261119a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261118a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261117a/);
   assert.doesNotMatch(`${html}\n${app}`, /20261116a/);
@@ -176,7 +177,9 @@ test("provider release checklist covers Meta, Tencent, Apodex, IFM, OpenBMB, Agn
 
   const thinkingMachines = config.providers.find((entry) => entry.name === "Thinking Machines");
   assert.ok(thinkingMachines.primarySources.includes("https://thinkingmachines.ai/news/inkling-2-small/"));
+  assert.ok(thinkingMachines.primarySources.includes("https://huggingface.co/thinkingmachines/TML-d24-varloop-research"));
   assert.ok(thinkingMachines.searchQueries.some((query) => query.includes("Inkling 2 Small")));
+  assert.ok(thinkingMachines.searchQueries.some((query) => query.includes("TML-d24-varloop-research") && query.includes("{since}")));
 
   const alibaba = config.providers.find((entry) => entry.name === "Alibaba");
   assert.ok(alibaba.primarySources.includes("https://www.qwencloud.com/models"));

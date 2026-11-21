@@ -88,20 +88,20 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("November 19 refresh preserves the November 18 baseline and adds one verified model row", () => {
-  const newModels = new Set(["Gemini 4 Neon"]);
+test("November 21 refresh preserves the November 19 baseline and adds one verified model row", () => {
+  const newModels = new Set(["TML-d24-varloop-research"]);
   const baseline = RELEASES.filter((release) => !newModels.has(release.model));
 
-  assert.equal(baseline.length, 181, "November 18 baseline row count before the current refresh");
-  assert.equal(new Set(baseline.map((release) => release.model)).size, 181);
-  assert.equal(Math.max(...baseline.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-17"));
-  assert.equal(RELEASES.length, 182);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 182);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-18"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-19"), "no row is later than the research cutoff");
+  assert.equal(baseline.length, 182, "November 19 baseline row count before the current refresh");
+  assert.equal(new Set(baseline.map((release) => release.model)).size, 182);
+  assert.equal(Math.max(...baseline.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-18"));
+  assert.equal(RELEASES.length, 183);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 183);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-20"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-21"), "no row is later than the research cutoff");
 });
 
-test("November 19 row preserves maker provenance and exact metric separation", () => {
+test("November 21 rows preserve maker provenance and exact metric separation", () => {
   const expected = {
     "Gemini 4 Neon": {
       provider: "Google",
@@ -152,14 +152,27 @@ test("November 19 row preserves maker provenance and exact metric separation", (
       intelligenceIndexConfiguration: null,
       intelligenceIndexSourceUrl: null,
     },
+    "TML-d24-varloop-research": {
+      provider: "Thinking Machines",
+      group: "Chinese+Other",
+      sourceUrl: "https://huggingface.co/thinkingmachines/TML-d24-varloop-research",
+      aliases: ["thinkingmachines/TML-d24-varloop-research", "TML-d24-varloop-research"],
+      intelligenceIndex: null,
+      intelligenceIndexConfiguration: null,
+      intelligenceIndexSourceUrl: null,
+    },
   };
 
+  const expectedDates = {
+    "Gemini 4 Neon": "2026-11-18",
+    "TML-d24-varloop-research": "2026-11-20",
+  };
   for (const [model, fields] of Object.entries(expected)) {
     const release = RELEASES.find((item) => item.model === model);
 
     assert.ok(release, model);
-    assert.equal(release.releaseDate, model === "Gemini 4 Neon" ? "2026-11-18" : "2026-11-17", model);
-    assert.equal(release.releaseCategory, "base", model);
+    assert.equal(release.releaseDate, expectedDates[model] ?? "2026-11-17", model);
+    assert.equal(release.releaseCategory, model === "TML-d24-varloop-research" ? "specialized-base" : "base", model);
     assert.equal(release.sourceType, "official", model);
     assert.deepEqual(release.focus, ["agentic", "programming"], model);
     assert.equal(release.codingIndex, null, model);
@@ -168,6 +181,7 @@ test("November 19 row preserves maker provenance and exact metric separation", (
   }
 
   const neon = RELEASES.find((release) => release.model === "Gemini 4 Neon");
+  const tml = RELEASES.find((release) => release.model === "TML-d24-varloop-research");
   assert.match(RELEASES.find((release) => release.model === "GPT-6.2 Astra").notes, /distinct base line.*Astra for Law/i);
   assert.match(RELEASES.find((release) => release.model === "GPT-6.2 Sol").notes, /distinct base line.*Ultrafast/i);
   assert.match(RELEASES.find((release) => release.model === "Tencent Hy4 Flash").notes, /distinct hybrid-attention.*LatentMoE.*Engram/i);
@@ -176,6 +190,11 @@ test("November 19 row preserves maker provenance and exact metric separation", (
   assert.match(neon.notes, /Intelligence Index 61 at xhigh and 60 at high/i);
   assert.match(neon.notes, /Coding Agent Index 58\.6.*not the requested/i);
   assert.match(neon.notes, /Easy Benchmarks returned Model Not Found/i);
+  assert.match(tml.notes, /distinct specialized-base line/i);
+  assert.match(tml.notes, /variable-loop.*Inkling 2 Mini/i);
+  assert.match(tml.notes, /agentic-coding, tool-use, and long-horizon evaluations/i);
+  assert.match(tml.notes, /Artificial Analysis page https:\/\/artificialanalysis\.ai\/models\/tml-d24-varloop-research returned 404/i);
+  assert.match(tml.notes, /Coding Index.*remains null/i);
 });
 
 test("November 17 historical NVIDIA correction preserves Sigma family scope and score unknowns", () => {

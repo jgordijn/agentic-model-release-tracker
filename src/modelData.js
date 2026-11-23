@@ -3,7 +3,7 @@ const aaModelLeaderboard = "https://artificialanalysis.ai/leaderboards/models";
 
 // AA Intelligence Index snapshots are stored separately from codingIndex.
 // Existing rows use the dated 2026-09-23 snapshot; entries added during the
-// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, 2026-10-10/13, 2026-10-15, 2026-10-16, 2026-11-06, 2026-11-10, 2026-11-13, 2026-11-16, 2026-11-18, and 2026-11-19 refreshes use the exact current AA
+// 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, 2026-10-10/13, 2026-10-15, 2026-10-16, 2026-11-06, 2026-11-10, 2026-11-13, 2026-11-16, 2026-11-18, 2026-11-19, and 2026-11-23 refreshes use the exact current AA
 // model-page configuration where available. No Intelligence Index value is ever
 // copied into codingIndex.
 export const AA_INTELLIGENCE_SCORES = {
@@ -2097,6 +2097,18 @@ export const RELEASES = [
     sourceUrl: "https://huggingface.co/thinkingmachines/TML-d24-varloop-research",
     aliases: ["thinkingmachines/TML-d24-varloop-research", "TML-d24-varloop-research"],
     notes: "Thinking Machines' official Hugging Face model card dates TML-d24-varloop-research to November 20, 2026 and describes it as an open-weight multimodal research model with a variable-loop architecture whose inference-time pass count differs from Inkling 2 Mini. It shares only the first training stages with Inkling 2 Mini, then receives distinct variable-loop midtraining and post-training; the card reports separate agentic-coding, tool-use, and long-horizon evaluations. It is therefore tracked as a distinct specialized-base line rather than a Mini tier, quantization, pure snapshot, or alias. The related Inkling 2 Mini was checked separately and remains excluded under the repository's explicit mini-tier rule. The exact Artificial Analysis page https://artificialanalysis.ai/models/tml-d24-varloop-research returned 404, and no exact Artificial Analysis Coding Index row/configuration was exposed; the card's DeepSWE, SWEBench, and other evaluations are not the requested Coding Index, so codingIndex remains null. Direct source/benchmark audit retrieved 2026-11-21."
+  }),
+  release({
+    model: "LingSante-3.1-flash",
+    provider: "InclusionAI",
+    group: "Chinese+Other",
+    releaseDate: "2026-11-22",
+    codingIndex: null,
+    focus: ["agentic"],
+    releaseCategory: "specialized-base",
+    sourceUrl: "https://huggingface.co/inclusionAI/LingSante-3.1-flash",
+    aliases: ["LingSante-3.1-flash", "inclusionAI/LingSante-3.1-flash", "lingsante-3-1-flash-1119"],
+    notes: "InclusionAI's official Hugging Face model card identifies LingSante-3.1-flash as a distinct healthcare-specialized open-weight MoE model built on Ling-3.1-flash, with separate medical mixed pretraining, mid-training, supervised fine-tuning, task-specific reinforcement learning, and multi-teacher distillation. Its long-horizon medical workflows, search/tool use, and explicit development/evaluation of general-purpose tool-using agents make it a specialized agentic base line rather than a modality-only model, pure snapshot, quantization, or alias; the earlier Ling-3.0-flash-Sante is a separate preceding healthcare release. No dated maker announcement or release-date field was exposed in the HF card. The official ModelScope collection at https://www.modelscope.cn/models/inclusionAI/LingSante-3.1-flash records 2026.11.22 and is used as the public-availability registry fallback; Artificial Analysis's exact catalog page https://artificialanalysis.ai/models/lingsante-3-1-flash-1119 independently states release November 22, 2026. The exact Artificial Analysis page exposes no Intelligence Index value and no exact Coding Index field; Easy Benchmarks returned Model Not Found for the matching aliases, so intelligenceIndex remains null and codingIndex remains null rather than using medical, coding, agentic, or other non-Coding metrics. Direct source/benchmark audit retrieved 2026-11-23."
   }),
 ];
 

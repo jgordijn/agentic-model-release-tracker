@@ -71,6 +71,29 @@ for (const source of DATA_SOURCES) urls.add(source.url);
 for (const entry of [...config.providers, ...(config.missingLabs ?? [])]) {
   for (const url of entry.primarySources) urls.add(url);
 }
+const requiredUrls = [
+  "https://www.anthropic.com/claude-fable-and-mythos-5-2",
+  "https://research.meta.ai/blog/muse-ember",
+  "https://www.agnes-ai.com/zh-Hans/docs/agnes-25-pro-theta",
+  "https://artificialanalysis.ai/models/jt-4-1-flash-236b-a21b",
+  "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/",
+  "https://artificialanalysis.ai/models/gemini-4-hydrogen-high",
+  "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/",
+  "https://artificialanalysis.ai/models/gemini-4-neon",
+  "https://artificialanalysis.ai/models/claude-fable-5-2",
+  "https://artificialanalysis.ai/models/gpt-6-2-astra",
+  "https://artificialanalysis.ai/models/gpt-6-2-sol",
+  "https://huggingface.co/tencent/Hy4-flash",
+  "https://huggingface.co/thinkingmachines/TML-d24-varloop-research",
+  "https://huggingface.co/inclusionAI/LingSante-3.1-flash",
+  "https://artificialanalysis.ai/models/lingsante-3-1-flash-1119",
+  "https://artificialanalysis.ai/models/muse-ember",
+  "https://artificialanalysis.ai/models/agnes-2-5-pro-theta",
+  "https://www.anthropic.com/claude-haiku-5-5",
+  "https://artificialanalysis.ai/models/claude-haiku-5-5",
+  "https://artificialanalysis.ai/leaderboards/models",
+];
+for (const url of requiredUrls) urls.add(url);
 const urlList = [...urls].filter(httpUrl).sort();
 const MAX_URLS = 360;
 expect(urlList.length <= MAX_URLS, `URL smoke budget exceeded: ${urlList.length} > ${MAX_URLS}`);
@@ -102,26 +125,7 @@ if (runHttp) {
     }
   }
   await Promise.all(Array.from({ length: 8 }, () => worker()));
-  for (const required of [
-    "https://www.anthropic.com/claude-fable-and-mythos-5-2",
-    "https://research.meta.ai/blog/muse-ember",
-    "https://www.agnes-ai.com/zh-Hans/docs/agnes-25-pro-theta",
-    "https://artificialanalysis.ai/models/jt-4-1-flash-236b-a21b",
-    "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/",
-    "https://artificialanalysis.ai/models/gemini-4-hydrogen-high",
-    "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/",
-    "https://artificialanalysis.ai/models/gemini-4-neon",
-    "https://artificialanalysis.ai/models/claude-fable-5-2",
-    "https://artificialanalysis.ai/models/gpt-6-2-astra",
-    "https://artificialanalysis.ai/models/gpt-6-2-sol",
-    "https://huggingface.co/tencent/Hy4-flash",
-    "https://huggingface.co/thinkingmachines/TML-d24-varloop-research",
-    "https://artificialanalysis.ai/models/muse-ember",
-    "https://artificialanalysis.ai/models/agnes-2-5-pro-theta",
-    "https://www.anthropic.com/claude-haiku-5-5",
-    "https://artificialanalysis.ai/models/claude-haiku-5-5",
-    "https://artificialanalysis.ai/leaderboards/models",
-  ]) {
+  for (const required of requiredUrls) {
     const result = smokeResults.find((entry) => entry.url === required);
     if (!result) errors.push(`required URL was not checked: ${required}`);
     else if (result.status === null) errors.push(`required URL network failure: ${required} (${result.error})`);

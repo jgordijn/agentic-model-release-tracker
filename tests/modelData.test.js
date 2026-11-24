@@ -15,7 +15,7 @@ test("every release stores a maker or benchmark source URL", () => {
 });
 
 test("Intelligence Index data is metric-specific, sourced, and null for unmatched families", () => {
-  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 66);
+  assert.equal(RELEASES.filter((release) => release.intelligenceIndex !== null).length, 67);
   for (const release of RELEASES) {
     assert.ok(Object.hasOwn(release, "intelligenceIndex"), release.model);
     if (release.intelligenceIndex === null) {
@@ -43,6 +43,7 @@ test("Intelligence Index data is metric-specific, sourced, and null for unmatche
     "Qwen4 Max": [43, "default"],
     "Ling 3.1 Flash": [41, "default"],
     "Ling 3.1 Flash 1019": [29, "default"],
+    "Ling-3.2-air": [23, "default"],
     "Muse Wonder": [52, "max"],
     "Muse Wonder Full": [56, "max"],
     "Muse Spark Open": [39, "xhigh"],
@@ -88,17 +89,42 @@ test("release model names are unique", () => {
   assert.equal(new Set(models).size, models.length);
 });
 
-test("November 23 refresh preserves the November 21 baseline and adds one verified model row", () => {
-  const newModels = new Set(["LingSante-3.1-flash"]);
+test("November 24 refresh preserves the November 23 baseline and adds one verified model row", () => {
+  const newModels = new Set(["Ling-3.2-air"]);
   const baseline = RELEASES.filter((release) => !newModels.has(release.model));
 
-  assert.equal(baseline.length, 183, "November 21 baseline row count before the current refresh");
-  assert.equal(new Set(baseline.map((release) => release.model)).size, 183);
-  assert.equal(Math.max(...baseline.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-20"));
-  assert.equal(RELEASES.length, 184);
-  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 184);
-  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-22"));
-  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-23"), "no row is later than the research cutoff");
+  assert.equal(baseline.length, 184, "November 23 baseline row count before the current refresh");
+  assert.equal(new Set(baseline.map((release) => release.model)).size, 184);
+  assert.equal(Math.max(...baseline.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-22"));
+  assert.equal(RELEASES.length, 185);
+  assert.equal(new Set(RELEASES.map((release) => release.model)).size, 185);
+  assert.equal(Math.max(...RELEASES.map((release) => Date.parse(release.releaseDate))), Date.parse("2026-11-23"));
+  assert.ok(RELEASES.every((release) => release.releaseDate <= "2026-11-24"), "no row is later than the research cutoff");
+});
+
+test("November 24 Ling-3.2-air preserves official provenance and exact metric separation", () => {
+  const ling = RELEASES.find((release) => release.model === "Ling-3.2-air");
+
+  assert.ok(ling);
+  assert.equal(ling.provider, "InclusionAI");
+  assert.equal(ling.group, "Chinese+Other");
+  assert.equal(ling.releaseDate, "2026-11-23");
+  assert.equal(ling.releaseCategory, "base");
+  assert.equal(ling.sourceType, "official");
+  assert.deepEqual(ling.focus, ["agentic", "programming"]);
+  assert.equal(ling.sourceUrl, "https://huggingface.co/inclusionAI/Ling-3.2-air");
+  assert.deepEqual(ling.aliases, ["Ling-3.2-air", "ling-3-2-air", "inclusionAI/Ling-3.2-air"]);
+  assert.equal(ling.codingIndex, null);
+  assert.equal(ling.scoreSourceUrl, undefined);
+  assert.equal(ling.intelligenceIndex, 23);
+  assert.equal(ling.intelligenceIndexConfiguration, "default");
+  assert.equal(ling.intelligenceIndexSourceUrl, "https://artificialanalysis.ai/models/ling-3-2-air");
+  assert.match(ling.notes, /workflow automation.*professional-document reasoning.*tool-call parsers/i);
+  assert.match(ling.notes, /createdAt marker is 2026-11-23T03:55:12Z/);
+  assert.match(ling.notes, /distinct base model line.*not a lightweight air tier.*quantization/i);
+  assert.match(ling.notes, /Intelligence Index 23.*default\/no-suffix/i);
+  assert.match(ling.notes, /no exact Coding Index field/i);
+  assert.match(ling.notes, /Easy Benchmarks returns Model Not Found/i);
 });
 
 test("November 23 rows preserve maker provenance and exact metric separation", () => {
@@ -701,7 +727,7 @@ test("xAI releases cover base Grok generations and distinct coding lines", () =>
 });
 
 test("dataset does not include preview, mini, nano, spark, air, plus, lite, or speciale config rows as standalone releases", () => {
-  const canonicalNamesContainingTierWords = new Set(["Grok Code Fast 1", "Muse Spark 1.3", "Muse Spark Open"]);
+  const canonicalNamesContainingTierWords = new Set(["Grok Code Fast 1", "Ling-3.2-air", "Muse Spark 1.3", "Muse Spark Open"]);
 
   for (const release of RELEASES) {
     if (canonicalNamesContainingTierWords.has(release.model)) continue;

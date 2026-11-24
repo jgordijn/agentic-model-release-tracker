@@ -5,7 +5,8 @@ const aaModelLeaderboard = "https://artificialanalysis.ai/leaderboards/models";
 // Existing rows use the dated 2026-09-23 snapshot; entries added during the
 // 2026-09-29/30, 2026-10-01, 2026-10-05, 2026-10-08, 2026-10-10/13, 2026-10-15, 2026-10-16, 2026-11-06, 2026-11-10, 2026-11-13, 2026-11-16, 2026-11-18, 2026-11-19, and 2026-11-23 refreshes use the exact current AA
 // model-page configuration where available. No Intelligence Index value is ever
-// copied into codingIndex.
+// copied into codingIndex. The 2026-11-24 refresh adds the exact default
+// configuration for Ling-3.2-air after its November 23 release.
 export const AA_INTELLIGENCE_SCORES = {
   "Agnes 2.5 Pro Theta": [24, "default", "https://artificialanalysis.ai/models/agnes-2-5-pro-theta"],
   "Agnes 3.0 Flash": [36, "default", "https://artificialanalysis.ai/models/agnes-3-0-flash"],
@@ -54,6 +55,7 @@ export const AA_INTELLIGENCE_SCORES = {
   "Ling-3.0-flash-VL": [25, "default", "https://artificialanalysis.ai/models/ling-3-0-flash-vl"],
   "Ling 3.1 Flash": [41, "default", "https://artificialanalysis.ai/models/ling-3-1-flash"],
   "Ling 3.1 Flash 1019": [29, "default", "https://artificialanalysis.ai/models/ling-3-1-flash-1019"],
+  "Ling-3.2-air": [23, "default", "https://artificialanalysis.ai/models/ling-3-2-air"],
   "MiMo-V2.5-Pro": [26, "default", "https://artificialanalysis.ai/models/mimo-v2-5-pro"],
   "MiMo-V2.6-Pro": [46, "default", "https://artificialanalysis.ai/models/mimo-v2-6-pro"],
   "MiniCPM5-2B": [12, "default", "https://artificialanalysis.ai/models/minicpm5-2b"],
@@ -2109,6 +2111,18 @@ export const RELEASES = [
     sourceUrl: "https://huggingface.co/inclusionAI/LingSante-3.1-flash",
     aliases: ["LingSante-3.1-flash", "inclusionAI/LingSante-3.1-flash", "lingsante-3-1-flash-1119"],
     notes: "InclusionAI's official Hugging Face model card identifies LingSante-3.1-flash as a distinct healthcare-specialized open-weight MoE model built on Ling-3.1-flash, with separate medical mixed pretraining, mid-training, supervised fine-tuning, task-specific reinforcement learning, and multi-teacher distillation. Its long-horizon medical workflows, search/tool use, and explicit development/evaluation of general-purpose tool-using agents make it a specialized agentic base line rather than a modality-only model, pure snapshot, quantization, or alias; the earlier Ling-3.0-flash-Sante is a separate preceding healthcare release. No dated maker announcement or release-date field was exposed in the HF card. The official ModelScope collection at https://www.modelscope.cn/models/inclusionAI/LingSante-3.1-flash records 2026.11.22 and is used as the public-availability registry fallback; Artificial Analysis's exact catalog page https://artificialanalysis.ai/models/lingsante-3-1-flash-1119 independently states release November 22, 2026. The exact Artificial Analysis page exposes no Intelligence Index value and no exact Coding Index field; Easy Benchmarks returned Model Not Found for the matching aliases, so intelligenceIndex remains null and codingIndex remains null rather than using medical, coding, agentic, or other non-Coding metrics. Direct source/benchmark audit retrieved 2026-11-23."
+  }),
+  release({
+    model: "Ling-3.2-air",
+    provider: "InclusionAI",
+    group: "Chinese+Other",
+    releaseDate: "2026-11-23",
+    codingIndex: null,
+    focus: ["agentic", "programming"],
+    releaseCategory: "base",
+    sourceUrl: "https://huggingface.co/inclusionAI/Ling-3.2-air",
+    aliases: ["Ling-3.2-air", "ling-3-2-air", "inclusionAI/Ling-3.2-air"],
+    notes: "InclusionAI's official Hugging Face model card introduces Ling-3.2-air as an open-weight 124B-total/5.5B-active hybrid-linear MoE model sharing Ling-3.0-flash-VL's native multimodal architecture, with stronger workflow automation and professional-document reasoning, tool-call parsers, and Terminal-Bench 4.0 results. It is a distinct base model line, not a lightweight air tier, quantization, pure snapshot, or API alias. The official Hugging Face registry createdAt marker is 2026-11-23T03:55:12Z and controls public availability; the official ModelScope page independently records dateModified 2026-11-23. Artificial Analysis's exact model page identifies the release as November 23, 2026 and reports Intelligence Index 23 for the default/no-suffix configuration, stored separately at https://artificialanalysis.ai/models/ling-3-2-air. The exact Artificial Analysis page exposes no exact Coding Index field, and Easy Benchmarks returns Model Not Found for the exact model, so codingIndex remains null rather than using Intelligence Index, AutomationBench-AA, FrontierCode, Terminal-Bench, or maker-reported values. Direct source/benchmark audit retrieved 2026-11-24."
   }),
 ];
 
